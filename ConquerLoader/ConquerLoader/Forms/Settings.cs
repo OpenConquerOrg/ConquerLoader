@@ -63,6 +63,7 @@ namespace ConquerLoader
                 tglDisableAutoFixFlash.Checked = CurrentLoaderConfig.DisableAutoFixFlash;
                 tglDisableScreenChanges.Checked = CurrentLoaderConfig.DisableScreenChanges;
                 tglUseCustomDLLs.Checked = CurrentLoaderConfig.UseCustomDLLs;
+                tglFPSUnlock.Checked = CurrentLoaderConfig.FPSUnlock;
                 tbxTitle.Text = CurrentLoaderConfig.Title;
                 gridViewSettings.DataSource = CurrentLoaderConfig.Servers;
             }
@@ -135,6 +136,16 @@ namespace ConquerLoader
             if (CurrentLoaderConfig.UseCustomDLLs)
             {
                 MetroFramework.MetroMessageBox.Show(this, "For use Custom DLL can put a DLL called COHook.dll for be auto-injected like native lib of loader.", this.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+        }
+
+        private void TglFPSUnlock_CheckedChanged(object sender, EventArgs e)
+        {
+            CurrentLoaderConfig.FPSUnlock = (sender as MetroToggle).Checked;
+            if (CurrentLoaderConfig.FPSUnlock)
+            {
+                lblImportantInfo.Text = "FPS Unlock may cause instability in some systems, for example with Old Graphic Cards. Use at your own risk.";
+                lblImportantInfo.Visible = true;
             }
         }
 
@@ -220,6 +231,11 @@ namespace ConquerLoader
             Core.SaveLoaderConfig(CurrentLoaderConfig);
             File.Delete(Core.ConfigJsonPath);
             Application.Exit();
+        }
+
+        private void lblFPSUnlock_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

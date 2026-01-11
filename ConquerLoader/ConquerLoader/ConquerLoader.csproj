@@ -57,8 +57,7 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>
-    </ApplicationIcon>
+    <ApplicationIcon>ConquerLoaderLogo.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup />
   <PropertyGroup />
@@ -279,6 +278,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Models\TextTranslation.cs" />
+    <Content Include="ConquerLoaderLogo.ico" />
     <Content Include="Resources\CLHook_Legacy.dll" />
     <Content Include="Resources\ConquerCipherHook.dll" />
     <None Include="Resources\ConquerLoaderLogo.ico" />

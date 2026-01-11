@@ -126,5 +126,9 @@
   {
     "id": "lblUseCustomDLLs",
     "text": "Usar DLL personalizada"
+  },
+  {
+    "id": "lblFPSUnlock",
+    "text": "Desbloquear FPs"
   }
 ]

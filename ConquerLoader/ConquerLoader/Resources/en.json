@@ -126,5 +126,9 @@
   {
     "id": "lblUseCustomDLLs",
     "text": "Use Custom DLL"
+  },
+  {
+    "id": "lblFPSUnlock",
+    "text": "Unlock FPS"
   }
 ]

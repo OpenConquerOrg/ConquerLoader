@@ -29,6 +29,7 @@ namespace ConquerLoader.Forms
             CLTheme.MainControls = this.Controls;
             this.Resizable = false;
             this.Theme = MetroFramework.MetroThemeStyle.Light;
+            cbxResolutions.Visible = false; // Default invisible
             LoaderConfig = Core.GetLoaderConfig();
             if (Core.UseEncryptedConfig)
             {
@@ -120,7 +121,7 @@ namespace ConquerLoader.Forms
                     noty.Visible = true;
                     Hide();
                     noty.BalloonTipTitle = $"{ProductName} {ProductVersion}";
-                    noty.BalloonTipText = "The best loader for ConquerOnline";
+                    noty.BalloonTipText = "The extensible loader for ConquerOnline";
                     noty.ShowBalloonTip(1000);
                 }
                 else if (FormWindowState.Normal == this.WindowState)
@@ -183,6 +184,7 @@ namespace ConquerLoader.Forms
             btnLogModules.Visible = LoaderConfig.DebugMode;
             btnCloseCO.Enabled = LoaderConfig.DebugMode;
             btnCloseCO.Visible = LoaderConfig.DebugMode;
+            tglFPSUnlock.Checked = LoaderConfig.FPSUnlock;
             Constants.LicenseKey = LoaderConfig.LicenseKey;
             foreach (ServerConfiguration server in LoaderConfig.Servers)
             {
@@ -199,6 +201,7 @@ namespace ConquerLoader.Forms
                 {
                     if (LoaderConfig.DefaultServer != null && s.Equals(LoaderConfig.DefaultServer.ServerName))
                     {
+                        cbxResolutions.Visible = LoaderConfig.DefaultServer.ServerVersion == 5187;
                         if (SelectDefault)
                         {
                             cbxServers.SelectedItem = s;
@@ -246,7 +249,7 @@ namespace ConquerLoader.Forms
                     {
                         File.Delete(HookINI);
                     }
-                    if (LoaderConfig.ServernameChange)
+                    if (LoaderConfig.ServernameChange) // That is deprecated, in future are removed from code
                     {
                         if (SelectedServer.ServerNameMemoryAddress != null && SelectedServer.ServerNameMemoryAddress.Length >= 8) // Detect valid memory address
                         {
@@ -474,7 +477,7 @@ namespace ConquerLoader.Forms
                 if (conquerProc != null)
                 {
                     Core.LogWritter.Write("Process launched!");
-                    if (CustomDLLs) // TODO hay que ver como soluciono el bug de que en versiones como 6609 parece que necesita mas tiempo, si lo injecto mas para abajo funciona sino no
+                    if (CustomDLLs)
                     {
                         if (!File.Exists(Application.StartupPath + @"\" + HookDLL))
                         {
@@ -635,6 +638,7 @@ namespace ConquerLoader.Forms
                     {
                         cbxServers.SelectedItem = currentSender.SelectedItem.ToString();
                         LoaderConfig.DefaultServer = LoaderConfig.Servers.Where(x => x.ServerName == currentSender.SelectedItem.ToString()).FirstOrDefault();
+                        cbxResolutions.Visible = LoaderConfig.DefaultServer.ServerVersion == 5187;
                         SetServerStatus();
                         Core.SaveLoaderConfig(LoaderConfig);
                     }
@@ -665,6 +669,36 @@ namespace ConquerLoader.Forms
         {
             About ab = new About();
             ab.ShowDialog();
+        }
+
+        private void CbxResolutions_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            ResolutionChanges();
+        }
+
+        private void ResolutionChanges()
+        {
+            if (cbxResolutions.SelectedItem != null)
+            {
+                string SelectedRes = cbxResolutions.SelectedItem.ToString();
+                if (SelectedRes == "800x600")
+                {
+                    LoaderConfig.HighResolution = false;
+                    LoaderConfig.DisableScreenChanges = true;
+                }
+                if (SelectedRes == "1024x768" || SelectedRes == "1920x1080")
+                {
+                    LoaderConfig.HighResolution = true;
+                    LoaderConfig.DisableScreenChanges = false;
+                }
+                Core.SaveLoaderConfig(LoaderConfig);
+            }
+        }
+
+        private void TglFPSUnlock_CheckedChanged(object sender, EventArgs e)
+        {
+            LoaderConfig.FPSUnlock = (sender as MetroToggle).Checked;
+            Core.SaveLoaderConfig(LoaderConfig);
         }
     }
 }
