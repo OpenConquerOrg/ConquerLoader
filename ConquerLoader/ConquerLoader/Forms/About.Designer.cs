@@ -43,12 +43,12 @@ namespace ConquerLoader.Forms
             // pbAbout
             // 
             this.pbAbout.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.pbAbout.Image = global::ConquerLoader.Properties.Resources.ConquerLoaderLogo;
+            this.pbAbout.Image = global::ConquerLoader.Properties.Resources.ConquerLoaderICON;
             this.pbAbout.Location = new System.Drawing.Point(34, 97);
             this.pbAbout.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.pbAbout.Name = "pbAbout";
             this.pbAbout.Size = new System.Drawing.Size(178, 194);
-            this.pbAbout.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
+            this.pbAbout.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pbAbout.TabIndex = 0;
             this.pbAbout.TabStop = false;
             this.pbAbout.Click += new System.EventHandler(this.PbAbout_Click);

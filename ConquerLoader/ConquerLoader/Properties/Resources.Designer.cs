@@ -121,22 +121,22 @@ namespace ConquerLoader.Properties {
         }
         
         /// <summary>
-        ///   Busca un recurso adaptado de tipo System.Drawing.Icon similar a (Icono).
+        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Icon ConquerLoaderIco {
+        internal static System.Drawing.Bitmap ConquerLoaderICON {
             get {
-                object obj = ResourceManager.GetObject("ConquerLoaderIco", resourceCulture);
-                return ((System.Drawing.Icon)(obj));
+                object obj = ResourceManager.GetObject("ConquerLoaderICON", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
-        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        ///   Busca un recurso adaptado de tipo System.Drawing.Icon similar a (Icono).
         /// </summary>
-        internal static System.Drawing.Bitmap ConquerLoaderLogo {
+        internal static System.Drawing.Icon ConquerLoaderLogo {
             get {
                 object obj = ResourceManager.GetObject("ConquerLoaderLogo", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
+                return ((System.Drawing.Icon)(obj));
             }
         }
         

@@ -3,7 +3,6 @@ using ConquerLoader.Forms;
 using MetroFramework.Controls;
 using System;
 using System.IO;
-using System.Linq;
 using System.Windows.Forms;
 
 namespace ConquerLoader
@@ -30,8 +29,10 @@ namespace ConquerLoader
             langSelector.Items.Add("English");
             langSelector.Items.Add("Español");
             langSelector.Items.Add("Português");
-            pbFlag.Visible = false; //disable for now change lang
-            langSelector.Visible = false; //disable for now change lang
+            pbFlag.Visible = true;
+            langSelector.Visible = true;
+            lblServerNameChange.Visible = false; // No need now
+            tglServerNameChange.Visible = false; // No need now
             CurrentLoaderConfig = Core.GetLoaderConfig();
             if (CurrentLoaderConfig != null)
             {

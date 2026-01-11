@@ -58,7 +58,6 @@ namespace ConquerLoader
             // 
             this.tbxIP.CustomButton.Image = null;
             this.tbxIP.CustomButton.Location = new System.Drawing.Point(186, 1);
-            this.tbxIP.CustomButton.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.tbxIP.CustomButton.Name = "";
             this.tbxIP.CustomButton.Size = new System.Drawing.Size(33, 33);
             this.tbxIP.CustomButton.Style = MetroFramework.MetroColorStyle.Blue;
@@ -93,7 +92,6 @@ namespace ConquerLoader
             // 
             this.tbxServerName.CustomButton.Image = null;
             this.tbxServerName.CustomButton.Location = new System.Drawing.Point(186, 1);
-            this.tbxServerName.CustomButton.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.tbxServerName.CustomButton.Name = "";
             this.tbxServerName.CustomButton.Size = new System.Drawing.Size(33, 33);
             this.tbxServerName.CustomButton.Style = MetroFramework.MetroColorStyle.Blue;
@@ -127,7 +125,6 @@ namespace ConquerLoader
             // 
             this.tbxVersion.CustomButton.Image = null;
             this.tbxVersion.CustomButton.Location = new System.Drawing.Point(186, 1);
-            this.tbxVersion.CustomButton.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.tbxVersion.CustomButton.Name = "";
             this.tbxVersion.CustomButton.Size = new System.Drawing.Size(33, 33);
             this.tbxVersion.CustomButton.Style = MetroFramework.MetroColorStyle.Blue;
@@ -173,7 +170,6 @@ namespace ConquerLoader
             // 
             this.tbxConquerExe.CustomButton.Image = null;
             this.tbxConquerExe.CustomButton.Location = new System.Drawing.Point(186, 1);
-            this.tbxConquerExe.CustomButton.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.tbxConquerExe.CustomButton.Name = "";
             this.tbxConquerExe.CustomButton.Size = new System.Drawing.Size(33, 33);
             this.tbxConquerExe.CustomButton.Style = MetroFramework.MetroColorStyle.Blue;
@@ -279,7 +275,6 @@ namespace ConquerLoader
             // 
             this.tbxLoginPort.CustomButton.Image = null;
             this.tbxLoginPort.CustomButton.Location = new System.Drawing.Point(186, 1);
-            this.tbxLoginPort.CustomButton.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.tbxLoginPort.CustomButton.Name = "";
             this.tbxLoginPort.CustomButton.Size = new System.Drawing.Size(33, 33);
             this.tbxLoginPort.CustomButton.Style = MetroFramework.MetroColorStyle.Blue;
@@ -324,7 +319,6 @@ namespace ConquerLoader
             // 
             this.tbxGamePort.CustomButton.Image = null;
             this.tbxGamePort.CustomButton.Location = new System.Drawing.Point(186, 1);
-            this.tbxGamePort.CustomButton.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.tbxGamePort.CustomButton.Name = "";
             this.tbxGamePort.CustomButton.Size = new System.Drawing.Size(33, 33);
             this.tbxGamePort.CustomButton.Style = MetroFramework.MetroColorStyle.Blue;

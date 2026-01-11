@@ -57,7 +57,8 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>ConquerLoaderICON.ico</ApplicationIcon>
+    <ApplicationIcon>
+    </ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup />
   <PropertyGroup />
@@ -277,11 +278,11 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="ConquerLoaderICON.ico" />
-    <Content Include="ConquerLoaderLogo.ico" />
     <Compile Include="Models\TextTranslation.cs" />
     <Content Include="Resources\CLHook_Legacy.dll" />
     <Content Include="Resources\ConquerCipherHook.dll" />
+    <None Include="Resources\ConquerLoaderLogo.ico" />
+    <None Include="Resources\ConquerLoaderICON.png" />
     <None Include="Resources\COServerDat.dll" />
     <None Include="Resources\en.json" />
     <None Include="Resources\es.json" />
@@ -291,7 +292,6 @@
     <None Include="Resources\es.png" />
     <None Include="Resources\en.png" />
     <None Include="Resources\pt.png" />
-    <None Include="Resources\ConquerLoaderLogo.png" />
     <None Include="Resources\TQAnp.dll" />
     <None Include="Resources\ServersXML_5717.xml" />
     <None Include="Resources\COFlashFixer_DLL.dll" />

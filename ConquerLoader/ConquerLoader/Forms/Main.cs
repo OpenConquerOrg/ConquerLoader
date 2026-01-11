@@ -113,7 +113,7 @@ namespace ConquerLoader.Forms
             if (Constants.HideInTrayOnFinish)
             {
                 noty.Text = ProductName;
-                noty.Icon = Properties.Resources.ConquerLoaderIco;
+                noty.Icon = Properties.Resources.ConquerLoaderLogo;
 
                 if (FormWindowState.Minimized == this.WindowState)
                 {
@@ -465,10 +465,10 @@ namespace ConquerLoader.Forms
                     }
                     RebuildServerDat();
                 }
-                if (SelectedServer.ServerVersion >= Constants.MinVersionUseRAWServerDat && SelectedServer.ServerVersion <= Constants.MaxVersionUseRAWServerDat)
+                if (SelectedServer.ServerVersion >= Constants.MinVersionUseRAWServerDat && SelectedServer.ServerVersion <= Constants.MaxVersionUseRAWServerDat && !CustomDLLs)
                 {
                     bool HookCreated = SafeIO.TryWriteAllBytes(Path.Combine(WorkingDir, HookDLL), Properties.Resources.COServerDat); // 5095 - 5716
-                    Core.LogWritter.Write($"Generating required files for use Custom Server.dat... Hook Created: ${HookCreated}");
+                    Core.LogWritter.Write($"Generating required files for use Custom Server.dat... Hook Created: {HookCreated}");
                 }
                 Process conquerProc = Process.Start(new ProcessStartInfo() { FileName = PathToConquerExe, WorkingDirectory = WorkingDir, Arguments = "blacknull" });
                 if (conquerProc != null)

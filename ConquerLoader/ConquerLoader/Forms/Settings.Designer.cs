@@ -37,16 +37,12 @@
             this.lblDisableScreenChanges = new MetroFramework.Controls.MetroLabel();
             this.tglDisableScreenChanges = new MetroFramework.Controls.MetroToggle();
             this.btnLockConfig = new MetroFramework.Controls.MetroButton();
-            this.pbFlag = new System.Windows.Forms.PictureBox();
-            this.langSelector = new MetroFramework.Controls.MetroComboBox();
             this.btnServerDat = new MetroFramework.Controls.MetroButton();
             this.lblDisableAutoFixFlash = new MetroFramework.Controls.MetroLabel();
             this.tglDisableAutoFixFlash = new MetroFramework.Controls.MetroToggle();
             this.btnPlugins = new MetroFramework.Controls.MetroButton();
             this.btnWizard = new MetroFramework.Controls.MetroButton();
             this.btnEdit = new MetroFramework.Controls.MetroButton();
-            this.lblServerNameChange = new MetroFramework.Controls.MetroLabel();
-            this.tglServerNameChange = new MetroFramework.Controls.MetroToggle();
             this.lblFullscreen = new MetroFramework.Controls.MetroLabel();
             this.tglFullscreen = new MetroFramework.Controls.MetroToggle();
             this.lblHighResolution = new MetroFramework.Controls.MetroLabel();
@@ -57,9 +53,13 @@
             this.tbxTitle = new MetroFramework.Controls.MetroTextBox();
             this.lblCloseOnFinish = new MetroFramework.Controls.MetroLabel();
             this.lblDebugMode = new MetroFramework.Controls.MetroLabel();
+            this.lblServerNameChange = new MetroFramework.Controls.MetroLabel();
+            this.tglServerNameChange = new MetroFramework.Controls.MetroToggle();
+            this.langSelector = new MetroFramework.Controls.MetroComboBox();
+            this.pbFlag = new System.Windows.Forms.PictureBox();
             this.metroPanel1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pbFlag)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridViewSettings)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pbFlag)).BeginInit();
             this.SuspendLayout();
             // 
             // tglDebugMode
@@ -91,16 +91,12 @@
             this.metroPanel1.Controls.Add(this.lblDisableScreenChanges);
             this.metroPanel1.Controls.Add(this.tglDisableScreenChanges);
             this.metroPanel1.Controls.Add(this.btnLockConfig);
-            this.metroPanel1.Controls.Add(this.pbFlag);
-            this.metroPanel1.Controls.Add(this.langSelector);
             this.metroPanel1.Controls.Add(this.btnServerDat);
             this.metroPanel1.Controls.Add(this.lblDisableAutoFixFlash);
             this.metroPanel1.Controls.Add(this.tglDisableAutoFixFlash);
             this.metroPanel1.Controls.Add(this.btnPlugins);
             this.metroPanel1.Controls.Add(this.btnWizard);
             this.metroPanel1.Controls.Add(this.btnEdit);
-            this.metroPanel1.Controls.Add(this.lblServerNameChange);
-            this.metroPanel1.Controls.Add(this.tglServerNameChange);
             this.metroPanel1.Controls.Add(this.lblFullscreen);
             this.metroPanel1.Controls.Add(this.tglFullscreen);
             this.metroPanel1.Controls.Add(this.lblHighResolution);
@@ -178,27 +174,6 @@
             this.btnLockConfig.UseSelectable = true;
             this.btnLockConfig.Click += new System.EventHandler(this.BtnLockConfig_Click);
             // 
-            // pbFlag
-            // 
-            this.pbFlag.Image = global::ConquerLoader.Properties.Resources.en;
-            this.pbFlag.Location = new System.Drawing.Point(960, 19);
-            this.pbFlag.Name = "pbFlag";
-            this.pbFlag.Size = new System.Drawing.Size(39, 29);
-            this.pbFlag.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.pbFlag.TabIndex = 24;
-            this.pbFlag.TabStop = false;
-            // 
-            // langSelector
-            // 
-            this.langSelector.FormattingEnabled = true;
-            this.langSelector.ItemHeight = 23;
-            this.langSelector.Location = new System.Drawing.Point(1007, 19);
-            this.langSelector.Name = "langSelector";
-            this.langSelector.Size = new System.Drawing.Size(105, 29);
-            this.langSelector.TabIndex = 23;
-            this.langSelector.UseSelectable = true;
-            this.langSelector.SelectedIndexChanged += new System.EventHandler(this.LangSelector_SelectedIndexChanged);
-            // 
             // btnServerDat
             // 
             this.btnServerDat.Location = new System.Drawing.Point(803, 220);
@@ -263,27 +238,6 @@
             this.btnEdit.Text = "Edit";
             this.btnEdit.UseSelectable = true;
             this.btnEdit.Click += new System.EventHandler(this.BtnEdit_Click);
-            // 
-            // lblServerNameChange
-            // 
-            this.lblServerNameChange.AutoSize = true;
-            this.lblServerNameChange.Location = new System.Drawing.Point(510, 29);
-            this.lblServerNameChange.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.lblServerNameChange.Name = "lblServerNameChange";
-            this.lblServerNameChange.Size = new System.Drawing.Size(132, 19);
-            this.lblServerNameChange.TabIndex = 14;
-            this.lblServerNameChange.Text = "ServerName Change";
-            // 
-            // tglServerNameChange
-            // 
-            this.tglServerNameChange.AutoSize = true;
-            this.tglServerNameChange.Location = new System.Drawing.Point(510, 63);
-            this.tglServerNameChange.Name = "tglServerNameChange";
-            this.tglServerNameChange.Size = new System.Drawing.Size(80, 24);
-            this.tglServerNameChange.TabIndex = 13;
-            this.tglServerNameChange.Text = "Off";
-            this.tglServerNameChange.UseSelectable = true;
-            this.tglServerNameChange.CheckedChanged += new System.EventHandler(this.TglServerNameChange_CheckedChanged);
             // 
             // lblFullscreen
             // 
@@ -366,7 +320,6 @@
             // 
             this.tbxTitle.CustomButton.Image = null;
             this.tbxTitle.CustomButton.Location = new System.Drawing.Point(252, 1);
-            this.tbxTitle.CustomButton.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.tbxTitle.CustomButton.Name = "";
             this.tbxTitle.CustomButton.Size = new System.Drawing.Size(33, 33);
             this.tbxTitle.CustomButton.Style = MetroFramework.MetroColorStyle.Blue;
@@ -412,12 +365,58 @@
             this.lblDebugMode.TabIndex = 3;
             this.lblDebugMode.Text = "Debug Mode";
             // 
+            // lblServerNameChange
+            // 
+            this.lblServerNameChange.AutoSize = true;
+            this.lblServerNameChange.Location = new System.Drawing.Point(207, 24);
+            this.lblServerNameChange.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblServerNameChange.Name = "lblServerNameChange";
+            this.lblServerNameChange.Size = new System.Drawing.Size(132, 19);
+            this.lblServerNameChange.TabIndex = 14;
+            this.lblServerNameChange.Text = "ServerName Change";
+            // 
+            // tglServerNameChange
+            // 
+            this.tglServerNameChange.AutoSize = true;
+            this.tglServerNameChange.Location = new System.Drawing.Point(207, 58);
+            this.tglServerNameChange.Name = "tglServerNameChange";
+            this.tglServerNameChange.Size = new System.Drawing.Size(80, 24);
+            this.tglServerNameChange.TabIndex = 13;
+            this.tglServerNameChange.Text = "Off";
+            this.tglServerNameChange.UseSelectable = true;
+            this.tglServerNameChange.CheckedChanged += new System.EventHandler(this.TglServerNameChange_CheckedChanged);
+            // 
+            // langSelector
+            // 
+            this.langSelector.FormattingEnabled = true;
+            this.langSelector.ItemHeight = 23;
+            this.langSelector.Location = new System.Drawing.Point(1042, 58);
+            this.langSelector.Name = "langSelector";
+            this.langSelector.Size = new System.Drawing.Size(105, 29);
+            this.langSelector.TabIndex = 23;
+            this.langSelector.UseSelectable = true;
+            this.langSelector.SelectedIndexChanged += new System.EventHandler(this.LangSelector_SelectedIndexChanged);
+            // 
+            // pbFlag
+            // 
+            this.pbFlag.Image = global::ConquerLoader.Properties.Resources.en;
+            this.pbFlag.Location = new System.Drawing.Point(995, 58);
+            this.pbFlag.Name = "pbFlag";
+            this.pbFlag.Size = new System.Drawing.Size(39, 29);
+            this.pbFlag.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pbFlag.TabIndex = 24;
+            this.pbFlag.TabStop = false;
+            // 
             // Settings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1157, 820);
             this.Controls.Add(this.metroPanel1);
+            this.Controls.Add(this.langSelector);
+            this.Controls.Add(this.pbFlag);
+            this.Controls.Add(this.tglServerNameChange);
+            this.Controls.Add(this.lblServerNameChange);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.Name = "Settings";
@@ -426,9 +425,10 @@
             this.Load += new System.EventHandler(this.Settings_Load);
             this.metroPanel1.ResumeLayout(false);
             this.metroPanel1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pbFlag)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridViewSettings)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pbFlag)).EndInit();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
