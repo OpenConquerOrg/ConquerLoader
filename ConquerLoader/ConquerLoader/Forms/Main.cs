@@ -31,6 +31,16 @@ namespace ConquerLoader.Forms
             this.Theme = MetroFramework.MetroThemeStyle.Light;
             cbxResolutions.Visible = false; // Default invisible
             LoaderConfig = Core.GetLoaderConfig();
+            if (LoaderConfig.HighResolution)
+            {
+                cbxResolutions.Text = "1024x768";
+            } else if (LoaderConfig.FHDResolution)
+            {
+                cbxResolutions.Text = "1920x1080";
+            } else
+            {
+                cbxResolutions.Text = "800x600";
+            }
             if (Core.UseEncryptedConfig)
             {
                 btnSettings.Enabled = false;
@@ -314,33 +324,32 @@ namespace ConquerLoader.Forms
                         Core.LogWritter.Write("Changing Screen Options...");
                         string SetupIniPath = Path.Combine(Directory.GetCurrentDirectory(), "ini", "GameSetup.ini");
                         IniManager parser = new IniManager(SetupIniPath, "ScreenMode");
-                        parser.Write("ScreenMode", "FullScrType", LoaderConfig.FullScreen ? "0" : "1");
-                        if (LoaderConfig.HighResolution)
+                        /*
+                         *  ScreenModeRecord
+                         *  0 = 800x600, windowed
+                         *  1 = 800x600, full-screen
+                         *  2 = 1024x768, windowed
+                         *  3 = 1024x768, full-screen
+                         *  FullScrType
+                         *  1 = FullScreen
+                         *  0 = Windowed
+                        */
+                        parser.Write("ScreenMode", "FullScrType", LoaderConfig.FullScreen ? "1" : "0");
+                        parser.Write("ScreenMode", "ScrWidth", LoaderConfig.FHDResolution ? "1920" : LoaderConfig.HighResolution ? "1024" : "800");
+                        parser.Write("ScreenMode", "ScrHeight", LoaderConfig.FHDResolution ? "1080" : LoaderConfig.HighResolution ? "768" : "600");
+                        if (LoaderConfig.HighResolution || LoaderConfig.FHDResolution)
                         {
-                            parser.Write("ScreenMode", "ScrWidth", "1024");
-                            parser.Write("ScreenMode", "ScrHeight", "768");
-                            /*
-                             * ScreenModeRecord
-                             *  0 = 800x600, windowed
-                                1 = 800x600, full-screen
-                                2 = 1024x768, windowed
-                                3 = 1024x768, full-screen
-                             * */
                             parser.Write("ScreenMode", "ScreenModeRecord", LoaderConfig.FullScreen ? "3" : "2");
+                            Core.LogWritter.Write($"[+] Changing ScreenModeRecord to {(LoaderConfig.FullScreen ? "2" : "3")}");
                         }
                         else
                         {
-                            parser.Write("ScreenMode", "ScrWidth", "800");
-                            parser.Write("ScreenMode", "ScrHeight", "600");
-                            /*
-                             * ScreenModeRecord
-                             *  0 = 800x600, windowed
-                                1 = 800x600, full-screen
-                                2 = 1024x768, windowed
-                                3 = 1024x768, full-screen
-                             * */
                             parser.Write("ScreenMode", "ScreenModeRecord", LoaderConfig.FullScreen ? "1" : "0");
+                            Core.LogWritter.Write($"[+] Changing ScreenModeRecord to {(LoaderConfig.FullScreen ? "1" : "0")}");
                         }
+                        Core.LogWritter.Write($"[+] Changing FullScrType to {(LoaderConfig.FullScreen ? "0" : "1")}");
+                        Core.LogWritter.Write($"[+] Changing ScrWidth to {(LoaderConfig.HighResolution ? "1024" : "800")}");
+                        Core.LogWritter.Write($"[+] Changing ScrHeight to {(LoaderConfig.HighResolution ? "768" : "600")}");
                     }
                     worker.RunWorkerAsync();
                 }
@@ -684,12 +693,11 @@ namespace ConquerLoader.Forms
                 if (SelectedRes == "800x600")
                 {
                     LoaderConfig.HighResolution = false;
-                    LoaderConfig.DisableScreenChanges = true;
                 }
                 if (SelectedRes == "1024x768" || SelectedRes == "1920x1080")
                 {
-                    LoaderConfig.HighResolution = true;
-                    LoaderConfig.DisableScreenChanges = false;
+                    LoaderConfig.HighResolution = SelectedRes == "1024x768";
+                    LoaderConfig.FHDResolution = SelectedRes == "1920x1080";
                 }
                 Core.SaveLoaderConfig(LoaderConfig);
             }

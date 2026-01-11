@@ -48,10 +48,9 @@
             // btnStart
             // 
             this.btnStart.ForeColor = System.Drawing.Color.White;
-            this.btnStart.Location = new System.Drawing.Point(216, 127);
-            this.btnStart.Margin = new System.Windows.Forms.Padding(2);
+            this.btnStart.Location = new System.Drawing.Point(324, 195);
             this.btnStart.Name = "btnStart";
-            this.btnStart.Size = new System.Drawing.Size(186, 30);
+            this.btnStart.Size = new System.Drawing.Size(279, 46);
             this.btnStart.TabIndex = 0;
             this.btnStart.Text = "START";
             this.btnStart.UseSelectable = true;
@@ -59,9 +58,10 @@
             // 
             // pBar
             // 
-            this.pBar.Location = new System.Drawing.Point(25, 99);
+            this.pBar.Location = new System.Drawing.Point(38, 152);
+            this.pBar.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.pBar.Name = "pBar";
-            this.pBar.Size = new System.Drawing.Size(376, 23);
+            this.pBar.Size = new System.Drawing.Size(564, 35);
             this.pBar.TabIndex = 2;
             // 
             // worker
@@ -75,10 +75,11 @@
             // 
             this.cbxServers.FormattingEnabled = true;
             this.cbxServers.ItemHeight = 23;
-            this.cbxServers.Location = new System.Drawing.Point(25, 127);
+            this.cbxServers.Location = new System.Drawing.Point(38, 195);
+            this.cbxServers.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.cbxServers.Name = "cbxServers";
             this.cbxServers.PromptText = "Select a Server";
-            this.cbxServers.Size = new System.Drawing.Size(186, 29);
+            this.cbxServers.Size = new System.Drawing.Size(277, 29);
             this.cbxServers.TabIndex = 3;
             this.cbxServers.UseSelectable = true;
             this.cbxServers.SelectedIndexChanged += new System.EventHandler(this.CbxServers_SelectedIndexChanged);
@@ -86,10 +87,9 @@
             // btnLogModules
             // 
             this.btnLogModules.ForeColor = System.Drawing.Color.White;
-            this.btnLogModules.Location = new System.Drawing.Point(240, 62);
-            this.btnLogModules.Margin = new System.Windows.Forms.Padding(2);
+            this.btnLogModules.Location = new System.Drawing.Point(360, 95);
             this.btnLogModules.Name = "btnLogModules";
-            this.btnLogModules.Size = new System.Drawing.Size(103, 24);
+            this.btnLogModules.Size = new System.Drawing.Size(154, 37);
             this.btnLogModules.TabIndex = 4;
             this.btnLogModules.Text = "Log Modules";
             this.btnLogModules.UseSelectable = true;
@@ -98,19 +98,19 @@
             // serverStatus
             // 
             this.serverStatus.AutoSize = true;
-            this.serverStatus.Location = new System.Drawing.Point(22, 62);
+            this.serverStatus.Location = new System.Drawing.Point(33, 95);
+            this.serverStatus.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.serverStatus.Name = "serverStatus";
-            this.serverStatus.Size = new System.Drawing.Size(10, 13);
+            this.serverStatus.Size = new System.Drawing.Size(14, 20);
             this.serverStatus.TabIndex = 5;
             this.serverStatus.Text = "-";
             // 
             // btnSettings
             // 
             this.btnSettings.ForeColor = System.Drawing.Color.White;
-            this.btnSettings.Location = new System.Drawing.Point(347, 62);
-            this.btnSettings.Margin = new System.Windows.Forms.Padding(2);
+            this.btnSettings.Location = new System.Drawing.Point(520, 95);
             this.btnSettings.Name = "btnSettings";
-            this.btnSettings.Size = new System.Drawing.Size(54, 24);
+            this.btnSettings.Size = new System.Drawing.Size(81, 37);
             this.btnSettings.TabIndex = 6;
             this.btnSettings.Text = "Settings";
             this.btnSettings.UseSelectable = true;
@@ -124,10 +124,9 @@
             // btnCloseCO
             // 
             this.btnCloseCO.ForeColor = System.Drawing.Color.White;
-            this.btnCloseCO.Location = new System.Drawing.Point(162, 62);
-            this.btnCloseCO.Margin = new System.Windows.Forms.Padding(2);
+            this.btnCloseCO.Location = new System.Drawing.Point(243, 95);
             this.btnCloseCO.Name = "btnCloseCO";
-            this.btnCloseCO.Size = new System.Drawing.Size(74, 24);
+            this.btnCloseCO.Size = new System.Drawing.Size(111, 37);
             this.btnCloseCO.TabIndex = 7;
             this.btnCloseCO.Text = "Close CO Process";
             this.btnCloseCO.UseSelectable = true;
@@ -138,10 +137,9 @@
             this.lblAbout.ActiveLinkColor = System.Drawing.Color.DarkGray;
             this.lblAbout.AutoSize = true;
             this.lblAbout.LinkColor = System.Drawing.Color.DarkRed;
-            this.lblAbout.Location = new System.Drawing.Point(367, 13);
-            this.lblAbout.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lblAbout.Location = new System.Drawing.Point(550, 20);
             this.lblAbout.Name = "lblAbout";
-            this.lblAbout.Size = new System.Drawing.Size(35, 13);
+            this.lblAbout.Size = new System.Drawing.Size(52, 20);
             this.lblAbout.TabIndex = 8;
             this.lblAbout.TabStop = true;
             this.lblAbout.Text = "About";
@@ -155,10 +153,11 @@
             "800x600",
             "1024x768",
             "1920x1080"});
-            this.cbxResolutions.Location = new System.Drawing.Point(25, 162);
+            this.cbxResolutions.Location = new System.Drawing.Point(38, 249);
+            this.cbxResolutions.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.cbxResolutions.Name = "cbxResolutions";
             this.cbxResolutions.PromptText = "Change Resolution";
-            this.cbxResolutions.Size = new System.Drawing.Size(186, 29);
+            this.cbxResolutions.Size = new System.Drawing.Size(277, 29);
             this.cbxResolutions.TabIndex = 9;
             this.cbxResolutions.UseSelectable = true;
             this.cbxResolutions.SelectedIndexChanged += new System.EventHandler(this.CbxResolutions_SelectedIndexChanged);
@@ -166,7 +165,8 @@
             // lblFPSUnlock
             // 
             this.lblFPSUnlock.AutoSize = true;
-            this.lblFPSUnlock.Location = new System.Drawing.Point(240, 168);
+            this.lblFPSUnlock.Location = new System.Drawing.Point(360, 258);
+            this.lblFPSUnlock.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblFPSUnlock.Name = "lblFPSUnlock";
             this.lblFPSUnlock.Size = new System.Drawing.Size(72, 19);
             this.lblFPSUnlock.TabIndex = 33;
@@ -175,10 +175,9 @@
             // tglFPSUnlock
             // 
             this.tglFPSUnlock.AutoSize = true;
-            this.tglFPSUnlock.Location = new System.Drawing.Point(317, 170);
-            this.tglFPSUnlock.Margin = new System.Windows.Forms.Padding(2);
+            this.tglFPSUnlock.Location = new System.Drawing.Point(476, 262);
             this.tglFPSUnlock.Name = "tglFPSUnlock";
-            this.tglFPSUnlock.Size = new System.Drawing.Size(80, 17);
+            this.tglFPSUnlock.Size = new System.Drawing.Size(80, 24);
             this.tglFPSUnlock.TabIndex = 32;
             this.tglFPSUnlock.Text = "Off";
             this.tglFPSUnlock.UseSelectable = true;
@@ -186,9 +185,9 @@
             // 
             // Main
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(431, 200);
+            this.ClientSize = new System.Drawing.Size(646, 308);
             this.Controls.Add(this.lblFPSUnlock);
             this.Controls.Add(this.tglFPSUnlock);
             this.Controls.Add(this.cbxResolutions);
@@ -201,11 +200,10 @@
             this.Controls.Add(this.pBar);
             this.Controls.Add(this.btnStart);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Margin = new System.Windows.Forms.Padding(2);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "Main";
-            this.Padding = new System.Windows.Forms.Padding(13, 60, 13, 13);
+            this.Padding = new System.Windows.Forms.Padding(20, 92, 20, 20);
             this.Text = "ConquerLoader";
             this.Load += new System.EventHandler(this.Main_Load);
             this.SizeChanged += new System.EventHandler(this.TrayMinimizerForm_Resize);

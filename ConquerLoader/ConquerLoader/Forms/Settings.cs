@@ -66,6 +66,10 @@ namespace ConquerLoader
                 tglFPSUnlock.Checked = CurrentLoaderConfig.FPSUnlock;
                 tbxTitle.Text = CurrentLoaderConfig.Title;
                 gridViewSettings.DataSource = CurrentLoaderConfig.Servers;
+                if (CurrentLoaderConfig.FHDResolution)
+                {
+                    tglHighResolution.Checked = false; // Disable High Resolution if Custom FHD is enabled
+                }
             }
         }
 
