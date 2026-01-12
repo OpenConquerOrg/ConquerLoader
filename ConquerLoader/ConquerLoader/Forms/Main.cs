@@ -29,18 +29,7 @@ namespace ConquerLoader.Forms
             CLTheme.MainControls = this.Controls;
             this.Resizable = false;
             this.Theme = MetroFramework.MetroThemeStyle.Light;
-            cbxResolutions.Visible = false; // Default invisible
             LoaderConfig = Core.GetLoaderConfig();
-            if (LoaderConfig.HighResolution)
-            {
-                cbxResolutions.Text = "1024x768";
-            } else if (LoaderConfig.FHDResolution)
-            {
-                cbxResolutions.Text = "1920x1080";
-            } else
-            {
-                cbxResolutions.Text = "800x600";
-            }
             if (Core.UseEncryptedConfig)
             {
                 btnSettings.Enabled = false;
@@ -53,6 +42,18 @@ namespace ConquerLoader.Forms
             if (LoaderConfig != null) {
                 Constants.CloseOnFinish = LoaderConfig.CloseOnFinish;
                 CustomDLLs = LoaderConfig.UseCustomDLLs;
+                if (LoaderConfig.HighResolution)
+                {
+                    cbxResolutions.Text = "1024x768";
+                }
+                else if (LoaderConfig.FHDResolution)
+                {
+                    cbxResolutions.Text = "1920x1080";
+                }
+                else
+                {
+                    cbxResolutions.Text = "800x600";
+                }
             }
             Constants.MainWorker = worker;
             Core.LoadAvailablePlugins();
@@ -211,7 +212,14 @@ namespace ConquerLoader.Forms
                 {
                     if (LoaderConfig.DefaultServer != null && s.Equals(LoaderConfig.DefaultServer.ServerName))
                     {
-                        cbxResolutions.Visible = LoaderConfig.DefaultServer.ServerVersion == 5187;
+                        if (LoaderConfig.DefaultServer.ServerVersion == 5187)
+                        {
+                            if (!cbxResolutions.Items.Contains("1920x1080")) cbxResolutions.Items.Add("1920x1080");
+                        }
+                        else
+                        {
+                            if (cbxResolutions.Items.Contains("1920x1080")) cbxResolutions.Items.Remove("1920x1080");
+                        }
                         if (SelectDefault)
                         {
                             cbxServers.SelectedItem = s;
@@ -647,7 +655,13 @@ namespace ConquerLoader.Forms
                     {
                         cbxServers.SelectedItem = currentSender.SelectedItem.ToString();
                         LoaderConfig.DefaultServer = LoaderConfig.Servers.Where(x => x.ServerName == currentSender.SelectedItem.ToString()).FirstOrDefault();
-                        cbxResolutions.Visible = LoaderConfig.DefaultServer.ServerVersion == 5187;
+                        if (LoaderConfig.DefaultServer.ServerVersion == 5187)
+                        {
+                            if (!cbxResolutions.Items.Contains("1920x1080")) cbxResolutions.Items.Add("1920x1080");
+                        } else
+                        {
+                            if (cbxResolutions.Items.Contains("1920x1080")) cbxResolutions.Items.Remove("1920x1080");
+                        }
                         SetServerStatus();
                         Core.SaveLoaderConfig(LoaderConfig);
                     }

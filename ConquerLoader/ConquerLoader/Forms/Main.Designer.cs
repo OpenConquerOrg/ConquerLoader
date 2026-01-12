@@ -151,8 +151,7 @@
             this.cbxResolutions.ItemHeight = 23;
             this.cbxResolutions.Items.AddRange(new object[] {
             "800x600",
-            "1024x768",
-            "1920x1080"});
+            "1024x768"});
             this.cbxResolutions.Location = new System.Drawing.Point(38, 249);
             this.cbxResolutions.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.cbxResolutions.Name = "cbxResolutions";
