@@ -212,11 +212,11 @@ namespace ConquerLoader.Forms
                 {
                     if (LoaderConfig.DefaultServer != null && s.Equals(LoaderConfig.DefaultServer.ServerName))
                     {
-                        if (LoaderConfig.DefaultServer.ServerVersion == 5187)
+                        if (LoaderConfig.DefaultServer.ServerVersion == 5187 || LoaderConfig.DefaultServer.ServerVersion >= 5600)
                         {
                             if (!cbxResolutions.Items.Contains("1920x1080")) cbxResolutions.Items.Add("1920x1080");
                         }
-                        else
+                        else if (LoaderConfig.DefaultServer.ServerVersion < 5600)
                         {
                             if (cbxResolutions.Items.Contains("1920x1080")) cbxResolutions.Items.Remove("1920x1080");
                         }
@@ -338,26 +338,28 @@ namespace ConquerLoader.Forms
                          *  1 = 800x600, full-screen
                          *  2 = 1024x768, windowed
                          *  3 = 1024x768, full-screen
+                         *  4 = Custom Resolution. The problem is the client are limited to 1024x768 in FullScreen, so, force using window mode in some configurations of fullscreen
                          *  FullScrType
-                         *  1 = FullScreen
-                         *  0 = Windowed
+                         *  1 = Windowed
+                         *  0 = FullScreen
                         */
-                        parser.Write("ScreenMode", "FullScrType", LoaderConfig.FullScreen ? "1" : "0");
+                        parser.Write("ScreenMode", "FullScrType", LoaderConfig.FullScreen ? "0" : "1");
+                        Core.LogWritter.Write($"[+] Changing FullScrType to {(LoaderConfig.FullScreen ? "0" : "1")}");
                         parser.Write("ScreenMode", "ScrWidth", LoaderConfig.FHDResolution ? "1920" : LoaderConfig.HighResolution ? "1024" : "800");
                         parser.Write("ScreenMode", "ScrHeight", LoaderConfig.FHDResolution ? "1080" : LoaderConfig.HighResolution ? "768" : "600");
+                        bool isCustomResolution = LoaderConfig.FHDResolution && SelectedServer.ServerVersion >= 5600;
                         if (LoaderConfig.HighResolution || LoaderConfig.FHDResolution)
                         {
-                            parser.Write("ScreenMode", "ScreenModeRecord", LoaderConfig.FullScreen ? "3" : "2");
-                            Core.LogWritter.Write($"[+] Changing ScreenModeRecord to {(LoaderConfig.FullScreen ? "2" : "3")}");
+                            parser.Write("ScreenMode", "ScreenModeRecord", LoaderConfig.FullScreen ? "3" : isCustomResolution ? "4" : "2");
+                            Core.LogWritter.Write($"[+] Changing ScreenModeRecord to {(LoaderConfig.FullScreen ? "3" : isCustomResolution ? "4" : "2")}");
                         }
                         else
                         {
                             parser.Write("ScreenMode", "ScreenModeRecord", LoaderConfig.FullScreen ? "1" : "0");
                             Core.LogWritter.Write($"[+] Changing ScreenModeRecord to {(LoaderConfig.FullScreen ? "1" : "0")}");
                         }
-                        Core.LogWritter.Write($"[+] Changing FullScrType to {(LoaderConfig.FullScreen ? "0" : "1")}");
-                        Core.LogWritter.Write($"[+] Changing ScrWidth to {(LoaderConfig.HighResolution ? "1024" : "800")}");
-                        Core.LogWritter.Write($"[+] Changing ScrHeight to {(LoaderConfig.HighResolution ? "768" : "600")}");
+                        Core.LogWritter.Write($"[+] Changing ScrWidth to {(LoaderConfig.FHDResolution ? "1920" : LoaderConfig.HighResolution ? "1024" : "800")}");
+                        Core.LogWritter.Write($"[+] Changing ScrHeight to {(LoaderConfig.FHDResolution ? "1080" : LoaderConfig.HighResolution ? "768" : "600")}");
                     }
                     worker.RunWorkerAsync();
                 }
@@ -655,10 +657,11 @@ namespace ConquerLoader.Forms
                     {
                         cbxServers.SelectedItem = currentSender.SelectedItem.ToString();
                         LoaderConfig.DefaultServer = LoaderConfig.Servers.Where(x => x.ServerName == currentSender.SelectedItem.ToString()).FirstOrDefault();
-                        if (LoaderConfig.DefaultServer.ServerVersion == 5187)
+                        if (LoaderConfig.DefaultServer.ServerVersion == 5187 || LoaderConfig.DefaultServer.ServerVersion >= 5600)
                         {
                             if (!cbxResolutions.Items.Contains("1920x1080")) cbxResolutions.Items.Add("1920x1080");
-                        } else
+                        }
+                        else if (LoaderConfig.DefaultServer.ServerVersion < 5600)
                         {
                             if (cbxResolutions.Items.Contains("1920x1080")) cbxResolutions.Items.Remove("1920x1080");
                         }
