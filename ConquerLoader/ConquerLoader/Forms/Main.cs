@@ -17,8 +17,10 @@ namespace ConquerLoader.Forms
         public LoaderConfig LoaderConfig = null;
         public ServerConfiguration SelectedServer = null;
         public Process CurrentConquerProcess = null;
-        public string HookINI = "CLHook.ini";
-        public string HookDLL = "CLHook.dll";
+        public string LegacyHookINI = "CLHook.ini";
+        public string LegacyHookDLL = "CLHook.dll";
+        public bool LegacyHookEnabled = false; // In old versions need for work, the idea is replace with COHook only and CipherHook
+        public string HookDLL = "COHook.dll";
         public bool AllStarted = false;
         public bool DX9Allowed = false;
         public bool CustomDLLs = false;
@@ -30,6 +32,12 @@ namespace ConquerLoader.Forms
             this.Resizable = false;
             this.Theme = MetroFramework.MetroThemeStyle.Light;
             LoaderConfig = Core.GetLoaderConfig();
+            if (LoaderConfig == null) // Prevent need restart for create config file in first launch
+            {
+                LoaderConfig lc = new LoaderConfig();
+                Core.SaveLoaderConfig(lc);
+                LoaderConfig = Core.GetLoaderConfig();
+            }
             if (Core.UseEncryptedConfig)
             {
                 btnSettings.Enabled = false;
@@ -93,6 +101,11 @@ namespace ConquerLoader.Forms
                 Process.Start("cpp2015-2019x86.exe").WaitForExit();
                 File.Delete("cpp2015-2019x86.exe");
             }
+
+            if (LoaderConfig.Servers.Count <= 0)
+            {
+                MetroFramework.MetroMessageBox.Show(this, "No servers configured. Click on Settings > New+ for Setup first Server", this.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
         }
 
         private void GenerateRequiredDLL()
@@ -105,9 +118,13 @@ namespace ConquerLoader.Forms
             {
                 Core.LogWritter.Write("Generated CLHook.dll");
                 SafeIO.TryWriteAllBytes(Path.Combine(WorkingDir, "CLHook.dll"), Properties.Resources.CLHook_Legacy, ex => Core.LogWritter.Write(ex.ToString()));
-            } else
+            }
+            else
             {
-                Core.LogWritter.Write("Using existing CLHook.dll");
+                if (LegacyHookEnabled)
+                {
+                    Core.LogWritter.Write("Using existing CLHook.dll");
+                }
             }
             if (!File.Exists(Path.Combine(Directory.GetCurrentDirectory(), "ConquerCipherHook.dll")))
             {
@@ -263,9 +280,9 @@ namespace ConquerLoader.Forms
                     SelectedServer = LoaderConfig.Servers.Where(x => x.ServerName == cbxServers.SelectedItem.ToString()).FirstOrDefault();
                     LoaderConfig.DefaultServer = SelectedServer;
                     Core.SaveLoaderConfig(LoaderConfig);
-                    if (File.Exists(HookINI))
+                    if (File.Exists(LegacyHookINI))
                     {
-                        File.Delete(HookINI);
+                        File.Delete(LegacyHookINI);
                     }
                     if (LoaderConfig.ServernameChange) // That is deprecated, in future are removed from code
                     {
@@ -313,7 +330,7 @@ namespace ConquerLoader.Forms
                         SelectedServer.ServerNameMemoryAddress = "0";
                     }
                     // Create first the config used by DLL
-                    File.WriteAllText(HookINI, "[CLHook]"
+                    File.WriteAllText(LegacyHookINI, "[CLHook]"
                         + Environment.NewLine + "HOST=" + SelectedServer.LoginHost
                         + Environment.NewLine + "GAMEHOST=" + SelectedServer.GameHost
                         + Environment.NewLine + "PORT=" + SelectedServer.LoginPort
@@ -377,38 +394,30 @@ namespace ConquerLoader.Forms
 
         private void Worker_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
         {
-            if (CustomDLLs)
-            {
-                HookDLL = "COHook.dll";
-            }
             // Do start conquer and inject
             Core.LogWritter.Write("Launching " + SelectedServer.ExecutableName + "...");
             string PathToConquerExe = Path.Combine(Application.StartupPath, SelectedServer.ExecutableName);
             string WorkingDir = Path.GetDirectoryName(PathToConquerExe);
             bool NoUseDX8_DX9 = true;
-            bool UseDecryptedServerDat = false;
+            bool UseDecryptedServerDat = true;
             bool AlreadyUsingLoader = Process.GetProcessesByName(Process.GetCurrentProcess().ProcessName).Length >= 1;
             if (AlreadyUsingLoader)
             {
-                Core.LogWritter.Write("Detected already using ConnquerLoader.");
+                Core.LogWritter.Write("Detected already using ConquerLoader.");
             }
             GenerateRequiredDLL();
             if (SelectedServer.ServerVersion >= Constants.MinVersionUseRAWServerDat && SelectedServer.ServerVersion <= Constants.MaxVersionUseRAWServerDat)
             {
-                HookDLL = "COHook.dll";
                 Core.LogWritter.Write("Using Custom Server.dat (New Raw Mode, Better performance)...");
                 RebuildServerDat();
-                CustomDLLs = true; // Force Launch first the dll COHook
-            }
-            // If using 6000 Version or more the HookDLL Used is COHook.dll
-            if ((SelectedServer.ServerVersion >= Constants.MinVersionUseServerDat && SelectedServer.ServerVersion <= Constants.MaxVersionUseServerDat) || Constants.ForceServerDat)
-            {
-                HookDLL = "COHook.dll";
-                Core.LogWritter.Write("Using Custom Server.dat...");
-                UseDecryptedServerDat = true;
             }
             if (File.Exists(PathToConquerExe))
             {
+                if (SelectedServer.ServerVersion >= Constants.MinVersionUseRAWServerDat && SelectedServer.ServerVersion <= Constants.MaxVersionUseRAWServerDat && !CustomDLLs)
+                {
+                    bool HookCreated = SafeIO.TryWriteAllBytes(Path.Combine(WorkingDir, HookDLL), Properties.Resources.COServerDat); // 5095 - 5716
+                    Core.LogWritter.Write($"Generating required files for use Custom Server.dat... Hook Created: {HookCreated} [{Path.Combine(WorkingDir, HookDLL)}]");
+                }
                 string CheckPathEnvDX8 = Path.Combine(Application.StartupPath, "Env_DX8", SelectedServer.ExecutableName);
                 string CheckPathEnvDX9 = Path.Combine(Application.StartupPath, "Env_DX9", SelectedServer.ExecutableName);
                 Core.LogWritter.Write("Checking if existing path: " + CheckPathEnvDX8 + "...");
@@ -419,24 +428,19 @@ namespace ConquerLoader.Forms
                     WorkingDir = Path.GetDirectoryName(PathToConquerExe);
                     if (CurrentConquerProcess == null)
                     {
-                        string OutputCopyDll = Path.Combine(Application.StartupPath, "Env_DX8", HookINI);
+                        string OutputCopyDll = Path.Combine(Application.StartupPath, "Env_DX8", LegacyHookINI);
                         if (File.Exists(OutputCopyDll))
                         {
                             File.Delete(OutputCopyDll);
                         }
                         if (!AlreadyUsingLoader)
                         {
-                            File.Copy(Path.Combine(Application.StartupPath, HookINI), OutputCopyDll);
+                            File.Copy(Path.Combine(Application.StartupPath, LegacyHookINI), OutputCopyDll);
                         }
-                        if (SelectedServer.ServerVersion >= 6371 && SelectedServer.ServerVersion <= Constants.MaxVersionUseServerDat)
+                        if (SelectedServer.ServerVersion >= 6371 && SelectedServer.ServerVersion <= Constants.MaxVersionUseRAWServerDat)
                         {
                             RebuildServerDat();
                             SafeIO.TryWriteAllBytes(Path.Combine(WorkingDir, "TQAnp.dll"), Properties.Resources.TQAnp, ex => Core.LogWritter.Write(ex.ToString()));
-                            if (!CustomDLLs)
-                            {
-                                Core.LogWritter.Write("Generating required files for use Custom Server.dat... (Using DX8)");
-                                SafeIO.TryWriteAllBytes(Path.Combine(Application.StartupPath, HookDLL), Properties.Resources.COHook6371, ex => Core.LogWritter.Write(ex.ToString()));
-                            }
                         }
                     }
                     NoUseDX8_DX9 = false;
@@ -450,47 +454,27 @@ namespace ConquerLoader.Forms
                         WorkingDir = Path.GetDirectoryName(PathToConquerExe);
                         if (CurrentConquerProcess == null)
                         {
-                            string OutputCopyDll = Path.Combine(Application.StartupPath, "Env_DX9", HookINI);
+                            string OutputCopyDll = Path.Combine(Application.StartupPath, "Env_DX9", LegacyHookINI);
                             if (File.Exists(OutputCopyDll))
                             {
                                 File.Delete(OutputCopyDll);
                             }
-                            File.Copy(Path.Combine(Application.StartupPath, HookINI), OutputCopyDll);
+                            File.Copy(Path.Combine(Application.StartupPath, LegacyHookINI), OutputCopyDll);
                             if (SelectedServer.ServerVersion >= 6600)
                             {
                                 RebuildServerDat();
                                 SafeIO.TryWriteAllBytes(Path.Combine(WorkingDir, "TQAnp.dll"), Properties.Resources.TQAnp, ex => Core.LogWritter.Write(ex.ToString()));
-                                if (!CustomDLLs)
-                                {
-                                    Core.LogWritter.Write("Generating required files for use Custom Server.dat... (Using DX9)");
-                                    SafeIO.TryWriteAllBytes(Path.Combine(Application.StartupPath, HookDLL), Properties.Resources.COHook6371, ex => Core.LogWritter.Write(ex.ToString()));
-                                }
                             }
                         }
                         NoUseDX8_DX9 = false;
                     }
                 }
-                if (NoUseDX8_DX9 && UseDecryptedServerDat  && SelectedServer.ServerVersion >= Constants.MinVersionUseServerDat)
+                if (NoUseDX8_DX9 && UseDecryptedServerDat  && SelectedServer.ServerVersion >= Constants.MinVersionCreateFlashFix)
                 {
-                    if (!CustomDLLs)
-                    {
-                        SafeIO.TryWriteAllBytes(Path.Combine(WorkingDir, "COFlashFixer.dll"), Properties.Resources.COFlashFixer_DLL); // Fix for flash
-                        if (SelectedServer.ServerVersion >= 6176 && SelectedServer.ServerVersion <= 6370)
-                        {
-                            SafeIO.TryWriteAllBytes(Path.Combine(WorkingDir, HookDLL), Properties.Resources.COHook6176); // 6176 TO 6370 Hook
-                        }
-                        else
-                        {
-                            SafeIO.TryWriteAllBytes(Path.Combine(WorkingDir, HookDLL), Properties.Resources.COHook6022); // V5717 TO V6175 Hook
-                        }
-                        Core.LogWritter.Write("Generating required files for use Custom Server.dat...");
-                    }
+                    Core.LogWritter.Write("Generating COFlashFixer.dll...");
+                    bool createdFlashFix = SafeIO.TryWriteAllBytes(Path.Combine(WorkingDir, "COFlashFixer.dll"), Properties.Resources.COFlashFixer_DLL); // Fix for flash
+                    Core.LogWritter.Write($"Generating COFlashFixer.dll... [{(createdFlashFix ? "Created" : "Failed")}]");
                     RebuildServerDat();
-                }
-                if (SelectedServer.ServerVersion >= Constants.MinVersionUseRAWServerDat && SelectedServer.ServerVersion <= Constants.MaxVersionUseRAWServerDat && !CustomDLLs)
-                {
-                    bool HookCreated = SafeIO.TryWriteAllBytes(Path.Combine(WorkingDir, HookDLL), Properties.Resources.COServerDat); // 5095 - 5716
-                    Core.LogWritter.Write($"Generating required files for use Custom Server.dat... Hook Created: {HookCreated}");
                 }
                 Process conquerProc = Process.Start(new ProcessStartInfo() { FileName = PathToConquerExe, WorkingDirectory = WorkingDir, Arguments = "blacknull" });
                 if (conquerProc != null)
@@ -555,7 +539,7 @@ namespace ConquerLoader.Forms
                                 Core.LogWritter.Write("Injected COFlashFixer successfully!");
                             }
                         }
-                        if (SelectedServer.ServerVersion >= Constants.MinVersionUseServerDat)
+                        if (SelectedServer.ServerVersion >= Constants.MinVersionUseRAWServerDat)
                         {
                             if (!Injector.StartInjection(Application.StartupPath + @"\" + "ConquerCipherHook.dll", (uint)conquerProc.Id, worker).Injected)
                             {
@@ -576,6 +560,18 @@ namespace ConquerLoader.Forms
                         else
                         {
                             Core.LogWritter.Write($"Injected {HookDLL} successfully!");
+                        }
+                        if (LegacyHookEnabled)
+                        {
+                            if (!Injector.StartInjection(Application.StartupPath + @"\" + LegacyHookDLL, (uint)conquerProc.Id, worker).Injected)
+                            {
+                                Core.LogWritter.Write($"Injection {LegacyHookDLL} failed! Reason: {Injector.LastStatus.ResultMessage}");
+                                MetroFramework.MetroMessageBox.Show(this, $"[{SelectedServer.ServerName}] Cannot inject {LegacyHookDLL}", this.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            }
+                            else
+                            {
+                                Core.LogWritter.Write($"Injected {LegacyHookDLL} successfully!");
+                            }
                         }
                     } else
                     {

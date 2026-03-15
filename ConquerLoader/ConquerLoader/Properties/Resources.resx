@@ -121,9 +121,6 @@
   <data name="ServersXML" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\serversxml.xml;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
-  <data name="COHook6022" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\cohook6022.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
   <data name="lang-es" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\es.json;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
@@ -142,9 +139,6 @@
   <data name="pt" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\pt.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="COHook6176" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\COHook6176.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
   <data name="VC_redist_x86" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\VC_redist.x86.exe;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
@@ -156,9 +150,6 @@
   </data>
   <data name="ServersXML_5717" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\serversxml_5717.xml;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
-  </data>
-  <data name="COHook6371" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\COHook6371.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="es" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\es.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>

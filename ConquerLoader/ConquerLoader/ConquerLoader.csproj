@@ -295,9 +295,6 @@
     <None Include="Resources\TQAnp.dll" />
     <None Include="Resources\ServersXML_5717.xml" />
     <None Include="Resources\COFlashFixer_DLL.dll" />
-    <None Include="Resources\COHook6022.dll" />
-    <None Include="Resources\COHook6371.dll" />
-    <None Include="Resources\COHook6176.dll" />
     <None Include="Resources\ServersXML.xml" />
   </ItemGroup>
   <ItemGroup>

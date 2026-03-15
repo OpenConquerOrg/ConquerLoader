@@ -166,7 +166,7 @@ namespace ConquerLoader
             bool isNumber = int.TryParse(tbxVersion.Text, out _);
             if (isNumber)
             {
-                if (tbxVersion.Text.Length > 0 && (int.Parse(tbxVersion.Text) >= Constants.MinVersionUseServerDat || int.Parse(tbxVersion.Text) >= Constants.MinVersionUseRAWServerDat))
+                if (tbxVersion.Text.Length > 0 && int.Parse(tbxVersion.Text) >= Constants.MinVersionUseRAWServerDat)
                 {
                     tbxGamePort.Text = "5816";
                     tbxGroupIcon.Visible = true;

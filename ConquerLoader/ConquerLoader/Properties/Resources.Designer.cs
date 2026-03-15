@@ -83,36 +83,6 @@ namespace ConquerLoader.Properties {
         /// <summary>
         ///   Busca un recurso adaptado de tipo System.Byte[].
         /// </summary>
-        internal static byte[] COHook6022 {
-            get {
-                object obj = ResourceManager.GetObject("COHook6022", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Busca un recurso adaptado de tipo System.Byte[].
-        /// </summary>
-        internal static byte[] COHook6176 {
-            get {
-                object obj = ResourceManager.GetObject("COHook6176", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Busca un recurso adaptado de tipo System.Byte[].
-        /// </summary>
-        internal static byte[] COHook6371 {
-            get {
-                object obj = ResourceManager.GetObject("COHook6371", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Busca un recurso adaptado de tipo System.Byte[].
-        /// </summary>
         internal static byte[] ConquerCipherHook {
             get {
                 object obj = ResourceManager.GetObject("ConquerCipherHook", resourceCulture);

@@ -20,6 +20,25 @@ namespace ConquerLoader
             Core.LoadControlTranslations(Controls);
         }
 
+        public void SetDefaultUI()
+        {
+            tglDebugMode.Checked = CurrentLoaderConfig.DebugMode;
+            tglCloseOnFinish.Checked = CurrentLoaderConfig.CloseOnFinish;
+            tglHighResolution.Checked = CurrentLoaderConfig.HighResolution;
+            tglFullscreen.Checked = CurrentLoaderConfig.FullScreen;
+            tglServerNameChange.Checked = CurrentLoaderConfig.ServernameChange;
+            tglDisableAutoFixFlash.Checked = CurrentLoaderConfig.DisableAutoFixFlash;
+            tglDisableScreenChanges.Checked = CurrentLoaderConfig.DisableScreenChanges;
+            tglUseCustomDLLs.Checked = CurrentLoaderConfig.UseCustomDLLs;
+            tglFPSUnlock.Checked = CurrentLoaderConfig.FPSUnlock;
+            tbxTitle.Text = CurrentLoaderConfig.Title;
+            gridViewSettings.DataSource = CurrentLoaderConfig.Servers;
+            if (CurrentLoaderConfig.FHDResolution)
+            {
+                tglHighResolution.Checked = false; // Disable High Resolution if Custom FHD is enabled
+            }
+        }
+
         private void Settings_Load(object sender, EventArgs e)
         {
             if ((MetroFramework.Forms.MetroForm)Tag != null)
@@ -55,21 +74,7 @@ namespace ConquerLoader
                 Environment.Exit(0);
             } else
             {
-                tglDebugMode.Checked = CurrentLoaderConfig.DebugMode;
-                tglCloseOnFinish.Checked = CurrentLoaderConfig.CloseOnFinish;
-                tglHighResolution.Checked = CurrentLoaderConfig.HighResolution;
-                tglFullscreen.Checked = CurrentLoaderConfig.FullScreen;
-                tglServerNameChange.Checked = CurrentLoaderConfig.ServernameChange;
-                tglDisableAutoFixFlash.Checked = CurrentLoaderConfig.DisableAutoFixFlash;
-                tglDisableScreenChanges.Checked = CurrentLoaderConfig.DisableScreenChanges;
-                tglUseCustomDLLs.Checked = CurrentLoaderConfig.UseCustomDLLs;
-                tglFPSUnlock.Checked = CurrentLoaderConfig.FPSUnlock;
-                tbxTitle.Text = CurrentLoaderConfig.Title;
-                gridViewSettings.DataSource = CurrentLoaderConfig.Servers;
-                if (CurrentLoaderConfig.FHDResolution)
-                {
-                    tglHighResolution.Checked = false; // Disable High Resolution if Custom FHD is enabled
-                }
+                SetDefaultUI();
             }
         }
 
