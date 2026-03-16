@@ -11,7 +11,7 @@ namespace CLCore
 {
     public static class CLServerConfig
     {
-        public static string APIBaseUri = "https://api.conquerloader.com/api";
+        public static string APIBaseUri = "https://api.conquerloader.com/api"; // local => "http://localhost:5258/api"
         public static uint ServerPort = 8000;
     }
     public class ConnectionEvent

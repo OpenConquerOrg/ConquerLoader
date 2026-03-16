@@ -19,7 +19,7 @@ namespace ConquerLoader.Forms
         public Process CurrentConquerProcess = null;
         public string LegacyHookINI = "CLHook.ini";
         public string LegacyHookDLL = "CLHook.dll";
-        public bool LegacyHookEnabled = false; // In old versions need for work, the idea is replace with COHook only and CipherHook
+        public bool LegacyHookEnabled = false; // Legacy Hook for unsupported versions (If find some version incompatible try it)
         public string HookDLL = "COHook.dll";
         public bool AllStarted = false;
         public bool DX9Allowed = false;

@@ -22,5 +22,6 @@
 		/// The method is called when go to configuration button of plugin in ConquerLoader.
 		/// </summary>
 		void Configure();
-	}
+        //bool RemotePlugin { get; set; }
+    }
 }

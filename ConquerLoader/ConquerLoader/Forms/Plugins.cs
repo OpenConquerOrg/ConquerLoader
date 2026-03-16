@@ -22,7 +22,7 @@ namespace ConquerLoader.Forms
             {
                 MetroFramework.Controls.MetroButton mBtn = new MetroFramework.Controls.MetroButton
                 {
-                    Text = plugin.Name,
+                    Text = plugin.Name,//+ (plugin.RemotePlugin ? " [Remote]" : ""),
                     Location = new Point(initLocationX, initLocationY),
                     Size = new Size(161, 50)
                 };

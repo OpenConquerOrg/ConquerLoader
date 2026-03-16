@@ -75,7 +75,9 @@ namespace CLCore
 				foreach (Type type in types)
 				{
 					//Create a new instance of all found types
-					Plugins.Add((IPlugin)Activator.CreateInstance(type));
+					var pluginInstance = (IPlugin)Activator.CreateInstance(type);
+					//pluginInstance.RemotePlugin = true;
+                    Plugins.Add(pluginInstance);
 				}
 			}
 			return Loaded;

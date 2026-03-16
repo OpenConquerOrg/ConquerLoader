@@ -219,6 +219,12 @@
     <Compile Include="Forms\ServerDatManager.Designer.cs">
       <DependentUpon>ServerDatManager.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\SetupLicense.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\SetupLicense.Designer.cs">
+      <DependentUpon>SetupLicense.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\Wizard.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -250,6 +256,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\ServerDatManager.resx">
       <DependentUpon>ServerDatManager.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\SetupLicense.resx">
+      <DependentUpon>SetupLicense.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Wizard.resx">
       <DependentUpon>Wizard.cs</DependentUpon>

@@ -2,6 +2,7 @@
 using ConquerLoader.Forms;
 using MetroFramework.Controls;
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Windows.Forms;
 
@@ -18,6 +19,10 @@ namespace ConquerLoader
         {
             InitializeComponent();
             Core.LoadControlTranslations(Controls);
+            if (Debugger.IsAttached)
+            {
+                btnSetupLicense.Visible = true;
+            }
         }
 
         public void SetDefaultUI()
@@ -242,9 +247,10 @@ namespace ConquerLoader
             Application.Exit();
         }
 
-        private void lblFPSUnlock_Click(object sender, EventArgs e)
+        private void BtnSetupLicense_Click(object sender, EventArgs e)
         {
-
+            SetupLicense setupLic = new SetupLicense();
+            setupLic.ShowDialog();
         }
     }
 }
