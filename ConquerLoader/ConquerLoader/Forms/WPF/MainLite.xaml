@@ -33,8 +33,6 @@
             <SolidColorBrush x:Key="OutlineBrush" Color="#9EA6B4" />
             <SolidColorBrush x:Key="TextPrimaryBrush" Color="#F4F7FC" />
             <SolidColorBrush x:Key="TextSecondaryBrush" Color="#D3D9E3" />
-            <SolidColorBrush x:Key="SuccessBrush" Color="#73D995" />
-            <SolidColorBrush x:Key="DangerBrush" Color="#FF8974" />
             <SolidColorBrush x:Key="GoldBrush" Color="#E7EBF3" />
 
             <Style x:Key="CardBorderStyle" TargetType="Border">
@@ -258,12 +256,6 @@
                         </ControlTemplate>
                     </Setter.Value>
                 </Setter>
-            </Style>
-
-            <Style x:Key="DangerButtonStyle" TargetType="Button" BasedOn="{StaticResource SecondaryButtonStyle}">
-                <Setter Property="Foreground" Value="{StaticResource DangerBrush}" />
-                <Setter Property="BorderBrush" Value="#7F1D1D" />
-                <Setter Property="Background" Value="#2A1317" />
             </Style>
 
             <Style x:Key="ComboToggleButtonStyle" TargetType="ToggleButton">
@@ -805,8 +797,6 @@
                                         <RowDefinition Height="Auto" />
                                         <RowDefinition Height="18" />
                                         <RowDefinition Height="Auto" />
-                                        <RowDefinition Height="18" />
-                                        <RowDefinition Height="Auto" />
                                     </Grid.RowDefinitions>
 
                                     <StackPanel>
@@ -817,7 +807,7 @@
                                         <TextBlock x:Name="txtActionsDescription"
                                            Margin="0,8,0,0"
                                            Style="{StaticResource BodyStyle}"
-                                           Text="Set the resolution first, then reveal the advanced tools only when you really need them." />
+                                           Text="Choose the resolution and FPS behavior before launching." />
                                     </StackPanel>
 
                                     <Border Grid.Row="2"
@@ -874,38 +864,6 @@
                                         </Grid>
                                     </Border>
 
-                                    <Border x:Name="diagnosticsCard"
-                                    Grid.Row="6"
-                                    Style="{StaticResource ScenePanelStyle}"
-                                    Background="#5A12141A"
-                                    BorderBrush="#CED5DE"
-                                    Padding="20"
-                                    Visibility="Collapsed">
-                                        <StackPanel>
-                                            <TextBlock x:Name="txtDiagnosticsTitle"
-                                               FontSize="14"
-                                               FontWeight="SemiBold"
-                                               Foreground="{StaticResource TextPrimaryBrush}"
-                                               Text="Diagnostics" />
-                                            <TextBlock x:Name="txtDiagnosticsDescription"
-                                               Margin="0,8,0,0"
-                                               Style="{StaticResource BodyStyle}"
-                                               Text="These debug actions are only shown when Debug Mode is enabled in Settings." />
-
-                                            <Button x:Name="btnLogModules"
-                                            Height="44"
-                                            Margin="0,18,0,12"
-                                            Click="BtnLogModules_Click"
-                                            Content="Log Modules"
-                                            Style="{StaticResource SecondaryButtonStyle}" />
-
-                                            <Button x:Name="btnCloseCO"
-                                            Height="44"
-                                            Click="BtnCloseCO_Click"
-                                            Content="Close Game Process"
-                                            Style="{StaticResource DangerButtonStyle}" />
-                                        </StackPanel>
-                                    </Border>
                                 </Grid>
                             </Border>
                         </Grid>

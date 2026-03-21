@@ -164,53 +164,113 @@
                 </Grid>
             </Border>
             <Grid Grid.Row="1" Margin="24">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="20" />
-            <RowDefinition Height="*" />
-        </Grid.RowDefinitions>
-        <Border Style="{StaticResource CardStyle}">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="16" />
-                    <ColumnDefinition Width="Auto" />
-                </Grid.ColumnDefinitions>
-                <StackPanel Grid.Column="0">
-                    <TextBlock x:Name="txtPluginsHeading" FontSize="28" FontWeight="SemiBold" Foreground="{StaticResource TextPrimaryBrush}" Text="Plugins" TextWrapping="Wrap" />
-                    <TextBlock x:Name="txtPluginsDescription" Margin="0,8,0,0" FontSize="14" Foreground="{StaticResource TextSecondaryBrush}" Text="Open a plugin configuration screen from a clearer list of installed modules." TextWrapping="Wrap" />
-                </StackPanel>
-                <Button x:Name="btnClose" Grid.Column="2" Width="110" Click="BtnClose_Click" Content="Close" Style="{StaticResource SecondaryButtonStyle}" />
-            </Grid>
-        </Border>
-        <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto">
-            <ItemsControl x:Name="pluginsItems">
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <WrapPanel ItemWidth="290" />
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <Border Width="270" Margin="0,0,20,20" Padding="20" Background="{StaticResource SurfaceBrush}" BorderBrush="#5A3D25" BorderThickness="1" CornerRadius="20">
-                            <Grid>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto" />
-                                    <RowDefinition Height="Auto" />
-                                    <RowDefinition Height="Auto" />
-                                    <RowDefinition Height="*" />
-                                    <RowDefinition Height="Auto" />
-                                </Grid.RowDefinitions>
-                                <TextBlock FontSize="18" FontWeight="SemiBold" Foreground="{StaticResource TextPrimaryBrush}" Text="{Binding Name}" TextWrapping="Wrap" />
-                                <TextBlock Grid.Row="1" Margin="0,10,0,0" FontSize="13" Foreground="{StaticResource TextSecondaryBrush}" Text="{Binding Explanation}" TextWrapping="Wrap" />
-                                <TextBlock Grid.Row="2" Margin="0,12,0,0" FontSize="12" FontWeight="SemiBold" Foreground="{StaticResource PrimaryBrush}" Text="{Binding PluginType}" TextWrapping="Wrap" />
-                                <Button Grid.Row="4" Margin="0,18,0,0" Height="42" Click="BtnConfigure_Click" Loaded="ConfigureButton_Loaded" Content="Configure" Tag="{Binding}" Style="{StaticResource SecondaryButtonStyle}" />
-                            </Grid>
-                        </Border>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
-        </ScrollViewer>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="20" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <Border Style="{StaticResource CardStyle}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="18" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Grid.Column="0">
+                            <TextBlock x:Name="txtPluginsHeading" FontSize="28" FontWeight="SemiBold" Foreground="{StaticResource TextPrimaryBrush}" Text="Plugins" TextWrapping="Wrap" />
+                            <TextBlock x:Name="txtPluginsDescription" Margin="0,8,0,0" FontSize="14" Foreground="{StaticResource TextSecondaryBrush}" Text="Review local plugins, browse remote modules from your license, and decide which ones should be installed." TextWrapping="Wrap" />
+                            <TextBlock x:Name="txtPluginsHint" Margin="0,12,0,0" FontSize="12" Foreground="{StaticResource PrimaryBrush}" Text="Local plugins come from the Plugins folder. Remote plugins only appear when your license exposes them." TextWrapping="Wrap" />
+                        </StackPanel>
+                        <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Top">
+                            <Button x:Name="btnRefresh" Width="120" Margin="0,0,12,0" Click="BtnRefresh_Click" Content="Refresh" Style="{StaticResource SecondaryButtonStyle}" />
+                            <Button x:Name="btnClose" Width="110" Click="BtnClose_Click" Content="Close" Style="{StaticResource SecondaryButtonStyle}" />
+                        </StackPanel>
+                    </Grid>
+                </Border>
+                <Grid Grid.Row="2">
+                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                        <ItemsControl x:Name="pluginsItems">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <WrapPanel ItemWidth="310" />
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Border Width="292" Margin="0,0,18,18" Padding="20" Background="{StaticResource SurfaceBrush}" BorderBrush="#5A3D25" BorderThickness="1" CornerRadius="20">
+                                        <Grid>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="Auto" />
+                                                <RowDefinition Height="Auto" />
+                                                <RowDefinition Height="Auto" />
+                                                <RowDefinition Height="Auto" />
+                                                <RowDefinition Height="*" />
+                                                <RowDefinition Height="Auto" />
+                                            </Grid.RowDefinitions>
+                                            <TextBlock FontSize="18" FontWeight="SemiBold" Foreground="{StaticResource TextPrimaryBrush}" Text="{Binding Name}" TextWrapping="Wrap" />
+                                            <WrapPanel Grid.Row="1" Margin="0,12,0,0">
+                                                <Border Margin="0,0,8,8" Padding="10,4" Background="#24181A" BorderBrush="#8B6340" BorderThickness="1" CornerRadius="999">
+                                                    <TextBlock FontSize="11" FontWeight="SemiBold" Foreground="{StaticResource TextPrimaryBrush}" Text="{Binding SourceText}" />
+                                                </Border>
+                                                <Border Margin="0,0,8,8" Padding="10,4" Background="#1A2029" BorderBrush="#66778E" BorderThickness="1" CornerRadius="999">
+                                                    <TextBlock FontSize="11" FontWeight="SemiBold" Foreground="{StaticResource TextPrimaryBrush}" Text="{Binding TierText}" />
+                                                </Border>
+                                                <Border Margin="0,0,8,8" Padding="10,4" Background="#1E1517" BorderBrush="#9EA6B4" BorderThickness="1" CornerRadius="999">
+                                                    <TextBlock FontSize="11" FontWeight="SemiBold" Foreground="{StaticResource TextPrimaryBrush}" Text="{Binding StatusText}" />
+                                                </Border>
+                                            </WrapPanel>
+                                            <TextBlock Grid.Row="2" Margin="0,8,0,0" FontSize="13" Foreground="{StaticResource TextSecondaryBrush}" Text="{Binding Explanation}" TextWrapping="Wrap" />
+                                            <TextBlock Grid.Row="3" Margin="0,12,0,0" FontSize="12" Foreground="{StaticResource PrimaryBrush}" Text="{Binding HintText}" TextWrapping="Wrap" />
+                                            <WrapPanel Grid.Row="5" Margin="0,18,0,0">
+                                                <Button Width="112"
+                                                        Margin="0,0,10,10"
+                                                        Click="BtnInstall_Click"
+                                                        Content="{Binding InstallButtonText}"
+                                                        Tag="{Binding}"
+                                                        Visibility="{Binding InstallVisibility}"
+                                                        Style="{StaticResource SecondaryButtonStyle}" />
+                                                <Button Width="120"
+                                                        Margin="0,0,10,10"
+                                                        Click="BtnToggleEnabled_Click"
+                                                        Content="{Binding ToggleButtonText}"
+                                                        Tag="{Binding}"
+                                                        Visibility="{Binding ToggleVisibility}"
+                                                        Style="{StaticResource SecondaryButtonStyle}" />
+                                                <Button Width="112"
+                                                        Margin="0,0,10,10"
+                                                        Click="BtnConfigure_Click"
+                                                        Content="{Binding ConfigureButtonText}"
+                                                        Tag="{Binding}"
+                                                        Visibility="{Binding ConfigureVisibility}"
+                                                        Style="{StaticResource SecondaryButtonStyle}" />
+                                                <Button Width="112"
+                                                        Margin="0,0,10,10"
+                                                        Click="BtnRemove_Click"
+                                                        Content="{Binding RemoveButtonText}"
+                                                        Tag="{Binding}"
+                                                        Visibility="{Binding RemoveVisibility}"
+                                                        Style="{StaticResource SecondaryButtonStyle}" />
+                                            </WrapPanel>
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </ScrollViewer>
+                    <Border x:Name="emptyStateCard"
+                            Visibility="Collapsed"
+                            Padding="28"
+                            Background="#120E13"
+                            BorderBrush="#5A3D25"
+                            BorderThickness="1"
+                            CornerRadius="24">
+                        <TextBlock x:Name="txtEmptyState"
+                                   FontSize="15"
+                                   Foreground="{StaticResource TextSecondaryBrush}"
+                                   Text="No plugins are available right now. Add local DLLs to the Plugins folder or configure a license to browse remote modules."
+                                   TextWrapping="Wrap" />
+                    </Border>
+                </Grid>
             </Grid>
         </Grid>
     </Border>

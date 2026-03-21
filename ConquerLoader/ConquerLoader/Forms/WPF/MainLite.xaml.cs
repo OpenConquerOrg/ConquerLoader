@@ -28,7 +28,6 @@ namespace ConquerLoader.Forms.WPF
         public bool AllStarted = false;
         public bool DX9Allowed = false;
         public bool CustomDLLs = false;
-        public bool FirstRunModeEnabled = false;
 
         private readonly BackgroundWorker worker;
         private readonly WinForms.NotifyIcon noty;
@@ -82,7 +81,6 @@ namespace ConquerLoader.Forms.WPF
             Constants.MainWorker = worker;
 
             Core.LoadAvailablePlugins();
-            Core.LoadRemotePlugins();
             Core.InitPlugins();
             DX9Allowed = Core.DirectXVersion() >= 9;
             UpdateChromeButtons();
@@ -298,7 +296,6 @@ namespace ConquerLoader.Forms.WPF
             btnStart.IsEnabled = LoaderConfig.Servers.Count > 0;
             tglFPSUnlock.IsChecked = LoaderConfig.FPSUnlock;
             Constants.LicenseKey = LoaderConfig.LicenseKey;
-            UpdateDebugToolsVisibility();
             UpdateLauncherHints();
 
             foreach (ServerConfiguration server in LoaderConfig.Servers)
@@ -745,18 +742,6 @@ namespace ConquerLoader.Forms.WPF
             }
         }
 
-        private void BtnLogModules_Click(object sender, RoutedEventArgs e)
-        {
-            if (CurrentConquerProcess == null) return;
-
-            string text = "Modules on process: " + CurrentConquerProcess.ProcessName;
-            foreach (ProcessModule m in CurrentConquerProcess.Modules)
-            {
-                text += "ModuleName:" + m.ModuleName + Environment.NewLine + "FileName:" + m.FileName + Environment.NewLine;
-            }
-            Core.LogWritter.Write(text);
-        }
-
         private void CbxServers_SelectedIndexChanged(object sender, SelectionChangedEventArgs e)
         {
             if (AllStarted && lstServers.SelectedItem != null)
@@ -814,17 +799,6 @@ namespace ConquerLoader.Forms.WPF
         private void BtnStartFirstRun_Click(object sender, RoutedEventArgs e)
         {
             BtnCreateServer_Click(sender, e);
-        }
-
-        private void BtnCloseCO_Click(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                if (CurrentConquerProcess != null) CurrentConquerProcess.Kill();
-            }
-            catch (Exception)
-            {
-            }
         }
 
         private void LblAbout_Click(object sender, RoutedEventArgs e)
@@ -936,13 +910,9 @@ namespace ConquerLoader.Forms.WPF
             txtFirstRunStep3.Text = T("mainFirstRunStep3", "3. Save the server and come back here to launch the game.");
             ApplyTranslation("btnStart", btnStart, "ENTER");
             ApplyTranslation("btnSettings", btnSettings, "Settings");
-            ApplyTranslation("btnCloseCO", btnCloseCO, "Close Game Process");
-            ApplyTranslation("btnLogModules", btnLogModules, "Log Modules");
             ApplyTranslation("lblFPSUnlock", lblFPSUnlock, "Unlock FPS");
             ApplyTranslation("lblAbout", lblAbout, "About");
             ApplyTranslation("commonEnabled", tglFPSUnlock, "Enabled");
-            ApplyTranslation("mainDiagnosticsTitle", txtDiagnosticsTitle, "Diagnostics");
-            ApplyTranslation("mainDiagnosticsDescription", txtDiagnosticsDescription, "These debug actions are only shown when Debug Mode is enabled in Settings.");
             noty.Visible = true;
             txtProgressValue.Text = "0%";
             UpdateStatusBadgeNeutral();
@@ -950,7 +920,6 @@ namespace ConquerLoader.Forms.WPF
             txtSelectedServer.Text = LoaderConfig != null && LoaderConfig.DefaultServer != null
                 ? LoaderConfig.DefaultServer.ServerName
                 : T("mainNoServerSelected", "No server selected");
-            UpdateDebugToolsVisibility();
             UpdateLauncherHints();
         }
 
@@ -1026,21 +995,6 @@ namespace ConquerLoader.Forms.WPF
                 : T("chromeMaximize", "Maximize");
         }
 
-        private void UpdateDebugToolsVisibility()
-        {
-            if (diagnosticsCard == null)
-            {
-                return;
-            }
-
-            bool showDiagnostics = LoaderConfig != null && LoaderConfig.DebugMode;
-            diagnosticsCard.Visibility = showDiagnostics ? Visibility.Visible : Visibility.Collapsed;
-            btnLogModules.IsEnabled = showDiagnostics;
-            btnLogModules.Visibility = showDiagnostics ? Visibility.Visible : Visibility.Collapsed;
-            btnCloseCO.IsEnabled = showDiagnostics;
-            btnCloseCO.Visibility = showDiagnostics ? Visibility.Visible : Visibility.Collapsed;
-        }
-
         private void UpdateLauncherHints()
         {
             if (LoaderConfig != null && LoaderConfig.Servers.Count <= 0)
@@ -1057,7 +1011,6 @@ namespace ConquerLoader.Forms.WPF
 
         private void EnableFirstRunMode()
         {
-            FirstRunModeEnabled = true;
             if (firstRunOverlay != null)
             {
                 firstRunOverlay.Visibility = Visibility.Visible;
@@ -1066,7 +1019,6 @@ namespace ConquerLoader.Forms.WPF
 
         private void DisableFirstRunMode()
         {
-            FirstRunModeEnabled = false;
             if (firstRunOverlay != null)
             {
                 firstRunOverlay.Visibility = Visibility.Collapsed;

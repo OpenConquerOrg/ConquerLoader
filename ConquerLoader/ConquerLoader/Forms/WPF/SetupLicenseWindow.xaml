@@ -3,10 +3,10 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:shell="clr-namespace:System.Windows.Shell;assembly=PresentationFramework"
         Title="Setup License"
-        Width="680"
-        Height="420"
-        MinWidth="620"
-        MinHeight="360"
+        Width="820"
+        Height="560"
+        MinWidth="760"
+        MinHeight="520"
         Background="#09090D"
         ResizeMode="CanResize"
         WindowStyle="None"
@@ -194,26 +194,40 @@
                     </StackPanel>
                 </Grid>
             </Border>
-            <ScrollViewer Grid.Row="1"
-                          Margin="24"
-                          Padding="0,0,10,0"
-                          VerticalScrollBarVisibility="Auto"
-                          HorizontalScrollBarVisibility="Disabled"
-                          CanContentScroll="False">
+            <Grid Grid.Row="1" Margin="24">
                 <Border Style="{StaticResource CardStyle}">
-                    <StackPanel>
-                        <TextBlock x:Name="txtLicenseHeading" FontSize="28" FontWeight="SemiBold" Foreground="{StaticResource TextPrimaryBrush}" Text="License setup" TextWrapping="Wrap" />
-                        <TextBlock x:Name="txtLicenseDescription" Margin="0,10,0,0" FontSize="14" Foreground="{StaticResource TextSecondaryBrush}" Text="Paste your license key below to unlock premium plugins and remote modules." TextWrapping="Wrap" />
-                        <TextBlock x:Name="txtLicenseKeyLabel" Margin="0,24,0,8" FontSize="12" FontWeight="SemiBold" Foreground="{StaticResource TextSecondaryBrush}" Text="License key" />
-                        <TextBox x:Name="tbxLicenseKey" Height="110" Padding="14" AcceptsReturn="True" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" Foreground="{StaticResource TextPrimaryBrush}" Background="#1E1517" BorderBrush="{StaticResource OutlineBrush}" BorderThickness="1" />
-                        <TextBlock x:Name="txtLicenseExample" Margin="0,10,0,0" FontSize="12" Foreground="{StaticResource TextSecondaryBrush}" Text="Example: 2d32a164-fcd5-796b-b43f-005a78274cad" TextWrapping="Wrap" />
-                        <WrapPanel Margin="0,24,0,0">
-                            <Button x:Name="btnClose" Width="110" Margin="0,0,12,12" Click="BtnClose_Click" Content="Close" Style="{StaticResource SecondaryButtonStyle}" />
-                            <Button x:Name="btnSetup" Width="140" Margin="0,0,0,12" Click="BtnSetup_Click" Content="Save License" Style="{StaticResource PrimaryButtonStyle}" />
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <StackPanel Grid.Row="0">
+                            <TextBlock x:Name="txtLicenseHeading" FontSize="30" FontWeight="SemiBold" Foreground="{StaticResource TextPrimaryBrush}" Text="License setup" TextWrapping="Wrap" />
+                            <TextBlock x:Name="txtLicenseDescription" Margin="0,12,0,0" FontSize="14" Foreground="{StaticResource TextSecondaryBrush}" Text="Paste your license key below to unlock premium plugins and remote modules." TextWrapping="Wrap" />
+                        </StackPanel>
+                        <TextBlock Grid.Row="1" x:Name="txtLicenseKeyLabel" Margin="0,28,0,10" FontSize="12" FontWeight="SemiBold" Foreground="{StaticResource TextSecondaryBrush}" Text="License key" />
+                        <TextBox Grid.Row="2"
+                                 x:Name="tbxLicenseKey"
+                                 MinHeight="160"
+                                 Padding="14"
+                                 AcceptsReturn="True"
+                                 TextWrapping="Wrap"
+                                 VerticalScrollBarVisibility="Auto"
+                                 Foreground="{StaticResource TextPrimaryBrush}"
+                                 Background="#1E1517"
+                                 BorderBrush="{StaticResource OutlineBrush}"
+                                 BorderThickness="1" />
+                        <TextBlock Grid.Row="3" x:Name="txtLicenseExample" Margin="0,12,0,0" FontSize="12" Foreground="{StaticResource TextSecondaryBrush}" Text="Example: 2d32a164-fcd5-796b-b43f-005a78274cad" TextWrapping="Wrap" />
+                        <WrapPanel Grid.Row="4" Margin="0,28,0,0">
+                            <Button x:Name="btnClose" Width="110" Margin="0,0,12,0" Click="BtnClose_Click" Content="Close" Style="{StaticResource SecondaryButtonStyle}" />
+                            <Button x:Name="btnSetup" Width="150" Click="BtnSetup_Click" Content="Save License" Style="{StaticResource PrimaryButtonStyle}" />
                         </WrapPanel>
-                    </StackPanel>
+                    </Grid>
                 </Border>
-            </ScrollViewer>
+            </Grid>
         </Grid>
     </Border>
 </Window>

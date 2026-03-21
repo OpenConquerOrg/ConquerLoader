@@ -1,18 +1,9 @@
 <ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:sys="clr-namespace:System;assembly=mscorlib">
-    <SolidColorBrush x:Key="SharedScrollTrackBrush" Color="#30080C11" />
-    <SolidColorBrush x:Key="SharedScrollTrackBorderBrush" Color="#72D2D8E2" />
-    <SolidColorBrush x:Key="SharedScrollThumbBrush" Color="#CDD4DE" />
-    <SolidColorBrush x:Key="SharedScrollThumbHoverBrush" Color="#EEF2F8" />
-    <SolidColorBrush x:Key="SharedScrollThumbDragBrush" Color="#FFF7F5" />
-    <SolidColorBrush x:Key="SharedScrollThumbBorderBrush" Color="#A42F22" />
-    <SolidColorBrush x:Key="SharedScrollThumbHoverBorderBrush" Color="#D34A38" />
-
-    <Style x:Key="SharedScrollBarPageButtonStyle" TargetType="{x:Type RepeatButton}">
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Style x:Key="SharedScrollPageButtonStyle" TargetType="{x:Type RepeatButton}">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="BorderThickness" Value="0" />
         <Setter Property="Focusable" Value="False" />
-        <Setter Property="IsTabStop" Value="False" />
-        <Setter Property="OverridesDefaultStyle" Value="True" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type RepeatButton}">
@@ -22,121 +13,110 @@
         </Setter>
     </Style>
 
-    <ControlTemplate x:Key="SharedVerticalThumbTemplate" TargetType="{x:Type Thumb}">
-        <Border x:Name="ThumbBorder"
-                Margin="0"
-                Background="{StaticResource SharedScrollThumbBrush}"
-                BorderBrush="{StaticResource SharedScrollThumbBorderBrush}"
-                BorderThickness="1"
-                CornerRadius="6" />
-        <ControlTemplate.Triggers>
-            <Trigger Property="IsMouseOver" Value="True">
-                <Setter TargetName="ThumbBorder" Property="Background" Value="{StaticResource SharedScrollThumbHoverBrush}" />
-                <Setter TargetName="ThumbBorder" Property="BorderBrush" Value="{StaticResource SharedScrollThumbHoverBorderBrush}" />
-            </Trigger>
-            <Trigger Property="IsDragging" Value="True">
-                <Setter TargetName="ThumbBorder" Property="Background" Value="{StaticResource SharedScrollThumbDragBrush}" />
-                <Setter TargetName="ThumbBorder" Property="BorderBrush" Value="#FF6C59" />
-            </Trigger>
-            <Trigger Property="IsEnabled" Value="False">
-                <Setter TargetName="ThumbBorder" Property="Opacity" Value="0.45" />
-            </Trigger>
-        </ControlTemplate.Triggers>
-    </ControlTemplate>
-
-    <ControlTemplate x:Key="SharedHorizontalThumbTemplate" TargetType="{x:Type Thumb}">
-        <Border x:Name="ThumbBorder"
-                Margin="0"
-                Background="{StaticResource SharedScrollThumbBrush}"
-                BorderBrush="{StaticResource SharedScrollThumbBorderBrush}"
-                BorderThickness="1"
-                CornerRadius="6" />
-        <ControlTemplate.Triggers>
-            <Trigger Property="IsMouseOver" Value="True">
-                <Setter TargetName="ThumbBorder" Property="Background" Value="{StaticResource SharedScrollThumbHoverBrush}" />
-                <Setter TargetName="ThumbBorder" Property="BorderBrush" Value="{StaticResource SharedScrollThumbHoverBorderBrush}" />
-            </Trigger>
-            <Trigger Property="IsDragging" Value="True">
-                <Setter TargetName="ThumbBorder" Property="Background" Value="{StaticResource SharedScrollThumbDragBrush}" />
-                <Setter TargetName="ThumbBorder" Property="BorderBrush" Value="#FF6C59" />
-            </Trigger>
-            <Trigger Property="IsEnabled" Value="False">
-                <Setter TargetName="ThumbBorder" Property="Opacity" Value="0.45" />
-            </Trigger>
-        </ControlTemplate.Triggers>
-    </ControlTemplate>
+    <Style x:Key="SharedScrollThumbStyle" TargetType="{x:Type Thumb}">
+        <Setter Property="OverridesDefaultStyle" Value="True" />
+        <Setter Property="Background" Value="#C94029" />
+        <Setter Property="BorderBrush" Value="#F4C7BE" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="SnapsToDevicePixels" Value="True" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Thumb}">
+                    <Border x:Name="ThumbBorder"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="5" />
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="ThumbBorder" Property="Background" Value="#E25239" />
+                            <Setter TargetName="ThumbBorder" Property="BorderBrush" Value="#FFE3DD" />
+                        </Trigger>
+                        <Trigger Property="IsDragging" Value="True">
+                            <Setter TargetName="ThumbBorder" Property="Background" Value="#A12718" />
+                            <Setter TargetName="ThumbBorder" Property="BorderBrush" Value="#FFD6CD" />
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter TargetName="ThumbBorder" Property="Opacity" Value="0.45" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
 
     <ControlTemplate x:Key="SharedVerticalScrollBarTemplate" TargetType="{x:Type ScrollBar}">
-        <Grid SnapsToDevicePixels="True"
+        <Grid Width="{TemplateBinding Width}"
+              Margin="{TemplateBinding Margin}"
               Background="Transparent">
-            <Border Margin="2,2,2,2"
-                    Background="{StaticResource SharedScrollTrackBrush}"
-                    BorderBrush="{StaticResource SharedScrollTrackBorderBrush}"
+            <Border Margin="1,0,1,0"
+                    Background="#64151A20"
+                    BorderBrush="#7A5151"
                     BorderThickness="1"
                     CornerRadius="6" />
             <Track x:Name="PART_Track"
-                   Margin="2,2,2,2"
+                   Margin="1,0,1,0"
                    Focusable="False"
+                   ViewportSize="NaN"
                    IsDirectionReversed="True">
-                <Track.Resources>
-                    <sys:Double x:Key="{x:Static SystemParameters.VerticalScrollBarButtonHeightKey}">112</sys:Double>
-                </Track.Resources>
                 <Track.DecreaseRepeatButton>
                     <RepeatButton Command="ScrollBar.PageUpCommand"
-                                  Style="{StaticResource SharedScrollBarPageButtonStyle}" />
+                                  Style="{StaticResource SharedScrollPageButtonStyle}" />
                 </Track.DecreaseRepeatButton>
                 <Track.Thumb>
-                    <Thumb Template="{StaticResource SharedVerticalThumbTemplate}" />
+                    <Thumb Height="68"
+                           Style="{StaticResource SharedScrollThumbStyle}" />
                 </Track.Thumb>
                 <Track.IncreaseRepeatButton>
                     <RepeatButton Command="ScrollBar.PageDownCommand"
-                                  Style="{StaticResource SharedScrollBarPageButtonStyle}" />
+                                  Style="{StaticResource SharedScrollPageButtonStyle}" />
                 </Track.IncreaseRepeatButton>
             </Track>
         </Grid>
     </ControlTemplate>
 
     <ControlTemplate x:Key="SharedHorizontalScrollBarTemplate" TargetType="{x:Type ScrollBar}">
-        <Grid SnapsToDevicePixels="True"
+        <Grid Height="{TemplateBinding Height}"
+              Margin="{TemplateBinding Margin}"
               Background="Transparent">
-            <Border Margin="2,2,2,2"
-                    Background="{StaticResource SharedScrollTrackBrush}"
-                    BorderBrush="{StaticResource SharedScrollTrackBorderBrush}"
+            <Border Margin="0,1,0,1"
+                    Background="#64151A20"
+                    BorderBrush="#7A5151"
                     BorderThickness="1"
                     CornerRadius="6" />
             <Track x:Name="PART_Track"
-                   Margin="2,2,2,2"
+                   Margin="0,1,0,1"
                    Focusable="False">
-                <Track.Resources>
-                    <sys:Double x:Key="{x:Static SystemParameters.HorizontalScrollBarButtonWidthKey}">112</sys:Double>
-                </Track.Resources>
                 <Track.DecreaseRepeatButton>
                     <RepeatButton Command="ScrollBar.PageLeftCommand"
-                                  Style="{StaticResource SharedScrollBarPageButtonStyle}" />
+                                  Style="{StaticResource SharedScrollPageButtonStyle}" />
                 </Track.DecreaseRepeatButton>
                 <Track.Thumb>
-                    <Thumb Template="{StaticResource SharedHorizontalThumbTemplate}" />
+                    <Thumb MinWidth="56"
+                           Style="{StaticResource SharedScrollThumbStyle}" />
                 </Track.Thumb>
                 <Track.IncreaseRepeatButton>
                     <RepeatButton Command="ScrollBar.PageRightCommand"
-                                  Style="{StaticResource SharedScrollBarPageButtonStyle}" />
+                                  Style="{StaticResource SharedScrollPageButtonStyle}" />
                 </Track.IncreaseRepeatButton>
             </Track>
         </Grid>
     </ControlTemplate>
 
     <Style TargetType="{x:Type ScrollBar}">
-        <Setter Property="Background" Value="Transparent" />
-        <Setter Property="Width" Value="14" />
-        <Setter Property="Height" Value="14" />
+        <Setter Property="Width" Value="16" />
+        <Setter Property="Height" Value="16" />
+        <Setter Property="Margin" Value="0" />
         <Setter Property="Focusable" Value="False" />
         <Setter Property="OverridesDefaultStyle" Value="True" />
         <Setter Property="SnapsToDevicePixels" Value="True" />
+        <Setter Property="Background" Value="Transparent" />
         <Setter Property="Template" Value="{StaticResource SharedVerticalScrollBarTemplate}" />
         <Style.Triggers>
             <Trigger Property="Orientation" Value="Horizontal">
                 <Setter Property="Width" Value="Auto" />
-                <Setter Property="Height" Value="14" />
+                <Setter Property="Height" Value="16" />
+                <Setter Property="Margin" Value="0,4,0,0" />
                 <Setter Property="Template" Value="{StaticResource SharedHorizontalScrollBarTemplate}" />
             </Trigger>
         </Style.Triggers>

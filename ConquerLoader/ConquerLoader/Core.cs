@@ -129,7 +129,7 @@ namespace ConquerLoader
             {
                 PluginLoader loader = new PluginLoader();
                 loader.LoadPlugins();
-                LogWritter.Write("Loaded " + PluginLoader.Plugins.Count + " plugins.");
+                LogWritter.Write("Loaded " + PluginLoader.Plugins.Count + " enabled plugins.");
             }
             catch (Exception e)
             {
@@ -140,12 +140,11 @@ namespace ConquerLoader
 
         public static void LoadRemotePlugins()
         {
-            // Remote plugins
             try
             {
                 PluginLoader loader = new PluginLoader();
-                int loaded = loader.LoadPluginsFromAPI(GetLoaderConfig()).Result;
-                Core.LogWritter.Write("Loaded " + loaded + " remote plugins.");
+                int available = loader.LoadPluginsFromAPI(GetLoaderConfig()).Result;
+                Core.LogWritter.Write("Remote plugin catalog reports " + available + " available plugins.");
             }
             catch (Exception ex)
             {

@@ -65,7 +65,6 @@ namespace ConquerLoader.Forms
             }
             Constants.MainWorker = worker;
             Core.LoadAvailablePlugins();
-            Core.LoadRemotePlugins(); // Experimental
             Core.InitPlugins();
             DX9Allowed = Core.DirectXVersion() >= 9;
         }

@@ -160,14 +160,6 @@
     "text": "Choose the resolution and FPS behavior before launching."
   },
   {
-    "id": "mainDiagnosticsTitle",
-    "text": "Diagnostics"
-  },
-  {
-    "id": "mainDiagnosticsDescription",
-    "text": "These debug actions are only shown when Debug Mode is enabled in Settings."
-  },
-  {
     "id": "settingsColumnServerName",
     "text": "Server name"
   },
@@ -222,5 +214,97 @@
   {
     "id": "settingsLoaderDescriptionLabel",
     "text": "Description in Loader"
+  },
+  {
+    "id": "pluginsHintLicensed",
+    "text": "Local plugins come from the Plugins folder. Remote plugins come from your license catalog and are installed on demand."
+  },
+  {
+    "id": "pluginsHintNoLicense",
+    "text": "Local plugins work without a license. Add a license key if you want to browse and install remote plugins."
+  },
+  {
+    "id": "pluginsEmptyState",
+    "text": "No plugins are available right now. Add local DLLs to the Plugins folder or configure a license to browse remote modules."
+  },
+  {
+    "id": "pluginsSourceLocal",
+    "text": "Local"
+  },
+  {
+    "id": "pluginsSourceRemote",
+    "text": "Remote"
+  },
+  {
+    "id": "pluginsTierFree",
+    "text": "Free"
+  },
+  {
+    "id": "pluginsTierPremium",
+    "text": "Premium"
+  },
+  {
+    "id": "pluginsStatusAvailable",
+    "text": "Available"
+  },
+  {
+    "id": "pluginsStatusEnabled",
+    "text": "Enabled"
+  },
+  {
+    "id": "pluginsStatusDisabled",
+    "text": "Disabled"
+  },
+  {
+    "id": "pluginsRemoteAvailableHint",
+    "text": "Available from your license catalog. Install it to download it into your local plugins folder."
+  },
+  {
+    "id": "pluginsRemoteInstalledHint",
+    "text": "This plugin was installed from the remote catalog. Restart the loader after install, remove, or enable changes."
+  },
+  {
+    "id": "pluginsLocalHint",
+    "text": "This plugin comes from the local Plugins folder."
+  },
+  {
+    "id": "btnInstallPlugin",
+    "text": "Install"
+  },
+  {
+    "id": "btnEnablePlugin",
+    "text": "Enable"
+  },
+  {
+    "id": "btnDisablePlugin",
+    "text": "Disable"
+  },
+  {
+    "id": "btnRemovePlugin",
+    "text": "Remove"
+  },
+  {
+    "id": "btnRefreshPlugins",
+    "text": "Refresh"
+  },
+  {
+    "id": "pluginsInstallSuccess",
+    "text": "Plugin installed. Restart the loader to activate it."
+  },
+  {
+    "id": "pluginsStateSaved",
+    "text": "Plugin state saved. Restart the loader to apply the change."
+  },
+  {
+    "id": "pluginsRemoveConfirm",
+    "text": "Remove plugin \"{0}\" from the local installation?"
+  },
+  {
+    "id": "pluginsRemoveSuccess",
+    "text": "Plugin removed. Restart the loader if it was active in the current session."
+  },
+  {
+    "id": "pluginsActionError",
+    "text": "The plugin action failed: {0}"
   }
 ]

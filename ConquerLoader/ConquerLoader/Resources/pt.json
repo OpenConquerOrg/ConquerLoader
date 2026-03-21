@@ -164,10 +164,6 @@
     "text": "Seguinte"
   },
   {
-    "id": "tglAdvancedMode",
-    "text": "Mostrar opcoes avancadas"
-  },
-  {
     "id": "tglFPSUnlock",
     "text": "Ativado"
   },
@@ -210,10 +206,6 @@
   {
     "id": "mainResolution",
     "text": "Resolucao"
-  },
-  {
-    "id": "mainAdvancedDescription",
-    "text": "As ferramentas avancadas sao opcionais. Use para diagnostico, compatibilidade e clientes especiais."
   },
   {
     "id": "mainNoServerSelected",
@@ -401,7 +393,7 @@
   },
   {
     "id": "pluginsWindowDescription",
-    "text": "Abra a tela de configuracao de um plugin a partir de uma lista mais clara dos modulos instalados."
+    "text": "Revise plugins locais, consulte os modulos remotos da sua licenca e decida quais deseja instalar."
   },
   {
     "id": "serverDatWindowTitle",
@@ -732,14 +724,6 @@
     "text": "Use isto apenas quando seu cliente e seu servidor suportarem."
   },
   {
-    "id": "mainDiagnosticsTitle",
-    "text": "Diagnostico"
-  },
-  {
-    "id": "mainDiagnosticsDescription",
-    "text": "Estas acoes de depuracao so aparecem quando o Debug Mode estiver ativo em Configuracoes."
-  },
-  {
     "id": "settingsColumnServerName",
     "text": "Nome do servidor"
   },
@@ -790,5 +774,97 @@
   {
     "id": "settingsColumnGroup",
     "text": "Grupo"
+  },
+  {
+    "id": "pluginsHintLicensed",
+    "text": "Os plugins locais vem da pasta Plugins. Os remotos vem do catalogo da sua licenca e sao instalados so quando voce quiser."
+  },
+  {
+    "id": "pluginsHintNoLicense",
+    "text": "Os plugins locais funcionam sem licenca. Adicione uma chave se quiser ver e instalar plugins remotos."
+  },
+  {
+    "id": "pluginsEmptyState",
+    "text": "Nao ha plugins disponiveis agora. Adicione DLLs locais a pasta Plugins ou configure uma licenca para ver modulos remotos."
+  },
+  {
+    "id": "pluginsSourceLocal",
+    "text": "Local"
+  },
+  {
+    "id": "pluginsSourceRemote",
+    "text": "Remoto"
+  },
+  {
+    "id": "pluginsTierFree",
+    "text": "Gratis"
+  },
+  {
+    "id": "pluginsTierPremium",
+    "text": "Premium"
+  },
+  {
+    "id": "pluginsStatusAvailable",
+    "text": "Disponivel"
+  },
+  {
+    "id": "pluginsStatusEnabled",
+    "text": "Ativado"
+  },
+  {
+    "id": "pluginsStatusDisabled",
+    "text": "Desativado"
+  },
+  {
+    "id": "pluginsRemoteAvailableHint",
+    "text": "Disponivel no catalogo da sua licenca. Instale para baixar para sua pasta local de plugins."
+  },
+  {
+    "id": "pluginsRemoteInstalledHint",
+    "text": "Este plugin foi instalado a partir do catalogo remoto. Reinicie o loader depois de instalar, remover ou mudar o estado."
+  },
+  {
+    "id": "pluginsLocalHint",
+    "text": "Este plugin vem da pasta local Plugins."
+  },
+  {
+    "id": "btnInstallPlugin",
+    "text": "Instalar"
+  },
+  {
+    "id": "btnEnablePlugin",
+    "text": "Ativar"
+  },
+  {
+    "id": "btnDisablePlugin",
+    "text": "Desativar"
+  },
+  {
+    "id": "btnRemovePlugin",
+    "text": "Remover"
+  },
+  {
+    "id": "btnRefreshPlugins",
+    "text": "Atualizar"
+  },
+  {
+    "id": "pluginsInstallSuccess",
+    "text": "Plugin instalado. Reinicie o loader para ativa-lo."
+  },
+  {
+    "id": "pluginsStateSaved",
+    "text": "Estado do plugin salvo. Reinicie o loader para aplicar a alteracao."
+  },
+  {
+    "id": "pluginsRemoveConfirm",
+    "text": "Deseja remover o plugin \"{0}\" da instalacao local?"
+  },
+  {
+    "id": "pluginsRemoveSuccess",
+    "text": "Plugin removido. Reinicie o loader se ele estava ativo na sessao atual."
+  },
+  {
+    "id": "pluginsActionError",
+    "text": "A acao do plugin falhou: {0}"
   }
 ]

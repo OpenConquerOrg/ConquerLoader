@@ -74,9 +74,11 @@
     <Compile Include="PluginSystem\IPreLaunchPlugin.cs" />
     <Compile Include="PluginSystem\IPlugin.cs" />
     <Compile Include="PluginSystem\Parameter.cs" />
+    <Compile Include="PluginSystem\PluginCatalogItem.cs" />
     <Compile Include="PluginSystem\PluginPreLaunchContext.cs" />
     <Compile Include="PluginSystem\PluginPreLaunchResult.cs" />
     <Compile Include="PluginSystem\PluginLoader.cs" />
+    <Compile Include="PluginSystem\PluginSettingsStore.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Helpers\Requests.cs" />
     <Compile Include="SocketSystem.cs" />

@@ -1,6 +1,5 @@
 using CLCore.Models;
 using System;
-using System.Diagnostics;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
@@ -19,17 +18,11 @@ namespace ConquerLoader.Forms.WPF
             Loaded += SettingsWindow_Loaded;
             StateChanged += SettingsWindow_StateChanged;
             UpdateChromeButtons();
-            if (Debugger.IsAttached)
-            {
-                btnSetupLicense.Visibility = Visibility.Visible;
-            }
         }
 
         public void SetDefaultUI()
         {
             if (CurrentLoaderConfig == null) return;
-
-            tglDebugMode.IsChecked = CurrentLoaderConfig.DebugMode;
             tglCloseOnFinish.IsChecked = CurrentLoaderConfig.CloseOnFinish;
             tglHighResolution.IsChecked = CurrentLoaderConfig.HighResolution;
             tglFullscreen.IsChecked = CurrentLoaderConfig.FullScreen;
@@ -177,11 +170,6 @@ namespace ConquerLoader.Forms.WPF
             btnMaxRestoreWindow.ToolTip = WindowState == WindowState.Maximized
                 ? T("chromeRestore", "Restore")
                 : T("chromeMaximize", "Maximize");
-        }
-
-        private void TglDebugMode_CheckedChanged(object sender, RoutedEventArgs e)
-        {
-            if (CurrentLoaderConfig != null) CurrentLoaderConfig.DebugMode = tglDebugMode.IsChecked == true;
         }
 
         private void TglCloseOnFinish_CheckedChanged(object sender, RoutedEventArgs e)
@@ -351,7 +339,6 @@ namespace ConquerLoader.Forms.WPF
             btnWizard.Content = Core.TranslateText("btnWizard", "New +");
             btnEdit.Content = Core.TranslateText("btnEdit", "Edit");
 
-            tglDebugMode.Content = Core.TranslateText("lblDebugMode", "Debug Mode");
             tglCloseOnFinish.Content = Core.TranslateText("lblCloseOnFinish", "Close On Finish");
             tglHighResolution.Content = Core.TranslateText("lblHighResolution", "High Resolution Mode");
             tglFullscreen.Content = Core.TranslateText("lblFullscreen", "Fullscreen");
@@ -368,7 +355,7 @@ namespace ConquerLoader.Forms.WPF
             txtLoaderTitleLabel.Text = T("lblTitle", "Title in Loader");
             txtLoaderDescriptionLabel.Text = T("settingsLoaderDescriptionLabel", "Description in Loader");
             txtAdvancedHeading.Text = T("settingsAdvancedTitle", "Advanced");
-            txtAdvancedDescription.Text = T("settingsAdvancedDescription", "These actions affect persistence and debugging tools.");
+            txtAdvancedDescription.Text = T("settingsAdvancedDescription", "These actions affect saved configuration and licensing.");
             txtServersHeading.Text = T("settingsServersTitle", "Servers");
             txtServersDescription.Text = T("settingsServersDescription", "Create, edit, and review the servers available in the launcher.");
             txtWizardHint.Text = T("settingsWizardHint", "Use New + to open the guided server setup.");

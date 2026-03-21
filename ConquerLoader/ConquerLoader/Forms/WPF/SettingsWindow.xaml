@@ -420,8 +420,6 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="20" />
             <RowDefinition Height="*" />
-            <RowDefinition Height="16" />
-            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
         <Border Grid.Row="0" Style="{StaticResource CardStyle}">
@@ -451,10 +449,12 @@
             </Grid.ColumnDefinitions>
 
             <ScrollViewer Grid.Column="0"
-                          Margin="0,0,10,0"
-                          VerticalScrollBarVisibility="Auto"
+                          Margin="0"
+                          VerticalAlignment="Stretch"
+                          VerticalScrollBarVisibility="Hidden"
                           HorizontalScrollBarVisibility="Disabled"
-                          Padding="0,0,8,0">
+                          Padding="0"
+                          CanContentScroll="False">
                 <StackPanel>
                     <Border Style="{StaticResource CardStyle}">
                         <StackPanel>
@@ -465,7 +465,6 @@
                             <TextBlock x:Name="txtLoaderDescriptionLabel" Margin="0,18,0,8" FontSize="12" FontWeight="SemiBold" Foreground="{StaticResource TextSecondaryBrush}" Text="Description In Loader" />
                             <TextBox x:Name="tbxDescription" Style="{StaticResource InputMultilineTextBoxStyle}" TextChanged="TbxDescription_TextChanged" />
                             <UniformGrid Margin="0,22,0,0" Columns="2">
-                                <CheckBox x:Name="tglDebugMode" Margin="0,0,16,14" Checked="TglDebugMode_CheckedChanged" Unchecked="TglDebugMode_CheckedChanged" Content="Debug Mode" />
                                 <CheckBox x:Name="tglCloseOnFinish" Margin="0,0,0,14" Checked="TglCloseOnFinish_CheckedChanged" Unchecked="TglCloseOnFinish_CheckedChanged" Content="Close On Finish" />
                                 <CheckBox x:Name="tglHighResolution" Margin="0,0,16,14" Checked="TglHighResolution_CheckedChanged" Unchecked="TglHighResolution_CheckedChanged" Content="High Resolution Mode" />
                                 <CheckBox x:Name="tglFullscreen" Margin="0,0,0,14" Checked="TglFullscreen_CheckedChanged" Unchecked="TglFullscreen_CheckedChanged" Content="Fullscreen" />
@@ -483,10 +482,10 @@
                     <Border Margin="0,20,0,0" Style="{StaticResource CardStyle}">
                         <StackPanel>
                             <TextBlock x:Name="txtAdvancedHeading" Style="{StaticResource SectionTitleStyle}" Text="Advanced" />
-                            <TextBlock x:Name="txtAdvancedDescription" Margin="0,8,0,0" Style="{StaticResource BodyStyle}" Text="These actions affect persistence and debugging tools." />
+                            <TextBlock x:Name="txtAdvancedDescription" Margin="0,8,0,0" Style="{StaticResource BodyStyle}" Text="These actions affect saved configuration and licensing." />
                             <WrapPanel Margin="0,22,0,0">
                                 <Button x:Name="btnLockConfig" Width="160" Margin="0,0,12,12" Click="BtnLockConfig_Click" Content="Lock Config" Style="{StaticResource SecondaryButtonStyle}" />
-                                <Button x:Name="btnSetupLicense" Width="160" Margin="0,0,0,12" Click="BtnSetupLicense_Click" Content="Setup License" Style="{StaticResource SecondaryButtonStyle}" Visibility="Collapsed" />
+                                <Button x:Name="btnSetupLicense" Width="160" Margin="0,0,0,12" Click="BtnSetupLicense_Click" Content="Setup License" Style="{StaticResource SecondaryButtonStyle}" />
                             </WrapPanel>
                         </StackPanel>
                     </Border>
@@ -536,21 +535,21 @@
                               ScrollViewer.HorizontalScrollBarVisibility="Auto"
                               ScrollViewer.VerticalScrollBarVisibility="Auto" />
 
-                    <WrapPanel Grid.Row="4">
-                        <Button x:Name="btnWizard" Width="120" Margin="0,0,12,12" Click="BtnWizard_Click" Content="New +" Style="{StaticResource SecondaryButtonStyle}" />
-                        <Button x:Name="btnEdit" Width="120" Margin="0,0,0,12" Click="BtnEdit_Click" Content="Edit" Style="{StaticResource SecondaryButtonStyle}" />
-                    </WrapPanel>
+                    <StackPanel Grid.Row="4">
+                        <WrapPanel>
+                            <Button x:Name="btnWizard" Width="120" Margin="0,0,12,12" Click="BtnWizard_Click" Content="New +" Style="{StaticResource SecondaryButtonStyle}" />
+                            <Button x:Name="btnEdit" Width="120" Margin="0,0,0,12" Click="BtnEdit_Click" Content="Edit" Style="{StaticResource SecondaryButtonStyle}" />
+                        </WrapPanel>
+                        <TextBlock HorizontalAlignment="Right"
+                                   FontSize="12"
+                                   Foreground="{StaticResource TextSecondaryBrush}"
+                                   x:Name="txtWizardHint"
+                                   Text="Use New + to open the guided server setup."
+                                   TextWrapping="Wrap" />
+                    </StackPanel>
                 </Grid>
             </Border>
         </Grid>
-
-        <TextBlock Grid.Row="4"
-                   HorizontalAlignment="Right"
-                   FontSize="12"
-                   Foreground="{StaticResource TextSecondaryBrush}"
-                   x:Name="txtWizardHint"
-                   Text="Use New + to open the guided server setup."
-                   TextWrapping="Wrap" />
             </Grid>
         </Grid>
     </Border>
