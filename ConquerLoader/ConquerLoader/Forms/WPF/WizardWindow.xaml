@@ -1,0 +1,658 @@
+<Window x:Class="ConquerLoader.Forms.WPF.WizardWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:shell="clr-namespace:System.Windows.Shell;assembly=PresentationFramework"
+        Title="Server Setup Wizard"
+        Width="1080"
+        Height="820"
+        MinWidth="940"
+        MinHeight="720"
+        Background="#09090D"
+        ResizeMode="CanResizeWithGrip"
+        WindowStyle="None"
+        WindowStartupLocation="CenterOwner">
+    <WindowChrome.WindowChrome>
+        <shell:WindowChrome CaptionHeight="0"
+                            CornerRadius="0"
+                            GlassFrameThickness="0"
+                            NonClientFrameEdges="None"
+                            ResizeBorderThickness="8"
+                            UseAeroCaptionButtons="False" />
+    </WindowChrome.WindowChrome>
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/ConquerLoader;component/Forms/WPF/SharedTheme.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        <SolidColorBrush x:Key="PrimaryBrush" Color="#CB4129" />
+        <SolidColorBrush x:Key="PrimarySoftBrush" Color="#4A1B15" />
+        <SolidColorBrush x:Key="SurfaceBrush" Color="#160F12" />
+        <SolidColorBrush x:Key="OutlineBrush" Color="#6B4C2D" />
+        <SolidColorBrush x:Key="TextPrimaryBrush" Color="#F7EEE4" />
+        <SolidColorBrush x:Key="TextSecondaryBrush" Color="#D6BDA1" />
+        <SolidColorBrush x:Key="SuccessBrush" Color="#4ADE80" />
+        <SolidColorBrush x:Key="SuccessSoftBrush" Color="#0F2A1C" />
+        <SolidColorBrush x:Key="WarningBrush" Color="#FBBF24" />
+        <SolidColorBrush x:Key="WarningSoftBrush" Color="#2A2110" />
+
+        <Style x:Key="CardStyle" TargetType="Border">
+            <Setter Property="Padding" Value="24" />
+            <Setter Property="CornerRadius" Value="24" />
+            <Setter Property="Background" Value="{StaticResource SurfaceBrush}" />
+            <Setter Property="BorderBrush" Value="#5A3D25" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect BlurRadius="24" Direction="270" Opacity="0.24" ShadowDepth="10" Color="#020617" />
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="StepBadgeStyle" TargetType="Border">
+            <Setter Property="Width" Value="40" />
+            <Setter Property="Height" Value="40" />
+            <Setter Property="CornerRadius" Value="20" />
+            <Setter Property="Background" Value="#362018" />
+        </Style>
+
+        <Style x:Key="FieldLabelStyle" TargetType="TextBlock">
+            <Setter Property="Margin" Value="0,0,0,8" />
+            <Setter Property="FontSize" Value="12" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="Foreground" Value="{StaticResource TextSecondaryBrush}" />
+        </Style>
+
+        <Style x:Key="InputTextBoxStyle" TargetType="TextBox">
+            <Setter Property="Height" Value="44" />
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="Padding" Value="14,8" />
+            <Setter Property="Foreground" Value="{StaticResource TextPrimaryBrush}" />
+            <Setter Property="Background" Value="#1E1517" />
+            <Setter Property="BorderBrush" Value="{StaticResource OutlineBrush}" />
+            <Setter Property="BorderThickness" Value="1" />
+        </Style>
+
+        <Style x:Key="ComboToggleButtonStyle" TargetType="ToggleButton">
+            <Setter Property="Focusable" Value="False" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ToggleButton">
+                        <Border Background="Transparent">
+                            <Path Width="10"
+                                  Height="6"
+                                  Margin="0,0,16,0"
+                                  HorizontalAlignment="Right"
+                                  VerticalAlignment="Center"
+                                  Fill="{StaticResource TextSecondaryBrush}"
+                                  Data="M 0 0 L 10 0 L 5 6 Z" />
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="InputComboBoxStyle" TargetType="ComboBox">
+            <Setter Property="Height" Value="44" />
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="Padding" Value="10,6" />
+            <Setter Property="Foreground" Value="{StaticResource TextPrimaryBrush}" />
+            <Setter Property="Background" Value="#1E1517" />
+            <Setter Property="BorderBrush" Value="{StaticResource OutlineBrush}" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ComboBox">
+                        <Grid>
+                            <Border x:Name="ComboBorder"
+                                    Background="{TemplateBinding Background}"
+                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                    BorderThickness="{TemplateBinding BorderThickness}"
+                                    CornerRadius="16">
+                                <Grid>
+                                    <ToggleButton ClickMode="Press"
+                                                  Focusable="False"
+                                                  IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
+                                                  Style="{StaticResource ComboToggleButtonStyle}" />
+                                    <ContentPresenter Margin="14,0,42,0"
+                                                      VerticalAlignment="Center"
+                                                      HorizontalAlignment="Left"
+                                                      Content="{TemplateBinding SelectionBoxItem}"
+                                                      ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
+                                                      ContentStringFormat="{TemplateBinding SelectionBoxItemStringFormat}" />
+                                </Grid>
+                            </Border>
+                            <Popup x:Name="PART_Popup"
+                                   AllowsTransparency="True"
+                                   IsOpen="{TemplateBinding IsDropDownOpen}"
+                                   Placement="Bottom"
+                                   PopupAnimation="Fade"
+                                   StaysOpen="False">
+                                <Border MinWidth="{Binding ActualWidth, RelativeSource={RelativeSource TemplatedParent}}"
+                                        Margin="0,8,0,0"
+                                        Background="#1A1011"
+                                        BorderBrush="{StaticResource OutlineBrush}"
+                                        BorderThickness="1"
+                                        CornerRadius="16">
+                                    <ScrollViewer Margin="4" SnapsToDevicePixels="True">
+                                        <StackPanel IsItemsHost="True" KeyboardNavigation.DirectionalNavigation="Contained" />
+                                    </ScrollViewer>
+                                </Border>
+                            </Popup>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="ComboBorder" Property="BorderBrush" Value="#B3834D" />
+                                <Setter TargetName="ComboBorder" Property="Background" Value="#241816" />
+                            </Trigger>
+                            <Trigger Property="IsKeyboardFocusWithin" Value="True">
+                                <Setter TargetName="ComboBorder" Property="BorderBrush" Value="#D1A56B" />
+                            </Trigger>
+                            <Trigger Property="IsDropDownOpen" Value="True">
+                                <Setter TargetName="ComboBorder" Property="BorderBrush" Value="#D1A56B" />
+                                <Setter TargetName="ComboBorder" Property="Background" Value="#241816" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style TargetType="ComboBoxItem">
+            <Setter Property="Foreground" Value="{StaticResource TextPrimaryBrush}" />
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="Padding" Value="12,10" />
+            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ComboBoxItem">
+                        <Border x:Name="ItemBorder" Margin="2" Padding="{TemplateBinding Padding}" Background="{TemplateBinding Background}" CornerRadius="10">
+                            <ContentPresenter />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsHighlighted" Value="True">
+                                <Setter TargetName="ItemBorder" Property="Background" Value="#3A231F" />
+                            </Trigger>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter TargetName="ItemBorder" Property="Background" Value="#8F301F" />
+                                <Setter Property="Foreground" Value="White" />
+                            </Trigger>
+                            <MultiTrigger>
+                                <MultiTrigger.Conditions>
+                                    <Condition Property="IsSelected" Value="True" />
+                                    <Condition Property="IsHighlighted" Value="True" />
+                                </MultiTrigger.Conditions>
+                                <Setter TargetName="ItemBorder" Property="Background" Value="#B5462C" />
+                            </MultiTrigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="PrimaryButtonStyle" TargetType="Button">
+            <Setter Property="Height" Value="48" />
+            <Setter Property="Padding" Value="18,10" />
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="Background" Value="{StaticResource PrimaryBrush}" />
+            <Setter Property="Foreground" Value="#FFF3EA" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="PrimaryBorder"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="#9C7242"
+                                BorderThickness="1"
+                                CornerRadius="16">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="PrimaryBorder" Property="Background" Value="#D0442B" />
+                                <Setter TargetName="PrimaryBorder" Property="BorderBrush" Value="#E0B36D" />
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="PrimaryBorder" Property="Background" Value="#821914" />
+                                <Setter TargetName="PrimaryBorder" Property="BorderBrush" Value="#F1C78F" />
+                            </Trigger>
+                            <Trigger Property="IsKeyboardFocused" Value="True">
+                                <Setter TargetName="PrimaryBorder" Property="BorderBrush" Value="#F8D9A9" />
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter TargetName="PrimaryBorder" Property="Opacity" Value="0.45" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="SecondaryButtonStyle" TargetType="Button" BasedOn="{StaticResource PrimaryButtonStyle}">
+            <Setter Property="Background" Value="#231719" />
+            <Setter Property="Foreground" Value="{StaticResource TextPrimaryBrush}" />
+            <Setter Property="BorderBrush" Value="{StaticResource OutlineBrush}" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="SecondaryBorder"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="16">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="SecondaryBorder" Property="Background" Value="#2E1E20" />
+                                <Setter TargetName="SecondaryBorder" Property="BorderBrush" Value="#B3834D" />
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="SecondaryBorder" Property="Background" Value="#1A1011" />
+                                <Setter TargetName="SecondaryBorder" Property="BorderBrush" Value="#D1A56B" />
+                            </Trigger>
+                            <Trigger Property="IsKeyboardFocused" Value="True">
+                                <Setter TargetName="SecondaryBorder" Property="BorderBrush" Value="#D1A56B" />
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter TargetName="SecondaryBorder" Property="Opacity" Value="0.45" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style TargetType="CheckBox">
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="Foreground" Value="{StaticResource TextPrimaryBrush}" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="CheckBox">
+                        <Border Background="Transparent">
+                            <BulletDecorator VerticalAlignment="Center">
+                                <BulletDecorator.Bullet>
+                                    <Border x:Name="CheckBorder"
+                                            Width="22"
+                                            Height="22"
+                                            Margin="0,0,2,0"
+                                            Background="#1D1416"
+                                            BorderBrush="{StaticResource OutlineBrush}"
+                                            BorderThickness="1"
+                                            CornerRadius="7">
+                                        <Path x:Name="CheckGlyph"
+                                              Width="11"
+                                              Height="8"
+                                              HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"
+                                              Data="M 1 4.5 L 4.3 7.5 L 10 1"
+                                              Stroke="White"
+                                              StrokeThickness="2"
+                                              StrokeEndLineCap="Round"
+                                              StrokeLineJoin="Round"
+                                              StrokeStartLineCap="Round"
+                                              Visibility="Collapsed" />
+                                    </Border>
+                                </BulletDecorator.Bullet>
+                                <TextBlock Margin="12,0,0,0"
+                                           VerticalAlignment="Center"
+                                           FontSize="{TemplateBinding FontSize}"
+                                           Foreground="{TemplateBinding Foreground}"
+                                           Text="{TemplateBinding Content}"
+                                           TextWrapping="WrapWithOverflow" />
+                            </BulletDecorator>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="CheckBorder" Property="Background" Value="#241816" />
+                                <Setter TargetName="CheckBorder" Property="BorderBrush" Value="#B3834D" />
+                            </Trigger>
+                            <Trigger Property="IsKeyboardFocused" Value="True">
+                                <Setter TargetName="CheckBorder" Property="BorderBrush" Value="#D1A56B" />
+                            </Trigger>
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter TargetName="CheckBorder" Property="Background" Value="#8F301F" />
+                                <Setter TargetName="CheckBorder" Property="BorderBrush" Value="#E0B36D" />
+                                <Setter TargetName="CheckGlyph" Property="Visibility" Value="Visible" />
+                            </Trigger>
+                            <MultiTrigger>
+                                <MultiTrigger.Conditions>
+                                    <Condition Property="IsChecked" Value="True" />
+                                    <Condition Property="IsMouseOver" Value="True" />
+                                </MultiTrigger.Conditions>
+                                <Setter TargetName="CheckBorder" Property="Background" Value="#B5462C" />
+                                <Setter TargetName="CheckBorder" Property="BorderBrush" Value="#F1C78F" />
+                            </MultiTrigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Opacity" Value="0.45" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="TitleBarButtonStyle" TargetType="Button">
+            <Setter Property="Width" Value="38" />
+            <Setter Property="Height" Value="36" />
+            <Setter Property="Margin" Value="8,0,0,0" />
+            <Setter Property="Padding" Value="0" />
+            <Setter Property="Background" Value="#1D1416" />
+            <Setter Property="Foreground" Value="{StaticResource TextSecondaryBrush}" />
+            <Setter Property="BorderBrush" Value="{StaticResource OutlineBrush}" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="FontFamily" Value="Segoe MDL2 Assets" />
+            <Setter Property="FontSize" Value="12" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="ChromeBorder"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="12">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"
+                                              Margin="0,-1,0,0" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="ChromeBorder" Property="Background" Value="#2C1D1F" />
+                                <Setter TargetName="ChromeBorder" Property="BorderBrush" Value="#C58A49" />
+                                <Setter Property="Foreground" Value="{StaticResource TextPrimaryBrush}" />
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="ChromeBorder" Property="Background" Value="#160E10" />
+                            </Trigger>
+                            <Trigger Property="Tag" Value="Close">
+                                <Setter Property="Foreground" Value="#EFB8AA" />
+                            </Trigger>
+                            <MultiTrigger>
+                                <MultiTrigger.Conditions>
+                                    <Condition Property="Tag" Value="Close" />
+                                    <Condition Property="IsMouseOver" Value="True" />
+                                </MultiTrigger.Conditions>
+                                <Setter TargetName="ChromeBorder" Property="Background" Value="#5D1B1E" />
+                                <Setter TargetName="ChromeBorder" Property="BorderBrush" Value="#F06A58" />
+                                <Setter Property="Foreground" Value="White" />
+                            </MultiTrigger>
+                            <MultiTrigger>
+                                <MultiTrigger.Conditions>
+                                    <Condition Property="Tag" Value="Close" />
+                                    <Condition Property="IsPressed" Value="True" />
+                                </MultiTrigger.Conditions>
+                                <Setter TargetName="ChromeBorder" Property="Background" Value="#421113" />
+                                <Setter TargetName="ChromeBorder" Property="BorderBrush" Value="#F06A58" />
+                            </MultiTrigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter TargetName="ChromeBorder" Property="Opacity" Value="0.45" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        </ResourceDictionary>
+    </Window.Resources>
+
+    <Border Margin="10" Background="#0A090C" BorderBrush="#6B4C2D" BorderThickness="1" CornerRadius="18">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="56" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Border Grid.Row="0" Background="#170F12" BorderBrush="#6B4C2D" BorderThickness="0,0,0,1" PreviewMouseLeftButtonDown="TitleBar_MouseLeftButtonDown">
+            <Grid Margin="16,8,16,8" PreviewMouseLeftButtonDown="TitleBar_MouseLeftButtonDown">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                    <Image Width="24"
+                           Height="24"
+                           Margin="0,0,10,0"
+                           Source="pack://application:,,,/Resources/ConquerLoaderICON.png"
+                           Stretch="Uniform" />
+                    <TextBlock VerticalAlignment="Center" FontSize="14" FontWeight="SemiBold" Foreground="{StaticResource TextPrimaryBrush}" Text="Server Setup Wizard" />
+                </StackPanel>
+                <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center" shell:WindowChrome.IsHitTestVisibleInChrome="True">
+                    <Button x:Name="btnMinimizeWindow" Click="BtnMinimizeWindow_Click" Content="_" Style="{StaticResource TitleBarButtonStyle}" />
+                    <Button x:Name="btnMaxRestoreWindow" Click="BtnMaxRestoreWindow_Click" Content="[]" Style="{StaticResource TitleBarButtonStyle}" />
+                    <Button x:Name="btnCloseWindow" Click="BtnCloseWindow_Click" Content="X" Style="{StaticResource TitleBarButtonStyle}" />
+                </StackPanel>
+            </Grid>
+        </Border>
+    <Grid Grid.Row="1" Margin="24">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="18" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="18" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="18" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <Border Grid.Row="0" Style="{StaticResource CardStyle}">
+            <DockPanel LastChildFill="False">
+                <StackPanel DockPanel.Dock="Left">
+                    <TextBlock x:Name="txtWizardTitle" FontSize="32" FontWeight="SemiBold" Foreground="{StaticResource TextPrimaryBrush}" Text="Server Setup Wizard" />
+                    <TextBlock Margin="0,10,0,0" FontSize="14" Foreground="{StaticResource TextSecondaryBrush}" Text="This assistant guides you step by step so you can configure a server without guessing what each field means." TextWrapping="Wrap" />
+                </StackPanel>
+                <Button DockPanel.Dock="Right" Width="120" Click="BtnCancel_Click" Content="Close" Style="{StaticResource SecondaryButtonStyle}" />
+            </DockPanel>
+        </Border>
+
+        <Border Grid.Row="2" Style="{StaticResource CardStyle}">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Column="0" HorizontalAlignment="Center">
+                    <Border x:Name="stepBadge1" Style="{StaticResource StepBadgeStyle}">
+                        <TextBlock x:Name="stepBadgeText1" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" Foreground="White" Text="1" />
+                    </Border>
+                    <TextBlock x:Name="stepTitle1" Margin="0,10,0,0" HorizontalAlignment="Center" FontWeight="SemiBold" Foreground="{StaticResource TextPrimaryBrush}" Text="Basics" />
+                    <TextBlock Margin="0,4,0,0" HorizontalAlignment="Center" FontSize="12" Foreground="{StaticResource TextSecondaryBrush}" Text="Name and address" />
+                </StackPanel>
+
+                <Border Grid.Column="1" Width="40" Height="2" VerticalAlignment="Center" Background="#5A3D25" />
+
+                <StackPanel Grid.Column="2" HorizontalAlignment="Center">
+                    <Border x:Name="stepBadge2" Style="{StaticResource StepBadgeStyle}">
+                        <TextBlock x:Name="stepBadgeText2" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" Foreground="White" Text="2" />
+                    </Border>
+                    <TextBlock x:Name="stepTitle2" Margin="0,10,0,0" HorizontalAlignment="Center" FontWeight="SemiBold" Foreground="{StaticResource TextPrimaryBrush}" Text="Client" />
+                    <TextBlock Margin="0,4,0,0" HorizontalAlignment="Center" FontSize="12" Foreground="{StaticResource TextSecondaryBrush}" Text="Version and executable" />
+                </StackPanel>
+
+                <Border Grid.Column="3" Width="40" Height="2" VerticalAlignment="Center" Background="#5A3D25" />
+
+                <StackPanel Grid.Column="4" HorizontalAlignment="Center">
+                    <Border x:Name="stepBadge3" Style="{StaticResource StepBadgeStyle}">
+                        <TextBlock x:Name="stepBadgeText3" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" Foreground="White" Text="3" />
+                    </Border>
+                    <TextBlock x:Name="stepTitle3" Margin="0,10,0,0" HorizontalAlignment="Center" FontWeight="SemiBold" Foreground="{StaticResource TextPrimaryBrush}" Text="Options" />
+                    <TextBlock Margin="0,4,0,0" HorizontalAlignment="Center" FontSize="12" Foreground="{StaticResource TextSecondaryBrush}" Text="Ports and graphics" />
+                </StackPanel>
+
+                <Border Grid.Column="5" Width="40" Height="2" VerticalAlignment="Center" Background="#5A3D25" />
+
+                <StackPanel Grid.Column="6" HorizontalAlignment="Center">
+                    <Border x:Name="stepBadge4" Style="{StaticResource StepBadgeStyle}">
+                        <TextBlock x:Name="stepBadgeText4" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" Foreground="White" Text="4" />
+                    </Border>
+                    <TextBlock x:Name="stepTitle4" Margin="0,10,0,0" HorizontalAlignment="Center" FontWeight="SemiBold" Foreground="{StaticResource TextPrimaryBrush}" Text="Review" />
+                    <TextBlock Margin="0,4,0,0" HorizontalAlignment="Center" FontSize="12" Foreground="{StaticResource TextSecondaryBrush}" Text="Confirm and save" />
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <Grid Grid.Row="4">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1.45*" />
+                <ColumnDefinition Width="18" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <Border Grid.Column="0" Style="{StaticResource CardStyle}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="12" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+
+                    <StackPanel Grid.Row="0">
+                        <TextBlock x:Name="txtStepHeading" FontSize="24" FontWeight="SemiBold" Foreground="{StaticResource TextPrimaryBrush}" Text="Step 1" />
+                        <TextBlock x:Name="txtStepDescription" Margin="0,8,0,0" FontSize="14" Foreground="{StaticResource TextSecondaryBrush}" TextWrapping="Wrap" />
+                    </StackPanel>
+
+                    <ScrollViewer Grid.Row="2"
+                                  VerticalScrollBarVisibility="Auto"
+                                  HorizontalScrollBarVisibility="Disabled"
+                                  Padding="0,0,8,0">
+                        <Grid>
+                            <StackPanel x:Name="stepPanel1">
+                                <TextBlock Text="Server name" Style="{StaticResource FieldLabelStyle}" />
+                                <TextBox x:Name="tbxServerName" Style="{StaticResource InputTextBoxStyle}" TextChanged="InputValueChanged" />
+                                <TextBlock Margin="0,6,0,0" FontSize="12" Foreground="{StaticResource TextSecondaryBrush}" Text="Use the public name players should recognize inside the loader." TextWrapping="Wrap" />
+
+                                <TextBlock Margin="0,18,0,8" Text="Server IP" Style="{StaticResource FieldLabelStyle}" />
+                                <TextBox x:Name="tbxIP" Style="{StaticResource InputTextBoxStyle}" TextChanged="InputValueChanged" LostFocus="TbxIP_LostFocus" />
+                                <TextBlock x:Name="lblHelpIP" Margin="0,6,0,0" FontSize="12" Foreground="{StaticResource TextSecondaryBrush}" Text="Write the IP address of your login server." TextWrapping="Wrap" />
+                            </StackPanel>
+
+                            <StackPanel x:Name="stepPanel2" Visibility="Collapsed">
+                                <TextBlock Text="Client version" Style="{StaticResource FieldLabelStyle}" />
+                                <TextBox x:Name="tbxVersion" Style="{StaticResource InputTextBoxStyle}" TextChanged="TbxVersion_TextChanged" LostFocus="ValidateNumber_LostFocus" />
+                                <TextBlock Margin="0,6,0,0" FontSize="12" Foreground="{StaticResource TextSecondaryBrush}" Text="This value controls compatibility, available assets, and DirectX9 support." TextWrapping="Wrap" />
+
+                                <TextBlock Margin="0,18,0,8" Text="Executable name" Style="{StaticResource FieldLabelStyle}" />
+                                <TextBox x:Name="tbxConquerExe" Style="{StaticResource InputTextBoxStyle}" TextChanged="InputValueChanged" />
+                                <TextBlock Margin="0,6,0,0" FontSize="12" Foreground="{StaticResource TextSecondaryBrush}" Text="Usually this is Conquer.exe unless your client uses another file name." TextWrapping="Wrap" />
+                            </StackPanel>
+
+                            <StackPanel x:Name="stepPanel3" Visibility="Collapsed">
+                                <TextBlock Text="Login port" Style="{StaticResource FieldLabelStyle}" />
+                                <TextBox x:Name="tbxLoginPort" Style="{StaticResource InputTextBoxStyle}" TextChanged="InputValueChanged" LostFocus="ValidateNumber_LostFocus" />
+
+                                <TextBlock Margin="0,18,0,8" Text="Game port" Style="{StaticResource FieldLabelStyle}" />
+                                <TextBox x:Name="tbxGamePort" Style="{StaticResource InputTextBoxStyle}" TextChanged="InputValueChanged" LostFocus="ValidateNumber_LostFocus" />
+
+                                <Border x:Name="visualGroupCard" Margin="0,20,0,0" Padding="18" Background="#231719" BorderBrush="{StaticResource OutlineBrush}" BorderThickness="1" CornerRadius="18">
+                                    <StackPanel>
+                                        <TextBlock FontSize="14" FontWeight="SemiBold" Foreground="{StaticResource TextPrimaryBrush}" Text="Login screen assets" />
+                                        <TextBlock Margin="0,6,0,0" FontSize="13" Foreground="{StaticResource TextSecondaryBrush}" Text="Only newer clients need these values. Choose the visual group first, then the icon." TextWrapping="Wrap" />
+
+                                        <TextBlock Margin="0,18,0,8" Text="Group" Style="{StaticResource FieldLabelStyle}" />
+                                        <ComboBox x:Name="tbxGroup" Style="{StaticResource InputComboBoxStyle}" SelectionChanged="TbxGroup_SelectionChanged" />
+
+                                        <TextBlock Margin="0,18,0,8" Text="Server icon" Style="{StaticResource FieldLabelStyle}" />
+                                        <ComboBox x:Name="tbxGroupIcon" Style="{StaticResource InputComboBoxStyle}" SelectionChanged="InputSelectionChanged" />
+                                        <TextBlock Margin="0,6,0,0"
+                                                   FontSize="12"
+                                                   Foreground="{StaticResource TextSecondaryBrush}"
+                                                   Text="This icon belongs to the selected group and identifies the server entry inside the login screen."
+                                                   TextWrapping="Wrap" />
+                                    </StackPanel>
+                                </Border>
+
+                                <Border x:Name="dx9Card" Margin="0,20,0,0" Padding="18" Background="#231719" BorderBrush="{StaticResource OutlineBrush}" BorderThickness="1" CornerRadius="18">
+                                    <StackPanel>
+                                        <TextBlock FontSize="14" FontWeight="SemiBold" Foreground="{StaticResource TextPrimaryBrush}" Text="Graphics compatibility" />
+                                        <CheckBox x:Name="tglUseDX9" Margin="0,14,0,0" Checked="Dx9ValueChanged" Unchecked="Dx9ValueChanged" Content="Use DirectX9 environment" />
+                                        <TextBlock x:Name="lblUseDX9" Margin="0,8,0,0" FontSize="12" Foreground="{StaticResource TextSecondaryBrush}" Text="Enable this only if your selected client version supports DirectX9 folders." TextWrapping="Wrap" />
+                                    </StackPanel>
+                                </Border>
+                            </StackPanel>
+
+                            <StackPanel x:Name="stepPanel4" Visibility="Collapsed">
+                                <Border Padding="18" Background="{StaticResource SuccessSoftBrush}" BorderBrush="#166534" BorderThickness="1" CornerRadius="18">
+                                    <StackPanel>
+                                        <TextBlock FontSize="14" FontWeight="SemiBold" Foreground="{StaticResource SuccessBrush}" Text="Ready to save" />
+                                        <TextBlock Margin="0,8,0,0" FontSize="13" Foreground="{StaticResource TextSecondaryBrush}" Text="Review the summary on the right. If everything looks correct, save the server and it will appear in the launcher immediately." TextWrapping="Wrap" />
+                                    </StackPanel>
+                                </Border>
+
+                                <Border Margin="0,20,0,0" Padding="18" Background="{StaticResource WarningSoftBrush}" BorderBrush="#854D0E" BorderThickness="1" CornerRadius="18">
+                                    <TextBlock FontSize="13" Foreground="{StaticResource WarningBrush}" Text="If you are not sure about group or icon values, leave them only when the selected client version requires them." TextWrapping="Wrap" />
+                                </Border>
+                            </StackPanel>
+                        </Grid>
+                    </ScrollViewer>
+                </Grid>
+            </Border>
+
+            <Grid Grid.Column="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="18" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="18" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <Border Grid.Row="0" Style="{StaticResource CardStyle}">
+                    <StackPanel>
+                        <TextBlock FontSize="20" FontWeight="SemiBold" Foreground="{StaticResource TextPrimaryBrush}" Text="What this step needs" />
+                        <TextBlock x:Name="txtStepHint" Margin="0,10,0,0" FontSize="14" Foreground="{StaticResource TextSecondaryBrush}" TextWrapping="Wrap" />
+                    </StackPanel>
+                </Border>
+
+                <Border Grid.Row="2" Style="{StaticResource CardStyle}">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="14" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <TextBlock FontSize="20" FontWeight="SemiBold" Foreground="{StaticResource TextPrimaryBrush}" Text="Current summary" />
+                        <Border Grid.Row="2"
+                                MinHeight="220"
+                                Padding="14"
+                                Background="#120C0E"
+                                BorderBrush="#5A3D25"
+                                BorderThickness="1"
+                                CornerRadius="16">
+                            <ScrollViewer VerticalScrollBarVisibility="Auto"
+                                          HorizontalScrollBarVisibility="Disabled">
+                                <TextBlock x:Name="txtSummary"
+                                           FontSize="14"
+                                           Foreground="{StaticResource TextSecondaryBrush}"
+                                           LineHeight="22"
+                                           TextWrapping="Wrap" />
+                            </ScrollViewer>
+                        </Border>
+                    </Grid>
+                </Border>
+
+                <Border Grid.Row="4" Style="{StaticResource CardStyle}">
+                    <StackPanel>
+                        <TextBlock FontSize="18" FontWeight="SemiBold" Foreground="{StaticResource TextPrimaryBrush}" Text="Validation" />
+                        <TextBlock x:Name="txtValidation" Margin="0,10,0,0" FontSize="14" Foreground="{StaticResource WarningBrush}" Text="Complete the required fields to continue." TextWrapping="Wrap" />
+                    </StackPanel>
+                </Border>
+            </Grid>
+        </Grid>
+
+        <DockPanel Grid.Row="6" LastChildFill="False">
+            <Button x:Name="btnPrevious" DockPanel.Dock="Left" Width="120" Click="BtnPrevious_Click" Content="Previous" Style="{StaticResource SecondaryButtonStyle}" />
+            <Button x:Name="btnNext" DockPanel.Dock="Right" Width="120" Click="BtnNext_Click" Content="Next" Style="{StaticResource PrimaryButtonStyle}" />
+            <Button x:Name="btnSave" DockPanel.Dock="Right" Width="140" Margin="0,0,12,0" Click="BtnSave_Click" Content="Save Server" Style="{StaticResource PrimaryButtonStyle}" Visibility="Collapsed" />
+        </DockPanel>
+    </Grid>
+    </Grid>
+    </Border>
+</Window>

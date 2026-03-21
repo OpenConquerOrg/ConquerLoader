@@ -1,0 +1,269 @@
+<Window x:Class="ConquerLoader.Forms.WPF.AboutWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:shell="clr-namespace:System.Windows.Shell;assembly=PresentationFramework"
+        Title="About"
+        Width="720"
+        Height="440"
+        MinWidth="640"
+        MinHeight="420"
+        Background="#09090D"
+        ResizeMode="CanResizeWithGrip"
+        WindowStyle="None"
+        WindowStartupLocation="CenterOwner">
+    <WindowChrome.WindowChrome>
+        <shell:WindowChrome CaptionHeight="0"
+                            CornerRadius="0"
+                            GlassFrameThickness="0"
+                            NonClientFrameEdges="None"
+                            ResizeBorderThickness="8"
+                            UseAeroCaptionButtons="False" />
+    </WindowChrome.WindowChrome>
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/ConquerLoader;component/Forms/WPF/SharedTheme.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        <SolidColorBrush x:Key="PrimaryBrush" Color="#CB4129" />
+        <SolidColorBrush x:Key="PrimarySoftBrush" Color="#4A1B15" />
+        <SolidColorBrush x:Key="OutlineBrush" Color="#6B4C2D" />
+        <SolidColorBrush x:Key="TextPrimaryBrush" Color="#F7EEE4" />
+        <SolidColorBrush x:Key="TextSecondaryBrush" Color="#D6BDA1" />
+        <SolidColorBrush x:Key="SurfaceBrush" Color="#160F12" />
+        <Style x:Key="CardStyle" TargetType="Border">
+            <Setter Property="Background" Value="{StaticResource SurfaceBrush}" />
+            <Setter Property="BorderBrush" Value="#5A3D25" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="CornerRadius" Value="28" />
+            <Setter Property="Padding" Value="28" />
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect BlurRadius="24" Direction="270" Opacity="0.24" ShadowDepth="10" Color="#020617" />
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="SecondaryButtonStyle" TargetType="Button">
+            <Setter Property="Height" Value="44" />
+            <Setter Property="Padding" Value="16,8" />
+            <Setter Property="FontSize" Value="13" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="Foreground" Value="{StaticResource TextPrimaryBrush}" />
+            <Setter Property="Background" Value="#231719" />
+            <Setter Property="BorderBrush" Value="{StaticResource OutlineBrush}" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="SecondaryBorder"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="14">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="SecondaryBorder" Property="Background" Value="#2E1E20" />
+                                <Setter TargetName="SecondaryBorder" Property="BorderBrush" Value="#B3834D" />
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="SecondaryBorder" Property="Background" Value="#1A1011" />
+                                <Setter TargetName="SecondaryBorder" Property="BorderBrush" Value="#D1A56B" />
+                            </Trigger>
+                            <Trigger Property="IsKeyboardFocused" Value="True">
+                                <Setter TargetName="SecondaryBorder" Property="BorderBrush" Value="#D1A56B" />
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter TargetName="SecondaryBorder" Property="Opacity" Value="0.45" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="TitleBarButtonStyle" TargetType="Button">
+            <Setter Property="Width" Value="38" />
+            <Setter Property="Height" Value="36" />
+            <Setter Property="Margin" Value="8,0,0,0" />
+            <Setter Property="Padding" Value="0" />
+            <Setter Property="Background" Value="#1D1416" />
+            <Setter Property="Foreground" Value="{StaticResource TextSecondaryBrush}" />
+            <Setter Property="BorderBrush" Value="{StaticResource OutlineBrush}" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="FontFamily" Value="Segoe MDL2 Assets" />
+            <Setter Property="FontSize" Value="12" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="ChromeBorder"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="12">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"
+                                              Margin="0,-1,0,0" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="ChromeBorder" Property="Background" Value="#2C1D1F" />
+                                <Setter TargetName="ChromeBorder" Property="BorderBrush" Value="#C58A49" />
+                                <Setter Property="Foreground" Value="{StaticResource TextPrimaryBrush}" />
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="ChromeBorder" Property="Background" Value="#160E10" />
+                            </Trigger>
+                            <Trigger Property="Tag" Value="Close">
+                                <Setter Property="Foreground" Value="#EFB8AA" />
+                            </Trigger>
+                            <MultiTrigger>
+                                <MultiTrigger.Conditions>
+                                    <Condition Property="Tag" Value="Close" />
+                                    <Condition Property="IsMouseOver" Value="True" />
+                                </MultiTrigger.Conditions>
+                                <Setter TargetName="ChromeBorder" Property="Background" Value="#5D1B1E" />
+                                <Setter TargetName="ChromeBorder" Property="BorderBrush" Value="#F06A58" />
+                                <Setter Property="Foreground" Value="White" />
+                            </MultiTrigger>
+                            <MultiTrigger>
+                                <MultiTrigger.Conditions>
+                                    <Condition Property="Tag" Value="Close" />
+                                    <Condition Property="IsPressed" Value="True" />
+                                </MultiTrigger.Conditions>
+                                <Setter TargetName="ChromeBorder" Property="Background" Value="#421113" />
+                                <Setter TargetName="ChromeBorder" Property="BorderBrush" Value="#F06A58" />
+                            </MultiTrigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter TargetName="ChromeBorder" Property="Opacity" Value="0.45" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        </ResourceDictionary>
+    </Window.Resources>
+    <Border Margin="10"
+            Background="#0A090C"
+            BorderBrush="#6B4C2D"
+            BorderThickness="1"
+            CornerRadius="18">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="56" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Border Grid.Row="0"
+                    Background="#170F12"
+                    BorderBrush="#6B4C2D"
+                    BorderThickness="0,0,0,1"
+                    PreviewMouseLeftButtonDown="TitleBar_MouseLeftButtonDown">
+                <Grid Margin="16,8,16,8"
+                      PreviewMouseLeftButtonDown="TitleBar_MouseLeftButtonDown">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Orientation="Horizontal"
+                                VerticalAlignment="Center"
+                                PreviewMouseLeftButtonDown="TitleBar_MouseLeftButtonDown">
+                        <Image Width="24"
+                               Height="24"
+                               Margin="0,0,10,0"
+                               Source="pack://application:,,,/Resources/ConquerLoaderICON.png"
+                               Stretch="Uniform" />
+                        <TextBlock FontSize="14"
+                                   FontWeight="SemiBold"
+                                   Foreground="{StaticResource TextPrimaryBrush}"
+                                   Text="About" />
+                    </StackPanel>
+                    <StackPanel Grid.Column="1"
+                                Orientation="Horizontal"
+                                VerticalAlignment="Center"
+                                shell:WindowChrome.IsHitTestVisibleInChrome="True">
+                        <Button x:Name="btnMinimizeWindow"
+                                Click="BtnMinimizeWindow_Click"
+                                Content="_"
+                                Style="{StaticResource TitleBarButtonStyle}" />
+                        <Button x:Name="btnMaxRestoreWindow"
+                                Click="BtnMaxRestoreWindow_Click"
+                                Content="[]"
+                                Style="{StaticResource TitleBarButtonStyle}" />
+                        <Button x:Name="btnCloseWindow"
+                                Click="BtnCloseWindow_Click"
+                                Content="X"
+                                Style="{StaticResource TitleBarButtonStyle}" />
+                    </StackPanel>
+                </Grid>
+            </Border>
+            <Grid Grid.Row="1" Margin="24">
+                    <Border Style="{StaticResource CardStyle}">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="210" />
+                        <ColumnDefinition Width="28" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Border Grid.Column="0"
+                            Width="196"
+                            Height="196"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Top"
+                            Background="#221618"
+                            BorderBrush="#8A613A"
+                            BorderThickness="1"
+                            CornerRadius="28"
+                            Cursor="Hand"
+                            MouseLeftButtonUp="BrandCard_MouseLeftButtonUp">
+                        <StackPanel VerticalAlignment="Center">
+                            <Image Width="94"
+                                   Height="94"
+                                   HorizontalAlignment="Center"
+                                   Source="pack://application:,,,/Resources/ConquerLoaderICON.png"
+                                   Stretch="Uniform" />
+                            <TextBlock Margin="0,10,0,0"
+                                       HorizontalAlignment="Center"
+                                       MaxWidth="150"
+                                       FontSize="13"
+                                       Foreground="{StaticResource TextSecondaryBrush}"
+                                       Text="conquerloader.com"
+                                       TextAlignment="Center"
+                                       TextWrapping="WrapWithOverflow" />
+                        </StackPanel>
+                    </Border>
+                    <StackPanel Grid.Column="2">
+                        <TextBlock FontSize="30" FontWeight="SemiBold" Foreground="{StaticResource TextPrimaryBrush}" Text="About ConquerLoader" TextWrapping="Wrap" />
+                        <TextBlock Margin="0,10,0,0" FontSize="15" Foreground="{StaticResource TextSecondaryBrush}" Text="A lightweight launcher with plugin support and server management for Conquer Online." TextWrapping="Wrap" />
+                        <TextBlock Margin="0,24,0,0" FontSize="14" Foreground="{StaticResource TextPrimaryBrush}" Text="Created by Cristian Ocana Soler (DaRkFoxDeveloper)" TextWrapping="Wrap" />
+                        <TextBlock Margin="0,8,0,0" FontSize="14" Foreground="{StaticResource TextPrimaryBrush}" Text="Portuguese translation by Louan Fontenele" TextWrapping="Wrap" />
+                        <TextBlock Margin="0,8,0,0" FontSize="14" Foreground="{StaticResource TextPrimaryBrush}" Text="Testers: Robert Frias, Pezzi Tomas" TextWrapping="Wrap" />
+                        <DockPanel Margin="0,24,0,0" LastChildFill="False">
+                            <TextBlock DockPanel.Dock="Left" FontSize="14" FontWeight="SemiBold" Foreground="{StaticResource TextPrimaryBrush}" Text="Version:" />
+                            <TextBlock x:Name="lblAboutVersionN" DockPanel.Dock="Left" Margin="8,0,0,0" FontSize="14" Foreground="{StaticResource TextSecondaryBrush}" Text="v1.0.0.0" TextWrapping="Wrap" />
+                        </DockPanel>
+                        <StackPanel Margin="0,26,0,0">
+                            <TextBlock FontSize="14" FontWeight="SemiBold" Foreground="{StaticResource TextPrimaryBrush}" Text="Links" />
+                            <TextBlock Margin="0,10,0,0" FontSize="14" Foreground="{StaticResource TextSecondaryBrush}" TextWrapping="WrapWithOverflow">
+                                <Run Text="Website: " />
+                                <Hyperlink NavigateUri="https://conquerloader.com/"
+                                           Foreground="#E0B36D"
+                                           RequestNavigate="Hyperlink_RequestNavigate"
+                                           TextDecorations="Underline">https://conquerloader.com/</Hyperlink>
+                            </TextBlock>
+                            <TextBlock Margin="0,8,0,0" FontSize="14" Foreground="{StaticResource TextSecondaryBrush}" TextWrapping="WrapWithOverflow">
+                                <Run Text="Changelog: " />
+                                <Hyperlink NavigateUri="https://conquerloader.com/changelog/"
+                                           Foreground="#E0B36D"
+                                           RequestNavigate="Hyperlink_RequestNavigate"
+                                           TextDecorations="Underline">https://conquerloader.com/changelog/</Hyperlink>
+                            </TextBlock>
+                        </StackPanel>
+                    </StackPanel>
+                </Grid>
+            </Border>
+            </Grid>
+        </Grid>
+    </Border>
+</Window>
