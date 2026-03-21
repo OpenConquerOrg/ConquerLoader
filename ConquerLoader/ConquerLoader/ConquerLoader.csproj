@@ -353,6 +353,7 @@
     <Compile Include="Models\TextTranslation.cs" />
     <Content Include="ConquerLoaderLogo.ico" />
     <Content Include="Resources\CLHook_Legacy.dll" />
+    <Resource Include="Resources\CL_BG.png" />
     <Content Include="Resources\ConquerCipherHook.dll" />
     <None Include="Resources\ConquerLoaderLogo.ico" />
     <Resource Include="Resources\ConquerLoaderICON.png" />

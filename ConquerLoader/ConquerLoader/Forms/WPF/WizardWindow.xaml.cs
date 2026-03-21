@@ -510,7 +510,7 @@ namespace ConquerLoader.Forms.WPF
                     break;
                 default:
                     txtStepHeading.Text = "Step 4. Review and save";
-                    txtStepDescription.Text = "Everything is ready. Check the summary and save the server when the values look correct.";
+                    txtStepDescription.Text = "Everything is ready. Review the values from the previous steps and save the server when they look correct.";
                     txtStepHint.Text = "If something looks wrong, go back to the previous step and adjust it before saving.";
                     break;
             }
@@ -527,12 +527,12 @@ namespace ConquerLoader.Forms.WPF
             }
             else if (step == activeStep)
             {
-                badge.Background = BrushFromHex("#1A73E8");
+                badge.Background = BrushFromHex("#C53D2B");
                 text.Text = step.ToString();
             }
             else
             {
-                badge.Background = BrushFromHex("#D7DEEA");
+                badge.Background = BrushFromHex("#808997");
                 text.Text = step.ToString();
             }
         }
@@ -615,26 +615,7 @@ namespace ConquerLoader.Forms.WPF
 
         private void UpdateSummary()
         {
-            int version;
-            int.TryParse(tbxVersion.Text, out version);
-            string versionText = string.IsNullOrWhiteSpace(tbxVersion.Text) ? "-" : tbxVersion.Text;
-            string exeText = string.IsNullOrWhiteSpace(tbxConquerExe.Text) ? "-" : tbxConquerExe.Text;
-            string selectedGroup = ResolveGroupName(version, false);
-            string selectedIcon = SelectedGroupIcon();
-            string groupText = visualGroupCard != null && visualGroupCard.Visibility == Visibility.Visible && !string.IsNullOrWhiteSpace(selectedGroup) ? selectedGroup : "Not required";
-            string iconText = visualGroupCard != null && visualGroupCard.Visibility == Visibility.Visible && !string.IsNullOrWhiteSpace(selectedIcon) ? selectedIcon : "Not required";
-            string dx9Text = dx9Card != null && dx9Card.Visibility == Visibility.Visible ? ((tglUseDX9.IsChecked == true) ? "Enabled" : "Disabled") : "Not available for this version";
-
-            txtSummary.Text =
-                "Server: " + SafeText(tbxServerName.Text) + Environment.NewLine +
-                "IP: " + SafeText(tbxIP.Text) + Environment.NewLine +
-                "Version: " + versionText + Environment.NewLine +
-                "Executable: " + exeText + Environment.NewLine +
-                "Login port: " + SafeText(tbxLoginPort.Text) + Environment.NewLine +
-                "Game port: " + SafeText(tbxGamePort.Text) + Environment.NewLine +
-                "Group: " + groupText + Environment.NewLine +
-                "Server icon: " + iconText + Environment.NewLine +
-                "DirectX9: " + dx9Text;
+            // Summary panel removed from the wizard UI.
         }
 
         private static string SafeText(string text)

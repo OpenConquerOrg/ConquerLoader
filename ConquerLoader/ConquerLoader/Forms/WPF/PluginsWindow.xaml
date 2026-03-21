@@ -24,15 +24,15 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/ConquerLoader;component/Forms/WPF/SharedTheme.xaml" />
             </ResourceDictionary.MergedDictionaries>
-        <SolidColorBrush x:Key="TextPrimaryBrush" Color="#F7EEE4" />
-        <SolidColorBrush x:Key="TextSecondaryBrush" Color="#D6BDA1" />
+        <SolidColorBrush x:Key="TextPrimaryBrush" Color="#F4F7FC" />
+        <SolidColorBrush x:Key="TextSecondaryBrush" Color="#D3D9E3" />
         <SolidColorBrush x:Key="PrimaryBrush" Color="#CB4129" />
-        <SolidColorBrush x:Key="SurfaceBrush" Color="#160F12" />
-        <SolidColorBrush x:Key="OutlineBrush" Color="#6B4C2D" />
+        <SolidColorBrush x:Key="SurfaceBrush" Color="#120E13" />
+        <SolidColorBrush x:Key="OutlineBrush" Color="#9EA6B4" />
         <Style x:Key="CardStyle" TargetType="Border">
             <Setter Property="Padding" Value="24" />
             <Setter Property="Background" Value="{StaticResource SurfaceBrush}" />
-            <Setter Property="BorderBrush" Value="#5A3D25" />
+            <Setter Property="BorderBrush" Value="#808997" />
             <Setter Property="BorderThickness" Value="1" />
             <Setter Property="CornerRadius" Value="24" />
         </Style>
@@ -136,7 +136,7 @@
         </Style>
         </ResourceDictionary>
     </Window.Resources>
-    <Border Margin="10" Background="#0A090C" BorderBrush="#6B4C2D" BorderThickness="1" CornerRadius="18">
+    <Border Margin="0" Background="#09080B" BorderBrush="#00FFFFFF" BorderThickness="0" CornerRadius="0">
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="56" />

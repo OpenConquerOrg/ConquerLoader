@@ -4,10 +4,10 @@
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         xmlns:shell="clr-namespace:System.Windows.Shell;assembly=PresentationFramework"
         Title="ConquerLoader"
-        Width="1180"
-        Height="800"
-        MinWidth="980"
-        MinHeight="720"
+        Width="1280"
+        Height="860"
+        MinWidth="1120"
+        MinHeight="760"
         Background="#07090E"
         ResizeMode="CanResizeWithGrip"
         WindowStyle="None"
@@ -26,23 +26,23 @@
                 <ResourceDictionary Source="/ConquerLoader;component/Forms/WPF/SharedTheme.xaml" />
             </ResourceDictionary.MergedDictionaries>
         <SolidColorBrush x:Key="PrimaryBrush" Color="#CB4129" />
-        <SolidColorBrush x:Key="PrimaryDarkBrush" Color="#A02418" />
-        <SolidColorBrush x:Key="PrimarySoftBrush" Color="#4A1B15" />
-        <SolidColorBrush x:Key="SurfaceBrush" Color="#160F12" />
-        <SolidColorBrush x:Key="SurfaceAltBrush" Color="#1E1517" />
-        <SolidColorBrush x:Key="OutlineBrush" Color="#6B4C2D" />
-        <SolidColorBrush x:Key="TextPrimaryBrush" Color="#F7EEE4" />
-        <SolidColorBrush x:Key="TextSecondaryBrush" Color="#D6BDA1" />
+        <SolidColorBrush x:Key="PrimaryDarkBrush" Color="#941C17" />
+        <SolidColorBrush x:Key="PrimarySoftBrush" Color="#341319" />
+        <SolidColorBrush x:Key="SurfaceBrush" Color="#120E13" />
+        <SolidColorBrush x:Key="SurfaceAltBrush" Color="#171319" />
+        <SolidColorBrush x:Key="OutlineBrush" Color="#9EA6B4" />
+        <SolidColorBrush x:Key="TextPrimaryBrush" Color="#F4F7FC" />
+        <SolidColorBrush x:Key="TextSecondaryBrush" Color="#D3D9E3" />
         <SolidColorBrush x:Key="SuccessBrush" Color="#73D995" />
         <SolidColorBrush x:Key="InfoSoftBrush" Color="#241816" />
         <SolidColorBrush x:Key="DangerBrush" Color="#FF8974" />
-        <SolidColorBrush x:Key="GoldBrush" Color="#E0B36D" />
+        <SolidColorBrush x:Key="GoldBrush" Color="#E7EBF3" />
 
         <Style x:Key="CardBorderStyle" TargetType="Border">
             <Setter Property="Padding" Value="28" />
             <Setter Property="CornerRadius" Value="28" />
             <Setter Property="Background" Value="{StaticResource SurfaceBrush}" />
-            <Setter Property="BorderBrush" Value="#5A3D25" />
+            <Setter Property="BorderBrush" Value="#808997" />
             <Setter Property="BorderThickness" Value="1" />
             <Setter Property="Effect">
                 <Setter.Value>
@@ -53,6 +53,22 @@
                                       Color="#040203" />
                 </Setter.Value>
             </Setter>
+        </Style>
+
+        <Style x:Key="ScenePanelStyle" TargetType="Border" BasedOn="{StaticResource CardBorderStyle}">
+            <Setter Property="Padding" Value="24" />
+            <Setter Property="CornerRadius" Value="26" />
+            <Setter Property="Background" Value="#58100E14" />
+            <Setter Property="BorderBrush" Value="#B4BCC8" />
+            <Setter Property="BorderThickness" Value="1.4" />
+        </Style>
+
+        <Style x:Key="ScenePlateStyle" TargetType="Border">
+            <Setter Property="Padding" Value="16,8" />
+            <Setter Property="Background" Value="#341118" />
+            <Setter Property="BorderBrush" Value="#BEC4D0" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="CornerRadius" Value="18" />
         </Style>
 
         <Style x:Key="SectionTitleStyle" TargetType="TextBlock">
@@ -412,76 +428,6 @@
             </Setter>
         </Style>
 
-        <Style TargetType="CheckBox">
-            <Setter Property="Cursor" Value="Hand" />
-            <Setter Property="FontSize" Value="14" />
-            <Setter Property="Foreground" Value="{StaticResource TextPrimaryBrush}" />
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="CheckBox">
-                        <Border Background="Transparent">
-                            <BulletDecorator VerticalAlignment="Center">
-                                <BulletDecorator.Bullet>
-                                    <Border x:Name="CheckBorder"
-                                            Width="22"
-                                            Height="22"
-                                            Margin="0,0,2,0"
-                                            Background="#1D1416"
-                                            BorderBrush="{StaticResource OutlineBrush}"
-                                            BorderThickness="1"
-                                            CornerRadius="7">
-                                        <Path x:Name="CheckGlyph"
-                                              Width="11"
-                                              Height="8"
-                                              HorizontalAlignment="Center"
-                                              VerticalAlignment="Center"
-                                              Data="M 1 4.5 L 4.3 7.5 L 10 1"
-                                              Stroke="White"
-                                              StrokeThickness="2"
-                                              StrokeEndLineCap="Round"
-                                              StrokeLineJoin="Round"
-                                              StrokeStartLineCap="Round"
-                                              Visibility="Collapsed" />
-                                    </Border>
-                                </BulletDecorator.Bullet>
-                                <TextBlock Margin="12,0,0,0"
-                                           VerticalAlignment="Center"
-                                           FontSize="{TemplateBinding FontSize}"
-                                           Foreground="{TemplateBinding Foreground}"
-                                           Text="{TemplateBinding Content}"
-                                           TextWrapping="WrapWithOverflow" />
-                            </BulletDecorator>
-                        </Border>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="CheckBorder" Property="Background" Value="#241816" />
-                                <Setter TargetName="CheckBorder" Property="BorderBrush" Value="#B3834D" />
-                            </Trigger>
-                            <Trigger Property="IsKeyboardFocused" Value="True">
-                                <Setter TargetName="CheckBorder" Property="BorderBrush" Value="#D1A56B" />
-                            </Trigger>
-                            <Trigger Property="IsChecked" Value="True">
-                                <Setter TargetName="CheckBorder" Property="Background" Value="#8F301F" />
-                                <Setter TargetName="CheckBorder" Property="BorderBrush" Value="#E0B36D" />
-                                <Setter TargetName="CheckGlyph" Property="Visibility" Value="Visible" />
-                            </Trigger>
-                            <MultiTrigger>
-                                <MultiTrigger.Conditions>
-                                    <Condition Property="IsChecked" Value="True" />
-                                    <Condition Property="IsMouseOver" Value="True" />
-                                </MultiTrigger.Conditions>
-                                <Setter TargetName="CheckBorder" Property="Background" Value="#B5462C" />
-                                <Setter TargetName="CheckBorder" Property="BorderBrush" Value="#F1C78F" />
-                            </MultiTrigger>
-                            <Trigger Property="IsEnabled" Value="False">
-                                <Setter Property="Opacity" Value="0.45" />
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-
         <Style x:Key="ProgressStyle" TargetType="ProgressBar">
             <Setter Property="Height" Value="8" />
             <Setter Property="Foreground" Value="{StaticResource GoldBrush}" />
@@ -553,44 +499,49 @@
         </ResourceDictionary>
     </Window.Resources>
 
-    <Border Margin="10"
-            Background="#0A090C"
-            BorderBrush="#6B4C2D"
-            BorderThickness="1"
-            CornerRadius="22">
-        <Grid>
-            <Grid.Background>
-                <RadialGradientBrush Center="0.52,0.18" GradientOrigin="0.52,0.18" RadiusX="0.95" RadiusY="0.95">
-                    <GradientStop Color="#442115" Offset="0" />
-                    <GradientStop Color="#211214" Offset="0.42" />
-                    <GradientStop Color="#09090D" Offset="1" />
-                </RadialGradientBrush>
-            </Grid.Background>
-
-            <Ellipse Width="760"
-                     Height="760"
-                     Margin="-130,-240,0,0"
-                     HorizontalAlignment="Left"
-                     VerticalAlignment="Top"
-                     Fill="#22FF9F45"
-                     IsHitTestVisible="False" />
-            <Ellipse Width="520"
-                     Height="520"
-                     Margin="0,-150,-140,0"
-                     HorizontalAlignment="Right"
-                     VerticalAlignment="Top"
-                     Fill="#18D96E42"
-                     IsHitTestVisible="False" />
-            <Rectangle VerticalAlignment="Bottom"
-                       Height="260"
-                       IsHitTestVisible="False">
+    <Border Margin="0"
+            Background="#020203"
+            BorderBrush="#00FFFFFF"
+            BorderThickness="0"
+            CornerRadius="0">
+        <Grid ClipToBounds="True">
+            <Image Source="/ConquerLoader;component/Resources/CL_BG.png"
+                   Stretch="UniformToFill"
+                   Opacity="1"
+                   IsHitTestVisible="False" />
+            <Rectangle IsHitTestVisible="False"
+                       Fill="#02000000" />
+            <Rectangle IsHitTestVisible="False">
                 <Rectangle.Fill>
-                    <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
-                        <GradientStop Color="#00FFFFFF" Offset="0" />
-                        <GradientStop Color="#D209090D" Offset="1" />
+                    <LinearGradientBrush StartPoint="0.5,0" EndPoint="0.5,1">
+                        <GradientStop Color="#00000000" Offset="0" />
+                        <GradientStop Color="#06020406" Offset="0.18" />
+                        <GradientStop Color="#2805070C" Offset="0.72" />
+                        <GradientStop Color="#64030508" Offset="1" />
                     </LinearGradientBrush>
                 </Rectangle.Fill>
             </Rectangle>
+            <Rectangle VerticalAlignment="Top"
+                       Height="160"
+                       IsHitTestVisible="False">
+                <Rectangle.Fill>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                        <GradientStop Color="#14FFF7F3" Offset="0" />
+                        <GradientStop Color="#00FFFFFF" Offset="1" />
+                    </LinearGradientBrush>
+                </Rectangle.Fill>
+            </Rectangle>
+            <Ellipse Width="500"
+                     Height="150"
+                     Margin="0,0,0,76"
+                     HorizontalAlignment="Center"
+                     VerticalAlignment="Bottom"
+                     Fill="#26FF6A47"
+                     IsHitTestVisible="False">
+                <Ellipse.Effect>
+                    <BlurEffect Radius="60" />
+                </Ellipse.Effect>
+            </Ellipse>
 
             <Grid>
                 <Grid.RowDefinitions>
@@ -599,8 +550,8 @@
                 </Grid.RowDefinitions>
 
                 <Border Grid.Row="0"
-                        Background="#7A100D10"
-                        BorderBrush="#4A2B1D"
+                        Background="#3010151A"
+                        BorderBrush="#339EA6B4"
                         BorderThickness="0,0,0,1"
                         PreviewMouseLeftButtonDown="TitleBar_MouseLeftButtonDown">
                     <Grid Margin="16,8,16,8"
@@ -613,17 +564,17 @@
                         <StackPanel Orientation="Horizontal"
                                     VerticalAlignment="Center"
                                     PreviewMouseLeftButtonDown="TitleBar_MouseLeftButtonDown">
-                            <Border Width="30"
-                                    Height="30"
-                                    CornerRadius="14"
-                                    Background="#2E1712"
-                                    BorderBrush="#8A613A"
+                            <Border Width="32"
+                                    Height="32"
+                                    CornerRadius="15"
+                                    Background="#261014"
+                                    BorderBrush="#8893A3"
                                     BorderThickness="1">
-                                <Image Width="22"
-                                       Height="22"
+                                <Image Width="24"
+                                       Height="24"
                                        HorizontalAlignment="Center"
                                        VerticalAlignment="Center"
-                                       Source="pack://application:,,,/Resources/ConquerLoaderICON.png"
+                                       Source="/ConquerLoader;component/Resources/ConquerLoaderICON.png"
                                        Stretch="Uniform" />
                             </Border>
                             <StackPanel Margin="12,0,0,0"
@@ -633,7 +584,7 @@
                                            FontSize="14"
                                            FontWeight="SemiBold"
                                            Foreground="{StaticResource TextPrimaryBrush}" />
-                                <TextBlock Text="server launcher"
+                                <TextBlock Text="fantasy launcher"
                                            FontSize="11"
                                            Foreground="{StaticResource TextSecondaryBrush}" />
                             </StackPanel>
@@ -650,7 +601,7 @@
                                     Style="{StaticResource TitleBarButtonStyle}" />
                             <Button x:Name="btnMaxRestoreWindow"
                                     Click="BtnMaxRestoreWindow_Click"
-                                    Content="□"
+                                    Content="&#xE922;"
                                     Style="{StaticResource TitleBarButtonStyle}" />
                             <Button x:Name="btnCloseWindow"
                                     Click="BtnCloseWindow_Click"
@@ -663,130 +614,109 @@
                 </Border>
 
                 <ScrollViewer Grid.Row="1"
-                              VerticalScrollBarVisibility="Auto">
-                    <Grid Margin="24">
+                              Padding="0"
+                              VerticalScrollBarVisibility="Auto"
+                              HorizontalScrollBarVisibility="Disabled"
+                              PanningMode="VerticalOnly">
+                    <Grid Margin="22,12,22,24">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto" />
-                            <RowDefinition Height="20" />
-                            <RowDefinition Height="*" />
+                            <RowDefinition Height="30" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="28" />
+                            <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
 
-                <Border Grid.Row="0"
-                        Style="{StaticResource CardBorderStyle}"
-                        Background="#8C120E10"
-                        BorderBrush="#7A5733">
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="20" />
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="Auto" />
-                        </Grid.ColumnDefinitions>
-
-                        <Border Width="124"
-                                Height="124"
-                                Background="#22000000"
-                                BorderBrush="#B88A4C"
-                                BorderThickness="2"
-                                CornerRadius="62"
-                                VerticalAlignment="Center">
-                            <Image Width="98"
-                                   Height="98"
-                                   HorizontalAlignment="Center"
-                                   VerticalAlignment="Center"
-                                   Source="pack://application:,,,/Resources/ConquerLoaderICON.png"
-                                   Stretch="Uniform" />
-                        </Border>
-
-                        <StackPanel Grid.Column="2" VerticalAlignment="Center">
-                            <Border Width="156"
-                                    Height="34"
-                                    Margin="0,0,0,12"
-                                    HorizontalAlignment="Left"
-                                    Background="#352113"
-                                    BorderBrush="#9C7242"
-                                    BorderThickness="1"
-                                    CornerRadius="17">
-                                <TextBlock HorizontalAlignment="Center"
-                                           VerticalAlignment="Center"
-                                           FontSize="12"
-                                           FontWeight="SemiBold"
-                                           Foreground="{StaticResource GoldBrush}"
-                                           Text="SERVER PORTAL" />
-                            </Border>
-                            <TextBlock x:Name="txtWindowTitle"
-                                       FontSize="42"
-                                       FontWeight="Bold"
-                                       Foreground="{StaticResource TextPrimaryBrush}"
-                                       TextWrapping="Wrap" />
-                            <TextBlock x:Name="txtHeaderDescription"
-                                       Margin="0,12,0,0"
-                                       MaxWidth="620"
-                                       Style="{StaticResource BodyStyle}"
-                                       Text="Choose your realm, review the launch panel, and enter the client from one guided launcher." />
-                        </StackPanel>
-
-                        <Border Grid.Column="3"
-                                Padding="18"
-                                HorizontalAlignment="Right"
-                                VerticalAlignment="Top"
-                                Background="#281715"
-                                BorderBrush="#8A613A"
+                <Grid Grid.Row="0">
+                    <StackPanel HorizontalAlignment="Center">
+                        <Border Width="190"
+                                Height="38"
+                                HorizontalAlignment="Center"
+                                Background="#2E1016"
+                                BorderBrush="#BBC2CF"
                                 BorderThickness="1"
-                                CornerRadius="22">
-                            <StackPanel Width="238">
-                                <TextBlock FontSize="12"
-                                           FontWeight="SemiBold"
-                                           Foreground="{StaticResource TextSecondaryBrush}"
-                                           Text="Selected realm" />
-                                <TextBlock x:Name="txtSelectedServer"
-                                           Margin="0,6,0,0"
-                                           FontSize="22"
-                                           FontWeight="SemiBold"
-                                           Foreground="{StaticResource TextPrimaryBrush}"
-                                           Text="No server selected"
-                                           TextWrapping="Wrap" />
-                                <TextBlock x:Name="txtServerStatusHint"
-                                           Margin="0,10,0,0"
-                                           Style="{StaticResource BodyStyle}"
-                                           Text="The selected server will be checked before launch." />
-                                <WrapPanel Margin="0,18,0,0">
-                                    <Button x:Name="btnSettingsHeader"
-                                            Width="112"
-                                            Margin="0,0,10,10"
-                                            Click="BtnSettings_Click"
-                                            Content="Settings"
-                                            Style="{StaticResource GhostButtonStyle}" />
-                                    <Button x:Name="lblAbout"
-                                            Width="102"
-                                            Margin="0,0,0,10"
-                                            Click="LblAbout_Click"
-                                            Content="About"
-                                            Style="{StaticResource GhostButtonStyle}" />
-                                </WrapPanel>
-                            </StackPanel>
+                                CornerRadius="19">
+                            <TextBlock HorizontalAlignment="Center"
+                                       VerticalAlignment="Center"
+                                       FontSize="12"
+                                       FontWeight="SemiBold"
+                                       Foreground="{StaticResource GoldBrush}"
+                                       Text="Created by DaRkFox" />
                         </Border>
-                    </Grid>
-                </Border>
 
-                <Grid Grid.Row="2">
+                        <Image Width="290"
+                               Height="290"
+                               Margin="0,8,0,0"
+                               HorizontalAlignment="Center"
+                               Source="/ConquerLoader;component/Resources/ConquerLoaderICON.png"
+                               Stretch="Uniform">
+                            <Image.Effect>
+                                <DropShadowEffect BlurRadius="42"
+                                                  Direction="270"
+                                                  Opacity="0.5"
+                                                  ShadowDepth="16"
+                                                  Color="#2D0E09" />
+                            </Image.Effect>
+                        </Image>
+
+                        <TextBlock x:Name="txtWindowTitle"
+                                   Margin="0,2,0,0"
+                                   FontFamily="Palatino Linotype"
+                                   FontSize="34"
+                                   FontWeight="Bold"
+                                   Foreground="{StaticResource TextPrimaryBrush}"
+                                   TextAlignment="Center"
+                                   TextWrapping="Wrap" />
+                        <TextBlock x:Name="txtHeaderDescription"
+                                   Margin="0,6,0,0"
+                                   MaxWidth="460"
+                                   FontSize="12"
+                                   Foreground="#E0E5EF"
+                                   Text="Choose your realm, review the launch panel, and enter the client from one guided launcher."
+                                   TextAlignment="Center"
+                                   TextWrapping="Wrap" />
+                    </StackPanel>
+
+                    <WrapPanel HorizontalAlignment="Right"
+                               VerticalAlignment="Top"
+                               Visibility="Collapsed">
+                        <Button x:Name="btnSettingsHeader"
+                                Width="116"
+                                Margin="0,0,10,10"
+                                Click="BtnSettings_Click"
+                                Content="Settings"
+                                Style="{StaticResource GhostButtonStyle}" />
+                        <Button
+                                Width="104"
+                                Margin="0,0,0,10"
+                                Content="About"
+                                Style="{StaticResource GhostButtonStyle}" />
+                    </WrapPanel>
+                </Grid>
+
+                <Grid Grid.Row="2"
+                      Margin="0,8,0,0">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="1.02*" />
-                        <ColumnDefinition Width="20" />
-                        <ColumnDefinition Width="1.18*" />
-                        <ColumnDefinition Width="20" />
-                        <ColumnDefinition Width="0.95*" />
+                        <ColumnDefinition Width="270" />
+                        <ColumnDefinition Width="22" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="22" />
+                        <ColumnDefinition Width="248" />
                     </Grid.ColumnDefinitions>
 
                     <Border Grid.Column="0"
-                            Style="{StaticResource CardBorderStyle}"
-                            Background="#8D140F12"
-                            BorderBrush="#7A5733">
+                            Margin="0,168,0,22"
+                            Style="{StaticResource ScenePanelStyle}"
+                            Background="#4C100E14"
+                            BorderBrush="#C3C9D4">
                         <StackPanel>
-                            <TextBlock Style="{StaticResource SectionTitleStyle}" Text="Server Selection" />
+                            <TextBlock FontFamily="Palatino Linotype"
+                                       Style="{StaticResource SectionTitleStyle}"
+                                       Text="Server Selection" />
                             <TextBlock x:Name="txtHelper"
-                                       Margin="0,8,0,24"
-                                       Style="{StaticResource BodyStyle}" />
+                                       Margin="0,10,0,22"
+                                       Style="{StaticResource BodyStyle}"
+                                       Text="Pick a configured server. The launcher will keep the selected realm ready for the next start." />
 
                             <TextBlock Text="Available servers" Style="{StaticResource FieldLabelStyle}" />
                             <ComboBox x:Name="cbxServers"
@@ -794,19 +724,19 @@
                                       Style="{StaticResource InputComboBoxStyle}"
                                       SelectionChanged="CbxServers_SelectedIndexChanged" />
 
-                            <Border Margin="0,20,0,0"
-                                    Padding="18"
-                                    Background="#2A1816"
-                                    BorderBrush="#6B4C2D"
+                            <Border Margin="0,22,0,0"
+                                    Padding="20"
+                                    Background="#361117"
+                                    BorderBrush="#8E97A6"
                                     BorderThickness="1"
                                     CornerRadius="22">
                                 <StackPanel>
                                     <TextBlock FontSize="12"
                                                FontWeight="SemiBold"
-                                               Foreground="{StaticResource TextSecondaryBrush}"
-                                               Text="Server status hint" />
+                                               Foreground="{StaticResource GoldBrush}"
+                                               Text="Launch note" />
                                     <TextBlock x:Name="txtLaunchTip"
-                                               Margin="0,8,0,0"
+                                               Margin="0,10,0,0"
                                                Style="{StaticResource BodyStyle}"
                                                Text="Choose a server first so the launch options stay in sync." />
                                 </StackPanel>
@@ -815,15 +745,17 @@
                     </Border>
 
                     <Border Grid.Column="2"
-                            Style="{StaticResource CardBorderStyle}"
-                            Background="#5A110D10"
-                            BorderBrush="#8C6335">
+                            Style="{StaticResource ScenePanelStyle}"
+                            Background="#4E110F15"
+                            BorderBrush="#C8CED8"
+                            Margin="0,220,0,0"
+                            Padding="28,24,28,26">
                         <Grid>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto" />
-                                <RowDefinition Height="24" />
+                                <RowDefinition Height="22" />
                                 <RowDefinition Height="Auto" />
-                                <RowDefinition Height="24" />
+                                <RowDefinition Height="26" />
                                 <RowDefinition Height="Auto" />
                             </Grid.RowDefinitions>
 
@@ -832,31 +764,49 @@
                                            FontSize="12"
                                            FontWeight="SemiBold"
                                            Foreground="{StaticResource GoldBrush}"
-                                           Text="READY TO ENTER" />
+                                           Text="ENTER THE REALM" />
                                 <TextBlock Margin="0,12,0,0"
                                            HorizontalAlignment="Center"
+                                           FontFamily="Palatino Linotype"
                                            FontSize="32"
                                            FontWeight="Bold"
                                            Foreground="{StaticResource TextPrimaryBrush}"
                                            Text="Launch Client"
+                                           TextAlignment="Center" />
+                                <TextBlock x:Name="txtSelectedServer"
+                                           Margin="0,14,0,0"
+                                           HorizontalAlignment="Center"
+                                           FontFamily="Palatino Linotype"
+                                           FontSize="24"
+                                           FontWeight="SemiBold"
+                                           Foreground="{StaticResource TextPrimaryBrush}"
+                                           Text="No server selected"
+                                           TextAlignment="Center"
+                                           TextWrapping="Wrap" />
+                                <TextBlock x:Name="txtServerStatusHint"
+                                           Margin="0,10,0,0"
+                                           HorizontalAlignment="Center"
+                                           MaxWidth="520"
+                                           Style="{StaticResource BodyStyle}"
+                                           Text="The selected server will be checked before launch."
                                            TextAlignment="Center" />
                             </StackPanel>
 
                             <Grid Grid.Row="2">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="20" />
-                                    <ColumnDefinition Width="150" />
+                                    <ColumnDefinition Width="24" />
+                                    <ColumnDefinition Width="170" />
                                 </Grid.ColumnDefinitions>
 
                                 <StackPanel>
                                     <TextBlock Text="Launch status" Style="{StaticResource FieldLabelStyle}" />
                                     <DockPanel Margin="0,10,0,0" LastChildFill="False">
                                         <Border x:Name="serverStatusBadge"
-                                                Width="110"
-                                                Height="38"
+                                                Width="120"
+                                                Height="40"
                                                 Background="#6B4C2D"
-                                                CornerRadius="19">
+                                                CornerRadius="20">
                                             <TextBlock x:Name="serverStatus"
                                                        HorizontalAlignment="Center"
                                                        VerticalAlignment="Center"
@@ -865,7 +815,7 @@
                                                        Text="-" />
                                         </Border>
                                         <TextBlock x:Name="txtProgressValue"
-                                                   Margin="14,8,0,0"
+                                                   Margin="14,9,0,0"
                                                    FontSize="12"
                                                    Foreground="{StaticResource TextSecondaryBrush}"
                                                    Text="0%" />
@@ -888,10 +838,27 @@
                                 </StackPanel>
                             </Grid>
 
-                            <StackPanel Grid.Row="4" HorizontalAlignment="Center">
+                            <Border Grid.Row="4"
+                                    Margin="38,0,38,0"
+                                    Padding="16,12"
+                                    Background="#68131018"
+                                    BorderBrush="#959EAC"
+                                    BorderThickness="1"
+                                    CornerRadius="22"
+                                    VerticalAlignment="Top">
+                                <TextBlock HorizontalAlignment="Center"
+                                           TextAlignment="Center"
+                                           Style="{StaticResource BodyStyle}"
+                                           Foreground="{StaticResource TextPrimaryBrush}"
+                                           Text="Choose your server, confirm the launch status, and enter with one clear primary action." />
+                            </Border>
+
+                            <StackPanel Grid.Row="4"
+                                        Margin="0,70,0,0"
+                                        HorizontalAlignment="Center">
                                 <Button x:Name="btnStart"
-                                        Width="320"
-                                        Height="66"
+                                        Width="340"
+                                        Height="74"
                                         Click="BtnStart_Click"
                                         Content="ENTER"
                                         Style="{StaticResource LaunchButtonStyle}" />
@@ -899,24 +866,37 @@
                                            HorizontalAlignment="Center"
                                            FontSize="12"
                                            Foreground="{StaticResource TextSecondaryBrush}"
-                                           Text="The launcher saves your selected server and resolution automatically." />
+                                           Text="The launcher saves your selected server and resolution automatically."
+                                           TextAlignment="Center"
+                                           TextWrapping="Wrap" />
                             </StackPanel>
                         </Grid>
                     </Border>
 
-                    <StackPanel Grid.Column="4">
-                        <Border Style="{StaticResource CardBorderStyle}">
+                    <StackPanel Grid.Column="4"
+                                Margin="0,186,0,0">
+                        <Border Style="{StaticResource ScenePanelStyle}"
+                                Background="#4C100E14"
+                                BorderBrush="#C3C9D4">
                             <StackPanel>
-                                <TextBlock Style="{StaticResource SectionTitleStyle}" Text="Guided Actions" />
+                                <TextBlock FontFamily="Palatino Linotype"
+                                           Style="{StaticResource SectionTitleStyle}"
+                                           Text="Options" />
                                 <TextBlock x:Name="txtActionsDescription"
-                                           Margin="0,8,0,0"
+                                           Margin="0,10,0,0"
                                            Style="{StaticResource BodyStyle}"
-                                           Text="Use settings for deeper configuration, or stay here for the normal launch flow." />
+                                           Text="Open settings, create a server, or reveal advanced controls only when you need them." />
 
                                 <Button x:Name="btnSettings"
                                         Margin="0,22,0,0"
                                         Click="BtnSettings_Click"
                                         Content="Open Settings"
+                                        Style="{StaticResource SecondaryButtonStyle}" />
+
+                                <Button x:Name="lblAbout"
+                                        Margin="0,12,0,0"
+                                        Click="LblAbout_Click"
+                                        Content="About"
                                         Style="{StaticResource SecondaryButtonStyle}" />
 
                                 <Button x:Name="btnCreateServer"
@@ -937,10 +917,12 @@
 
                         <Border x:Name="advancedOptionsCard"
                                 Margin="0,20,0,0"
-                                Style="{StaticResource CardBorderStyle}"
+                                Style="{StaticResource ScenePanelStyle}"
                                 Visibility="Collapsed">
                             <StackPanel>
-                                <TextBlock Style="{StaticResource SectionTitleStyle}" Text="Advanced" />
+                                <TextBlock FontFamily="Palatino Linotype"
+                                           Style="{StaticResource SectionTitleStyle}"
+                                           Text="Advanced" />
                                 <TextBlock x:Name="txtAdvancedDescription"
                                            Margin="0,8,0,0"
                                            Style="{StaticResource BodyStyle}"
@@ -993,9 +975,14 @@
                             </StackPanel>
                         </Border>
 
-                        <Border Margin="0,20,0,0" Style="{StaticResource CardBorderStyle}">
+                        <Border Margin="0,20,0,0"
+                                Style="{StaticResource ScenePanelStyle}"
+                                Background="#B4151012"
+                                Visibility="Collapsed">
                             <StackPanel>
-                                <TextBlock Style="{StaticResource SectionTitleStyle}" Text="Quick Guide" />
+                                <TextBlock FontFamily="Palatino Linotype"
+                                           Style="{StaticResource SectionTitleStyle}"
+                                           Text="Quick Guide" />
                                 <TextBlock x:Name="txtGuideLine1"
                                            Margin="0,18,0,0"
                                            Style="{StaticResource BodyStyle}"

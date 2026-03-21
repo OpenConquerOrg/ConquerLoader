@@ -24,14 +24,14 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/ConquerLoader;component/Forms/WPF/SharedTheme.xaml" />
             </ResourceDictionary.MergedDictionaries>
-        <SolidColorBrush x:Key="TextPrimaryBrush" Color="#F7EEE4" />
-        <SolidColorBrush x:Key="TextSecondaryBrush" Color="#D6BDA1" />
-        <SolidColorBrush x:Key="SurfaceBrush" Color="#160F12" />
-        <SolidColorBrush x:Key="OutlineBrush" Color="#6B4C2D" />
+        <SolidColorBrush x:Key="TextPrimaryBrush" Color="#F4F7FC" />
+        <SolidColorBrush x:Key="TextSecondaryBrush" Color="#D3D9E3" />
+        <SolidColorBrush x:Key="SurfaceBrush" Color="#120E13" />
+        <SolidColorBrush x:Key="OutlineBrush" Color="#9EA6B4" />
         <Style x:Key="CardStyle" TargetType="Border">
             <Setter Property="Padding" Value="24" />
             <Setter Property="Background" Value="{StaticResource SurfaceBrush}" />
-            <Setter Property="BorderBrush" Value="#5A3D25" />
+            <Setter Property="BorderBrush" Value="#808997" />
             <Setter Property="BorderThickness" Value="1" />
             <Setter Property="CornerRadius" Value="24" />
         </Style>
@@ -170,7 +170,7 @@
         </Style>
         </ResourceDictionary>
     </Window.Resources>
-    <Border Margin="10" Background="#0A090C" BorderBrush="#6B4C2D" BorderThickness="1" CornerRadius="18">
+    <Border Margin="0" Background="#09080B" BorderBrush="#00FFFFFF" BorderThickness="0" CornerRadius="0">
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="56" />
@@ -197,55 +197,62 @@
                     </StackPanel>
                 </Grid>
             </Border>
-            <Grid Grid.Row="1" Margin="24">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="20" />
-            <RowDefinition Height="*" />
-            <RowDefinition Height="20" />
-            <RowDefinition Height="Auto" />
-        </Grid.RowDefinitions>
-        <Border Style="{StaticResource CardStyle}">
-            <StackPanel>
-                <TextBlock FontSize="28" FontWeight="SemiBold" Foreground="{StaticResource TextPrimaryBrush}" Text="Server.dat viewer" TextWrapping="Wrap" />
-                <TextBlock Margin="0,8,0,0" FontSize="14" Foreground="{StaticResource TextSecondaryBrush}" Text="Inspect which server groups and icons are associated with each configured server." TextWrapping="Wrap" />
-            </StackPanel>
-        </Border>
-        <Grid Grid.Row="2">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="1.1*" />
-                <ColumnDefinition Width="20" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
-            <Border Grid.Column="0" Padding="20" Background="{StaticResource SurfaceBrush}" BorderBrush="#5A3D25" BorderThickness="1" CornerRadius="20">
+            <ScrollViewer Grid.Row="1"
+                          Margin="24"
+                          Padding="0,0,10,0"
+                          VerticalScrollBarVisibility="Auto"
+                          HorizontalScrollBarVisibility="Disabled"
+                          CanContentScroll="False">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
-                        <RowDefinition Height="16" />
+                        <RowDefinition Height="20" />
                         <RowDefinition Height="*" />
-                    </Grid.RowDefinitions>
-                    <TextBlock FontSize="20" FontWeight="SemiBold" Foreground="{StaticResource TextPrimaryBrush}" Text="Servers" />
-                    <ListBox x:Name="lstServers" Grid.Row="2" SelectionChanged="LstServers_SelectionChanged" ScrollViewer.HorizontalScrollBarVisibility="Auto" />
-                </Grid>
-            </Border>
-            <Border Grid.Column="2" Padding="20" Background="{StaticResource SurfaceBrush}" BorderBrush="#5A3D25" BorderThickness="1" CornerRadius="20">
-                <Grid>
-                    <Grid.RowDefinitions>
+                        <RowDefinition Height="20" />
                         <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="16" />
-                        <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
-                    <TextBlock FontSize="20" FontWeight="SemiBold" Foreground="{StaticResource TextPrimaryBrush}" Text="Group details" />
-                    <TextBlock x:Name="txtGroupSummary" Grid.Row="1" Margin="0,12,0,0" FontSize="14" Foreground="{StaticResource TextSecondaryBrush}" Text="Select a server to inspect its assigned login screen group." TextWrapping="Wrap" />
-                    <ListBox x:Name="lstGroups" Grid.Row="3" ScrollViewer.HorizontalScrollBarVisibility="Auto" />
+                    <Border Style="{StaticResource CardStyle}">
+                        <StackPanel>
+                            <TextBlock FontSize="28" FontWeight="SemiBold" Foreground="{StaticResource TextPrimaryBrush}" Text="Server.dat viewer" TextWrapping="Wrap" />
+                            <TextBlock Margin="0,8,0,0" FontSize="14" Foreground="{StaticResource TextSecondaryBrush}" Text="Inspect which server groups and icons are associated with each configured server." TextWrapping="Wrap" />
+                        </StackPanel>
+                    </Border>
+                    <Grid Grid.Row="2">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1.1*" />
+                            <ColumnDefinition Width="20" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Border Grid.Column="0" Padding="20" Background="{StaticResource SurfaceBrush}" BorderBrush="#5A3D25" BorderThickness="1" CornerRadius="20">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="16" />
+                                    <RowDefinition Height="*" />
+                                </Grid.RowDefinitions>
+                                <TextBlock FontSize="20" FontWeight="SemiBold" Foreground="{StaticResource TextPrimaryBrush}" Text="Servers" />
+                                <ListBox x:Name="lstServers" Grid.Row="2" SelectionChanged="LstServers_SelectionChanged" ScrollViewer.HorizontalScrollBarVisibility="Auto" />
+                            </Grid>
+                        </Border>
+                        <Border Grid.Column="2" Padding="20" Background="{StaticResource SurfaceBrush}" BorderBrush="#5A3D25" BorderThickness="1" CornerRadius="20">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="16" />
+                                    <RowDefinition Height="*" />
+                                </Grid.RowDefinitions>
+                                <TextBlock FontSize="20" FontWeight="SemiBold" Foreground="{StaticResource TextPrimaryBrush}" Text="Group details" />
+                                <TextBlock x:Name="txtGroupSummary" Grid.Row="1" Margin="0,12,0,0" FontSize="14" Foreground="{StaticResource TextSecondaryBrush}" Text="Select a server to inspect its assigned login screen group." TextWrapping="Wrap" />
+                                <ListBox x:Name="lstGroups" Grid.Row="3" ScrollViewer.HorizontalScrollBarVisibility="Auto" />
+                            </Grid>
+                        </Border>
+                    </Grid>
+                    <DockPanel Grid.Row="4" LastChildFill="False">
+                        <Button DockPanel.Dock="Right" Width="120" Click="BtnClose_Click" Content="Close" Style="{StaticResource SecondaryButtonStyle}" />
+                    </DockPanel>
                 </Grid>
-            </Border>
-        </Grid>
-        <DockPanel Grid.Row="4" LastChildFill="False">
-            <Button DockPanel.Dock="Right" Width="120" Click="BtnClose_Click" Content="Close" Style="{StaticResource SecondaryButtonStyle}" />
-        </DockPanel>
-            </Grid>
+            </ScrollViewer>
         </Grid>
     </Border>
 </Window>

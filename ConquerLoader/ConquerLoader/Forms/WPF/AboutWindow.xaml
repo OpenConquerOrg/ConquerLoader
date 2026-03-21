@@ -3,10 +3,10 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:shell="clr-namespace:System.Windows.Shell;assembly=PresentationFramework"
         Title="About"
-        Width="720"
-        Height="440"
-        MinWidth="640"
-        MinHeight="420"
+        Width="940"
+        Height="620"
+        MinWidth="820"
+        MinHeight="560"
         Background="#09090D"
         ResizeMode="CanResizeWithGrip"
         WindowStyle="None"
@@ -25,14 +25,14 @@
                 <ResourceDictionary Source="/ConquerLoader;component/Forms/WPF/SharedTheme.xaml" />
             </ResourceDictionary.MergedDictionaries>
         <SolidColorBrush x:Key="PrimaryBrush" Color="#CB4129" />
-        <SolidColorBrush x:Key="PrimarySoftBrush" Color="#4A1B15" />
-        <SolidColorBrush x:Key="OutlineBrush" Color="#6B4C2D" />
-        <SolidColorBrush x:Key="TextPrimaryBrush" Color="#F7EEE4" />
-        <SolidColorBrush x:Key="TextSecondaryBrush" Color="#D6BDA1" />
-        <SolidColorBrush x:Key="SurfaceBrush" Color="#160F12" />
+        <SolidColorBrush x:Key="PrimarySoftBrush" Color="#341319" />
+        <SolidColorBrush x:Key="OutlineBrush" Color="#9EA6B4" />
+        <SolidColorBrush x:Key="TextPrimaryBrush" Color="#F4F7FC" />
+        <SolidColorBrush x:Key="TextSecondaryBrush" Color="#D3D9E3" />
+        <SolidColorBrush x:Key="SurfaceBrush" Color="#120E13" />
         <Style x:Key="CardStyle" TargetType="Border">
             <Setter Property="Background" Value="{StaticResource SurfaceBrush}" />
-            <Setter Property="BorderBrush" Value="#5A3D25" />
+            <Setter Property="BorderBrush" Value="#808997" />
             <Setter Property="BorderThickness" Value="1" />
             <Setter Property="CornerRadius" Value="28" />
             <Setter Property="Padding" Value="28" />
@@ -145,11 +145,11 @@
         </Style>
         </ResourceDictionary>
     </Window.Resources>
-    <Border Margin="10"
-            Background="#0A090C"
-            BorderBrush="#6B4C2D"
-            BorderThickness="1"
-            CornerRadius="18">
+    <Border Margin="0"
+            Background="#09080B"
+            BorderBrush="#00FFFFFF"
+            BorderThickness="0"
+            CornerRadius="0">
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="56" />
@@ -198,72 +198,77 @@
                     </StackPanel>
                 </Grid>
             </Border>
-            <Grid Grid.Row="1" Margin="24">
-                    <Border Style="{StaticResource CardStyle}">
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="210" />
-                        <ColumnDefinition Width="28" />
-                        <ColumnDefinition Width="*" />
-                    </Grid.ColumnDefinitions>
-                    <Border Grid.Column="0"
-                            Width="196"
-                            Height="196"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Top"
-                            Background="#221618"
-                            BorderBrush="#8A613A"
-                            BorderThickness="1"
-                            CornerRadius="28"
-                            Cursor="Hand"
-                            MouseLeftButtonUp="BrandCard_MouseLeftButtonUp">
-                        <StackPanel VerticalAlignment="Center">
-                            <Image Width="94"
-                                   Height="94"
-                                   HorizontalAlignment="Center"
-                                   Source="pack://application:,,,/Resources/ConquerLoaderICON.png"
-                                   Stretch="Uniform" />
-                            <TextBlock Margin="0,10,0,0"
+            <ScrollViewer Grid.Row="1"
+                          Margin="24"
+                          Padding="0,0,10,0"
+                          VerticalScrollBarVisibility="Auto"
+                          HorizontalScrollBarVisibility="Disabled"
+                          CanContentScroll="False">
+                <Border Style="{StaticResource CardStyle}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="180" />
+                            <ColumnDefinition Width="24" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Border Grid.Column="0"
+                                Width="170"
+                                Height="170"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Top"
+                                Background="#221618"
+                                BorderBrush="#8A613A"
+                                BorderThickness="1"
+                                CornerRadius="28"
+                                Cursor="Hand"
+                                MouseLeftButtonUp="BrandCard_MouseLeftButtonUp">
+                            <StackPanel VerticalAlignment="Center">
+                                <Image Width="94"
+                                       Height="94"
                                        HorizontalAlignment="Center"
-                                       MaxWidth="150"
+                                       Source="pack://application:,,,/Resources/ConquerLoaderICON.png"
+                                       Stretch="Uniform" />
+                                <TextBlock Margin="0,10,0,0"
+                                           HorizontalAlignment="Center"
+                                       MaxWidth="140"
                                        FontSize="13"
                                        Foreground="{StaticResource TextSecondaryBrush}"
                                        Text="conquerloader.com"
                                        TextAlignment="Center"
-                                       TextWrapping="WrapWithOverflow" />
+                                       TextWrapping="Wrap" />
+                            </StackPanel>
+                        </Border>
+                        <StackPanel Grid.Column="2">
+                            <TextBlock FontSize="30" FontWeight="SemiBold" Foreground="{StaticResource TextPrimaryBrush}" Text="About ConquerLoader" TextWrapping="Wrap" />
+                            <TextBlock Margin="0,10,0,0" FontSize="15" Foreground="{StaticResource TextSecondaryBrush}" Text="A lightweight launcher with plugin support and server management for Conquer Online." TextWrapping="Wrap" />
+                            <TextBlock Margin="0,24,0,0" FontSize="14" Foreground="{StaticResource TextPrimaryBrush}" Text="Created by Cristian Ocana Soler (DaRkFoxDeveloper)" TextWrapping="Wrap" />
+                            <TextBlock Margin="0,8,0,0" FontSize="14" Foreground="{StaticResource TextPrimaryBrush}" Text="Portuguese translation by Louan Fontenele" TextWrapping="Wrap" />
+                            <TextBlock Margin="0,8,0,0" FontSize="14" Foreground="{StaticResource TextPrimaryBrush}" Text="Testers: Robert Frias, Pezzi Tomas" TextWrapping="Wrap" />
+                            <DockPanel Margin="0,24,0,0" LastChildFill="False">
+                                <TextBlock DockPanel.Dock="Left" FontSize="14" FontWeight="SemiBold" Foreground="{StaticResource TextPrimaryBrush}" Text="Version:" />
+                                <TextBlock x:Name="lblAboutVersionN" DockPanel.Dock="Left" Margin="8,0,0,0" FontSize="14" Foreground="{StaticResource TextSecondaryBrush}" Text="v1.0.0.0" TextWrapping="Wrap" />
+                            </DockPanel>
+                            <StackPanel Margin="0,26,0,0">
+                                <TextBlock FontSize="14" FontWeight="SemiBold" Foreground="{StaticResource TextPrimaryBrush}" Text="Links" />
+                                <TextBlock Margin="0,10,0,0" FontSize="14" Foreground="{StaticResource TextSecondaryBrush}" TextWrapping="Wrap">
+                                    <Run Text="Website: " />
+                                    <Hyperlink NavigateUri="https://conquerloader.com/"
+                                               Foreground="#E0B36D"
+                                               RequestNavigate="Hyperlink_RequestNavigate"
+                                               TextDecorations="Underline">https://conquerloader.com/</Hyperlink>
+                                </TextBlock>
+                                <TextBlock Margin="0,8,0,0" FontSize="14" Foreground="{StaticResource TextSecondaryBrush}" TextWrapping="Wrap">
+                                    <Run Text="Changelog: " />
+                                    <Hyperlink NavigateUri="https://conquerloader.com/changelog/"
+                                               Foreground="#E0B36D"
+                                               RequestNavigate="Hyperlink_RequestNavigate"
+                                               TextDecorations="Underline">https://conquerloader.com/changelog/</Hyperlink>
+                                </TextBlock>
+                            </StackPanel>
                         </StackPanel>
-                    </Border>
-                    <StackPanel Grid.Column="2">
-                        <TextBlock FontSize="30" FontWeight="SemiBold" Foreground="{StaticResource TextPrimaryBrush}" Text="About ConquerLoader" TextWrapping="Wrap" />
-                        <TextBlock Margin="0,10,0,0" FontSize="15" Foreground="{StaticResource TextSecondaryBrush}" Text="A lightweight launcher with plugin support and server management for Conquer Online." TextWrapping="Wrap" />
-                        <TextBlock Margin="0,24,0,0" FontSize="14" Foreground="{StaticResource TextPrimaryBrush}" Text="Created by Cristian Ocana Soler (DaRkFoxDeveloper)" TextWrapping="Wrap" />
-                        <TextBlock Margin="0,8,0,0" FontSize="14" Foreground="{StaticResource TextPrimaryBrush}" Text="Portuguese translation by Louan Fontenele" TextWrapping="Wrap" />
-                        <TextBlock Margin="0,8,0,0" FontSize="14" Foreground="{StaticResource TextPrimaryBrush}" Text="Testers: Robert Frias, Pezzi Tomas" TextWrapping="Wrap" />
-                        <DockPanel Margin="0,24,0,0" LastChildFill="False">
-                            <TextBlock DockPanel.Dock="Left" FontSize="14" FontWeight="SemiBold" Foreground="{StaticResource TextPrimaryBrush}" Text="Version:" />
-                            <TextBlock x:Name="lblAboutVersionN" DockPanel.Dock="Left" Margin="8,0,0,0" FontSize="14" Foreground="{StaticResource TextSecondaryBrush}" Text="v1.0.0.0" TextWrapping="Wrap" />
-                        </DockPanel>
-                        <StackPanel Margin="0,26,0,0">
-                            <TextBlock FontSize="14" FontWeight="SemiBold" Foreground="{StaticResource TextPrimaryBrush}" Text="Links" />
-                            <TextBlock Margin="0,10,0,0" FontSize="14" Foreground="{StaticResource TextSecondaryBrush}" TextWrapping="WrapWithOverflow">
-                                <Run Text="Website: " />
-                                <Hyperlink NavigateUri="https://conquerloader.com/"
-                                           Foreground="#E0B36D"
-                                           RequestNavigate="Hyperlink_RequestNavigate"
-                                           TextDecorations="Underline">https://conquerloader.com/</Hyperlink>
-                            </TextBlock>
-                            <TextBlock Margin="0,8,0,0" FontSize="14" Foreground="{StaticResource TextSecondaryBrush}" TextWrapping="WrapWithOverflow">
-                                <Run Text="Changelog: " />
-                                <Hyperlink NavigateUri="https://conquerloader.com/changelog/"
-                                           Foreground="#E0B36D"
-                                           RequestNavigate="Hyperlink_RequestNavigate"
-                                           TextDecorations="Underline">https://conquerloader.com/changelog/</Hyperlink>
-                            </TextBlock>
-                        </StackPanel>
-                    </StackPanel>
-                </Grid>
-            </Border>
-            </Grid>
+                    </Grid>
+                </Border>
+            </ScrollViewer>
         </Grid>
     </Border>
 </Window>
