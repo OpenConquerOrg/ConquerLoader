@@ -21,7 +21,7 @@
   },
   {
     "id": "btnStart",
-    "text": "START"
+    "text": "ENTER"
   },
   {
     "id": "lblGroupIcon",
@@ -130,5 +130,97 @@
   {
     "id": "lblFPSUnlock",
     "text": "Unlock FPS"
+  },
+  {
+    "id": "commonEnabled",
+    "text": "Enabled"
+  },
+  {
+    "id": "chromeMinimize",
+    "text": "Minimize"
+  },
+  {
+    "id": "chromeMaximize",
+    "text": "Maximize"
+  },
+  {
+    "id": "chromeRestore",
+    "text": "Restore"
+  },
+  {
+    "id": "chromeClose",
+    "text": "Close"
+  },
+  {
+    "id": "mainFpsUnlockHint",
+    "text": "Use this only when your client and server support it."
+  },
+  {
+    "id": "mainOptionsDescription",
+    "text": "Choose the resolution and FPS behavior before launching."
+  },
+  {
+    "id": "mainDiagnosticsTitle",
+    "text": "Diagnostics"
+  },
+  {
+    "id": "mainDiagnosticsDescription",
+    "text": "These debug actions are only shown when Debug Mode is enabled in Settings."
+  },
+  {
+    "id": "settingsColumnServerName",
+    "text": "Server name"
+  },
+  {
+    "id": "settingsColumnServerVersion",
+    "text": "Client version"
+  },
+  {
+    "id": "settingsColumnLoginHost",
+    "text": "Login host"
+  },
+  {
+    "id": "settingsColumnGameHost",
+    "text": "Game host"
+  },
+  {
+    "id": "settingsColumnLoginPort",
+    "text": "Login port"
+  },
+  {
+    "id": "settingsColumnGamePort",
+    "text": "Game port"
+  },
+  {
+    "id": "settingsColumnExecutableName",
+    "text": "Executable"
+  },
+  {
+    "id": "settingsColumnEnableHostName",
+    "text": "Use hostname"
+  },
+  {
+    "id": "settingsColumnUseDirectX9",
+    "text": "DirectX9"
+  },
+  {
+    "id": "settingsColumnHostname",
+    "text": "Hostname"
+  },
+  {
+    "id": "settingsColumnServerNameMemoryAddress",
+    "text": "Server name address"
+  },
+  {
+    "id": "settingsColumnServerIcon",
+    "text": "Server icon"
+  },
+  {
+    "id": "settingsColumnGroup",
+    "text": "Group"
+  },
+  {
+    "id": "settingsLoaderDescriptionLabel",
+    "text": "Description in Loader"
   }
 ]

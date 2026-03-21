@@ -71,6 +71,16 @@ namespace ConquerLoader
                     }
             }
         }
+        public static string TranslateText(string key, string fallback = null)
+        {
+            TextTranslation translation = TextTranslations.Where(x => x.Id == key).FirstOrDefault();
+            if (translation != null && !string.IsNullOrWhiteSpace(translation.Text))
+            {
+                return translation.Text;
+            }
+
+            return fallback ?? key;
+        }
         public static int DirectXVersion()
         {
             int directxMajorVersion = 0;

@@ -8,7 +8,7 @@
         MinWidth="940"
         MinHeight="720"
         Background="#09090D"
-        ResizeMode="CanResizeWithGrip"
+        ResizeMode="CanResize"
         WindowStyle="None"
         WindowStartupLocation="CenterOwner">
     <WindowChrome.WindowChrome>
@@ -16,7 +16,7 @@
                             CornerRadius="0"
                             GlassFrameThickness="0"
                             NonClientFrameEdges="None"
-                            ResizeBorderThickness="8"
+                            ResizeBorderThickness="6"
                             UseAeroCaptionButtons="False" />
     </WindowChrome.WindowChrome>
     <Window.Resources>
@@ -25,7 +25,6 @@
                 <ResourceDictionary Source="/ConquerLoader;component/Forms/WPF/SharedTheme.xaml" />
             </ResourceDictionary.MergedDictionaries>
         <SolidColorBrush x:Key="PrimaryBrush" Color="#CB4129" />
-        <SolidColorBrush x:Key="PrimarySoftBrush" Color="#341319" />
         <SolidColorBrush x:Key="SurfaceBrush" Color="#120E13" />
         <SolidColorBrush x:Key="OutlineBrush" Color="#9EA6B4" />
         <SolidColorBrush x:Key="TextPrimaryBrush" Color="#F4F7FC" />
@@ -348,7 +347,7 @@
                            Margin="0,0,10,0"
                            Source="pack://application:,,,/Resources/ConquerLoaderICON.png"
                            Stretch="Uniform" />
-                    <TextBlock VerticalAlignment="Center" FontSize="14" FontWeight="SemiBold" Foreground="{StaticResource TextPrimaryBrush}" Text="Server Setup Wizard" />
+                    <TextBlock x:Name="txtWindowTitleBar" VerticalAlignment="Center" FontSize="14" FontWeight="SemiBold" Foreground="{StaticResource TextPrimaryBrush}" Text="Server Setup Wizard" />
                 </StackPanel>
                 <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center" shell:WindowChrome.IsHitTestVisibleInChrome="True">
                     <Button x:Name="btnMinimizeWindow" Click="BtnMinimizeWindow_Click" Content="_" Style="{StaticResource TitleBarButtonStyle}" />
@@ -372,9 +371,9 @@
             <DockPanel LastChildFill="False">
                 <StackPanel DockPanel.Dock="Left">
                     <TextBlock x:Name="txtWizardTitle" FontSize="32" FontWeight="SemiBold" Foreground="{StaticResource TextPrimaryBrush}" Text="Server Setup Wizard" />
-                    <TextBlock Margin="0,10,0,0" FontSize="14" Foreground="{StaticResource TextSecondaryBrush}" Text="This assistant guides you step by step so you can configure a server without guessing what each field means." TextWrapping="Wrap" />
+                    <TextBlock x:Name="txtWizardIntro" Margin="0,10,0,0" FontSize="14" Foreground="{StaticResource TextSecondaryBrush}" Text="This assistant guides you step by step so you can configure a server without guessing what each field means." TextWrapping="Wrap" />
                 </StackPanel>
-                <Button DockPanel.Dock="Right" Width="120" Click="BtnCancel_Click" Content="Close" Style="{StaticResource SecondaryButtonStyle}" />
+                <Button x:Name="btnCancel" DockPanel.Dock="Right" Width="120" Click="BtnCancel_Click" Content="Close" Style="{StaticResource SecondaryButtonStyle}" />
             </DockPanel>
         </Border>
 
@@ -395,7 +394,7 @@
                         <TextBlock x:Name="stepBadgeText1" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" Foreground="White" Text="1" />
                     </Border>
                     <TextBlock x:Name="stepTitle1" Margin="0,10,0,0" HorizontalAlignment="Center" FontWeight="SemiBold" Foreground="{StaticResource TextPrimaryBrush}" Text="Basics" />
-                    <TextBlock Margin="0,4,0,0" HorizontalAlignment="Center" FontSize="12" Foreground="{StaticResource TextSecondaryBrush}" Text="Name and address" />
+                    <TextBlock x:Name="stepSubtitle1" Margin="0,4,0,0" HorizontalAlignment="Center" FontSize="12" Foreground="{StaticResource TextSecondaryBrush}" Text="Name and address" />
                 </StackPanel>
 
                 <Border Grid.Column="1" Width="40" Height="2" VerticalAlignment="Center" Background="#808997" />
@@ -405,7 +404,7 @@
                         <TextBlock x:Name="stepBadgeText2" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" Foreground="White" Text="2" />
                     </Border>
                     <TextBlock x:Name="stepTitle2" Margin="0,10,0,0" HorizontalAlignment="Center" FontWeight="SemiBold" Foreground="{StaticResource TextPrimaryBrush}" Text="Client" />
-                    <TextBlock Margin="0,4,0,0" HorizontalAlignment="Center" FontSize="12" Foreground="{StaticResource TextSecondaryBrush}" Text="Version and executable" />
+                    <TextBlock x:Name="stepSubtitle2" Margin="0,4,0,0" HorizontalAlignment="Center" FontSize="12" Foreground="{StaticResource TextSecondaryBrush}" Text="Version and executable" />
                 </StackPanel>
 
                 <Border Grid.Column="3" Width="40" Height="2" VerticalAlignment="Center" Background="#808997" />
@@ -415,7 +414,7 @@
                         <TextBlock x:Name="stepBadgeText3" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" Foreground="White" Text="3" />
                     </Border>
                     <TextBlock x:Name="stepTitle3" Margin="0,10,0,0" HorizontalAlignment="Center" FontWeight="SemiBold" Foreground="{StaticResource TextPrimaryBrush}" Text="Options" />
-                    <TextBlock Margin="0,4,0,0" HorizontalAlignment="Center" FontSize="12" Foreground="{StaticResource TextSecondaryBrush}" Text="Ports and graphics" />
+                    <TextBlock x:Name="stepSubtitle3" Margin="0,4,0,0" HorizontalAlignment="Center" FontSize="12" Foreground="{StaticResource TextSecondaryBrush}" Text="Ports and graphics" />
                 </StackPanel>
 
                 <Border Grid.Column="5" Width="40" Height="2" VerticalAlignment="Center" Background="#808997" />
@@ -425,7 +424,7 @@
                         <TextBlock x:Name="stepBadgeText4" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" Foreground="White" Text="4" />
                     </Border>
                     <TextBlock x:Name="stepTitle4" Margin="0,10,0,0" HorizontalAlignment="Center" FontWeight="SemiBold" Foreground="{StaticResource TextPrimaryBrush}" Text="Review" />
-                    <TextBlock Margin="0,4,0,0" HorizontalAlignment="Center" FontSize="12" Foreground="{StaticResource TextSecondaryBrush}" Text="Confirm and save" />
+                    <TextBlock x:Name="stepSubtitle4" Margin="0,4,0,0" HorizontalAlignment="Center" FontSize="12" Foreground="{StaticResource TextSecondaryBrush}" Text="Confirm and save" />
                 </StackPanel>
             </Grid>
         </Border>
@@ -456,43 +455,44 @@
                                   Padding="0,0,8,0">
                         <Grid>
                             <StackPanel x:Name="stepPanel1">
-                                <TextBlock Text="Server name" Style="{StaticResource FieldLabelStyle}" />
+                                <TextBlock x:Name="txtServerNameLabel" Text="Server name" Style="{StaticResource FieldLabelStyle}" />
                                 <TextBox x:Name="tbxServerName" Style="{StaticResource InputTextBoxStyle}" TextChanged="InputValueChanged" />
-                                <TextBlock Margin="0,6,0,0" FontSize="12" Foreground="{StaticResource TextSecondaryBrush}" Text="Use the public name players should recognize inside the loader." TextWrapping="Wrap" />
+                                <TextBlock x:Name="txtServerNameHelp" Margin="0,6,0,0" FontSize="12" Foreground="{StaticResource TextSecondaryBrush}" Text="Use the public name players should recognize inside the loader." TextWrapping="Wrap" />
 
-                                <TextBlock Margin="0,18,0,8" Text="Server IP" Style="{StaticResource FieldLabelStyle}" />
+                                <TextBlock x:Name="txtServerIpLabel" Margin="0,18,0,8" Text="Server IP" Style="{StaticResource FieldLabelStyle}" />
                                 <TextBox x:Name="tbxIP" Style="{StaticResource InputTextBoxStyle}" TextChanged="InputValueChanged" LostFocus="TbxIP_LostFocus" />
                                 <TextBlock x:Name="lblHelpIP" Margin="0,6,0,0" FontSize="12" Foreground="{StaticResource TextSecondaryBrush}" Text="Write the IP address of your login server." TextWrapping="Wrap" />
                             </StackPanel>
 
                             <StackPanel x:Name="stepPanel2" Visibility="Collapsed">
-                                <TextBlock Text="Client version" Style="{StaticResource FieldLabelStyle}" />
+                                <TextBlock x:Name="txtClientVersionLabel" Text="Client version" Style="{StaticResource FieldLabelStyle}" />
                                 <TextBox x:Name="tbxVersion" Style="{StaticResource InputTextBoxStyle}" TextChanged="TbxVersion_TextChanged" LostFocus="ValidateNumber_LostFocus" />
-                                <TextBlock Margin="0,6,0,0" FontSize="12" Foreground="{StaticResource TextSecondaryBrush}" Text="This value controls compatibility, available assets, and DirectX9 support." TextWrapping="Wrap" />
+                                <TextBlock x:Name="txtClientVersionHelp" Margin="0,6,0,0" FontSize="12" Foreground="{StaticResource TextSecondaryBrush}" Text="This value controls compatibility, available assets, and DirectX9 support." TextWrapping="Wrap" />
 
-                                <TextBlock Margin="0,18,0,8" Text="Executable name" Style="{StaticResource FieldLabelStyle}" />
+                                <TextBlock x:Name="txtExecutableLabel" Margin="0,18,0,8" Text="Executable name" Style="{StaticResource FieldLabelStyle}" />
                                 <TextBox x:Name="tbxConquerExe" Style="{StaticResource InputTextBoxStyle}" TextChanged="InputValueChanged" />
-                                <TextBlock Margin="0,6,0,0" FontSize="12" Foreground="{StaticResource TextSecondaryBrush}" Text="Usually this is Conquer.exe unless your client uses another file name." TextWrapping="Wrap" />
+                                <TextBlock x:Name="txtExecutableHelp" Margin="0,6,0,0" FontSize="12" Foreground="{StaticResource TextSecondaryBrush}" Text="Usually this is Conquer.exe unless your client uses another file name." TextWrapping="Wrap" />
                             </StackPanel>
 
                             <StackPanel x:Name="stepPanel3" Visibility="Collapsed">
-                                <TextBlock Text="Login port" Style="{StaticResource FieldLabelStyle}" />
+                                <TextBlock x:Name="txtLoginPortLabel" Text="Login port" Style="{StaticResource FieldLabelStyle}" />
                                 <TextBox x:Name="tbxLoginPort" Style="{StaticResource InputTextBoxStyle}" TextChanged="InputValueChanged" LostFocus="ValidateNumber_LostFocus" />
 
-                                <TextBlock Margin="0,18,0,8" Text="Game port" Style="{StaticResource FieldLabelStyle}" />
+                                <TextBlock x:Name="txtGamePortLabel" Margin="0,18,0,8" Text="Game port" Style="{StaticResource FieldLabelStyle}" />
                                 <TextBox x:Name="tbxGamePort" Style="{StaticResource InputTextBoxStyle}" TextChanged="InputValueChanged" LostFocus="ValidateNumber_LostFocus" />
 
                                 <Border x:Name="visualGroupCard" Margin="0,20,0,0" Padding="18" Background="#231719" BorderBrush="{StaticResource OutlineBrush}" BorderThickness="1" CornerRadius="18">
                                     <StackPanel>
-                                        <TextBlock FontSize="14" FontWeight="SemiBold" Foreground="{StaticResource TextPrimaryBrush}" Text="Login screen assets" />
-                                        <TextBlock Margin="0,6,0,0" FontSize="13" Foreground="{StaticResource TextSecondaryBrush}" Text="Only newer clients need these values. Choose the visual group first, then the icon." TextWrapping="Wrap" />
+                                        <TextBlock x:Name="txtAssetsTitle" FontSize="14" FontWeight="SemiBold" Foreground="{StaticResource TextPrimaryBrush}" Text="Login screen assets" />
+                                        <TextBlock x:Name="txtAssetsDescription" Margin="0,6,0,0" FontSize="13" Foreground="{StaticResource TextSecondaryBrush}" Text="Only newer clients need these values. Choose the visual group first, then the icon." TextWrapping="Wrap" />
 
-                                        <TextBlock Margin="0,18,0,8" Text="Group" Style="{StaticResource FieldLabelStyle}" />
+                                        <TextBlock x:Name="txtGroupLabel" Margin="0,18,0,8" Text="Group" Style="{StaticResource FieldLabelStyle}" />
                                         <ComboBox x:Name="tbxGroup" Style="{StaticResource InputComboBoxStyle}" SelectionChanged="TbxGroup_SelectionChanged" />
 
-                                        <TextBlock Margin="0,18,0,8" Text="Server icon" Style="{StaticResource FieldLabelStyle}" />
+                                        <TextBlock x:Name="txtServerIconLabel" Margin="0,18,0,8" Text="Server icon" Style="{StaticResource FieldLabelStyle}" />
                                         <ComboBox x:Name="tbxGroupIcon" Style="{StaticResource InputComboBoxStyle}" SelectionChanged="InputSelectionChanged" />
-                                        <TextBlock Margin="0,6,0,0"
+                                        <TextBlock x:Name="txtServerIconHint"
+                                                   Margin="0,6,0,0"
                                                    FontSize="12"
                                                    Foreground="{StaticResource TextSecondaryBrush}"
                                                    Text="This icon belongs to the selected group and identifies the server entry inside the login screen."
@@ -502,7 +502,7 @@
 
                                 <Border x:Name="dx9Card" Margin="0,20,0,0" Padding="18" Background="#231719" BorderBrush="{StaticResource OutlineBrush}" BorderThickness="1" CornerRadius="18">
                                     <StackPanel>
-                                        <TextBlock FontSize="14" FontWeight="SemiBold" Foreground="{StaticResource TextPrimaryBrush}" Text="Graphics compatibility" />
+                                        <TextBlock x:Name="txtGraphicsTitle" FontSize="14" FontWeight="SemiBold" Foreground="{StaticResource TextPrimaryBrush}" Text="Graphics compatibility" />
                                         <CheckBox x:Name="tglUseDX9" Margin="0,14,0,0" Checked="Dx9ValueChanged" Unchecked="Dx9ValueChanged" Content="Use DirectX9 environment" />
                                         <TextBlock x:Name="lblUseDX9" Margin="0,8,0,0" FontSize="12" Foreground="{StaticResource TextSecondaryBrush}" Text="Enable this only if your selected client version supports DirectX9 folders." TextWrapping="Wrap" />
                                     </StackPanel>
@@ -512,13 +512,13 @@
                             <StackPanel x:Name="stepPanel4" Visibility="Collapsed">
                                 <Border Padding="18" Background="{StaticResource SuccessSoftBrush}" BorderBrush="#166534" BorderThickness="1" CornerRadius="18">
                                     <StackPanel>
-                                        <TextBlock FontSize="14" FontWeight="SemiBold" Foreground="{StaticResource SuccessBrush}" Text="Ready to save" />
-                                        <TextBlock Margin="0,8,0,0" FontSize="13" Foreground="{StaticResource TextSecondaryBrush}" Text="Review the values from the previous steps. If everything looks correct, save the server and it will appear in the launcher immediately." TextWrapping="Wrap" />
+                                        <TextBlock x:Name="txtReadyTitle" FontSize="14" FontWeight="SemiBold" Foreground="{StaticResource SuccessBrush}" Text="Ready to save" />
+                                        <TextBlock x:Name="txtReadyDescription" Margin="0,8,0,0" FontSize="13" Foreground="{StaticResource TextSecondaryBrush}" Text="Review the values from the previous steps. If everything looks correct, save the server and it will appear in the launcher immediately." TextWrapping="Wrap" />
                                     </StackPanel>
                                 </Border>
 
                                 <Border Margin="0,20,0,0" Padding="18" Background="{StaticResource WarningSoftBrush}" BorderBrush="#854D0E" BorderThickness="1" CornerRadius="18">
-                                    <TextBlock FontSize="13" Foreground="{StaticResource WarningBrush}" Text="If you are not sure about group or icon values, leave them only when the selected client version requires them." TextWrapping="Wrap" />
+                                    <TextBlock x:Name="txtReadyWarning" FontSize="13" Foreground="{StaticResource WarningBrush}" Text="If you are not sure about group or icon values, leave them only when the selected client version requires them." TextWrapping="Wrap" />
                                 </Border>
                             </StackPanel>
                         </Grid>
@@ -535,14 +535,14 @@
 
                 <Border Grid.Row="0" Style="{StaticResource CardStyle}">
                     <StackPanel>
-                        <TextBlock FontSize="20" FontWeight="SemiBold" Foreground="{StaticResource TextPrimaryBrush}" Text="What this step needs" />
+                        <TextBlock x:Name="txtRequirementsTitle" FontSize="20" FontWeight="SemiBold" Foreground="{StaticResource TextPrimaryBrush}" Text="What this step needs" />
                         <TextBlock x:Name="txtStepHint" Margin="0,10,0,0" FontSize="14" Foreground="{StaticResource TextSecondaryBrush}" TextWrapping="Wrap" />
                     </StackPanel>
                 </Border>
 
                 <Border Grid.Row="2" Style="{StaticResource CardStyle}">
                     <StackPanel>
-                        <TextBlock FontSize="18" FontWeight="SemiBold" Foreground="{StaticResource TextPrimaryBrush}" Text="Validation" />
+                        <TextBlock x:Name="txtValidationTitle" FontSize="18" FontWeight="SemiBold" Foreground="{StaticResource TextPrimaryBrush}" Text="Validation" />
                         <TextBlock x:Name="txtValidation" Margin="0,10,0,0" FontSize="14" Foreground="{StaticResource WarningBrush}" Text="Complete the required fields to continue." TextWrapping="Wrap" />
                     </StackPanel>
                 </Border>

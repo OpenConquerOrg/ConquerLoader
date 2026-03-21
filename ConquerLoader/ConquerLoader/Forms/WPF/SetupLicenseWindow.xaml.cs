@@ -17,6 +17,7 @@ namespace ConquerLoader.Forms.WPF
             tbxLicenseKey.Text = Config != null ? Config.LicenseKey : string.Empty;
             StateChanged += SetupLicenseWindow_StateChanged;
             UpdateChromeButtons();
+            ApplyTranslations();
         }
 
         private void BtnSetup_Click(object sender, RoutedEventArgs e)
@@ -28,7 +29,7 @@ namespace ConquerLoader.Forms.WPF
 
             Config.LicenseKey = tbxLicenseKey.Text;
             Core.SaveLoaderConfig(Config);
-            MessageBox.Show("License saved. Restart the loader to refresh available plugins.", Title, MessageBoxButton.OK, MessageBoxImage.Information);
+            MessageBox.Show(T("setupLicenseSavedMessage", "License saved. Restart the loader to refresh available plugins."), Title, MessageBoxButton.OK, MessageBoxImage.Information);
             DialogResult = true;
             Close();
         }
@@ -100,12 +101,31 @@ namespace ConquerLoader.Forms.WPF
             }
 
             btnMinimizeWindow.Content = "\uE921";
-            btnMinimizeWindow.ToolTip = "Minimize";
+            btnMinimizeWindow.ToolTip = T("chromeMinimize", "Minimize");
             btnCloseWindow.Content = "\uE8BB";
             btnCloseWindow.Tag = "Close";
-            btnCloseWindow.ToolTip = "Close";
+            btnCloseWindow.ToolTip = T("chromeClose", "Close");
             btnMaxRestoreWindow.Content = WindowState == WindowState.Maximized ? "\uE923" : "\uE922";
-            btnMaxRestoreWindow.ToolTip = WindowState == WindowState.Maximized ? "Restore" : "Maximize";
+            btnMaxRestoreWindow.ToolTip = WindowState == WindowState.Maximized
+                ? T("chromeRestore", "Restore")
+                : T("chromeMaximize", "Maximize");
+        }
+
+        private void ApplyTranslations()
+        {
+            Title = T("setupLicenseWindowTitle", "Setup License");
+            txtWindowTitleBar.Text = T("setupLicenseWindowTitle", "Setup License");
+            txtLicenseHeading.Text = T("setupLicenseHeading", "License setup");
+            txtLicenseDescription.Text = T("setupLicenseDescription", "Paste your license key below to unlock premium plugins and remote modules.");
+            txtLicenseKeyLabel.Text = T("setupLicenseKeyLabel", "License key");
+            txtLicenseExample.Text = T("setupLicenseExample", "Example: 2d32a164-fcd5-796b-b43f-005a78274cad");
+            btnClose.Content = Core.TranslateText("btnClose", "Close");
+            btnSetup.Content = T("btnSetupLicenseSave", "Save License");
+        }
+
+        private string T(string key, string fallback)
+        {
+            return Core.TranslateText(key, fallback);
         }
     }
 }

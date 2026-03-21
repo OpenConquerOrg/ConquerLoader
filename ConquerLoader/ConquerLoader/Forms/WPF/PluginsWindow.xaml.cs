@@ -23,6 +23,15 @@ namespace ConquerLoader.Forms.WPF
             pluginsItems.ItemsSource = PluginLoader.Plugins != null
                 ? PluginLoader.Plugins.ToList()
                 : Enumerable.Empty<IPlugin>();
+            ApplyTranslations();
+        }
+
+        private void ConfigureButton_Loaded(object sender, RoutedEventArgs e)
+        {
+            if (sender is Button button)
+            {
+                button.Content = T("btnConfigurePlugin", "Configure");
+            }
         }
 
         private void BtnConfigure_Click(object sender, RoutedEventArgs e)
@@ -102,12 +111,28 @@ namespace ConquerLoader.Forms.WPF
             }
 
             btnMinimizeWindow.Content = "\uE921";
-            btnMinimizeWindow.ToolTip = "Minimize";
+            btnMinimizeWindow.ToolTip = T("chromeMinimize", "Minimize");
             btnCloseWindow.Content = "\uE8BB";
             btnCloseWindow.Tag = "Close";
-            btnCloseWindow.ToolTip = "Close";
+            btnCloseWindow.ToolTip = T("chromeClose", "Close");
             btnMaxRestoreWindow.Content = WindowState == WindowState.Maximized ? "\uE923" : "\uE922";
-            btnMaxRestoreWindow.ToolTip = WindowState == WindowState.Maximized ? "Restore" : "Maximize";
+            btnMaxRestoreWindow.ToolTip = WindowState == WindowState.Maximized
+                ? T("chromeRestore", "Restore")
+                : T("chromeMaximize", "Maximize");
+        }
+
+        private void ApplyTranslations()
+        {
+            Title = T("pluginsWindowTitle", "Plugins");
+            txtWindowTitleBar.Text = T("pluginsWindowTitle", "Plugins");
+            txtPluginsHeading.Text = T("pluginsWindowTitle", "Plugins");
+            txtPluginsDescription.Text = T("pluginsWindowDescription", "Open a plugin configuration screen from a clearer list of installed modules.");
+            btnClose.Content = T("btnClose", "Close");
+        }
+
+        private string T(string key, string fallback)
+        {
+            return Core.TranslateText(key, fallback);
         }
     }
 }

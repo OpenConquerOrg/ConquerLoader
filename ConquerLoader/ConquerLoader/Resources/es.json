@@ -9,7 +9,7 @@
   },
   {
     "id": "btnStart",
-    "text": "INICIAR"
+    "text": "ENTRAR"
   },
   {
     "id": "btnAdd",
@@ -130,5 +130,665 @@
   {
     "id": "lblFPSUnlock",
     "text": "Desbloquear FPS"
+  },
+  {
+    "id": "lblAbout",
+    "text": "Acerca de"
+  },
+  {
+    "id": "btnCreateServer",
+    "text": "Crear"
+  },
+  {
+    "id": "btnStartFirstRun",
+    "text": "Crear mi primer servidor"
+  },
+  {
+    "id": "btnSetupLicense",
+    "text": "Licencia"
+  },
+  {
+    "id": "btnSetupLicenseSave",
+    "text": "Guardar licencia"
+  },
+  {
+    "id": "btnConfigurePlugin",
+    "text": "Configurar"
+  },
+  {
+    "id": "btnPrevious",
+    "text": "Anterior"
+  },
+  {
+    "id": "btnNext",
+    "text": "Siguiente"
+  },
+  {
+    "id": "tglAdvancedMode",
+    "text": "Mostrar opciones avanzadas"
+  },
+  {
+    "id": "tglFPSUnlock",
+    "text": "Activado"
+  },
+  {
+    "id": "tglUseDX9",
+    "text": "Usar entorno DirectX9"
+  },
+  {
+    "id": "mainTrayBalloon",
+    "text": "El loader extensible para ConquerOnline"
+  },
+  {
+    "id": "mainHeaderDescription",
+    "text": "Elige tu reino, revisa las opciones y entra desde una sola pantalla."
+  },
+  {
+    "id": "mainServerSelection",
+    "text": "Seleccion de servidor"
+  },
+  {
+    "id": "mainAvailableServers",
+    "text": "Servidores disponibles"
+  },
+  {
+    "id": "mainLauncherNote",
+    "text": "Nota del launcher"
+  },
+  {
+    "id": "mainEnterLabel",
+    "text": "ENTRAR AL REINO"
+  },
+  {
+    "id": "mainOptionsTitle",
+    "text": "Opciones"
+  },
+  {
+    "id": "mainOptionsDescription",
+    "text": "Configura la resolucion y el ajuste de FPS antes de iniciar."
+  },
+  {
+    "id": "mainResolution",
+    "text": "Resolucion"
+  },
+  {
+    "id": "mainAdvancedDescription",
+    "text": "Las herramientas avanzadas son opcionales. Usalas para diagnostico, compatibilidad y clientes especiales."
+  },
+  {
+    "id": "mainNoServerSelected",
+    "text": "Ningun servidor seleccionado"
+  },
+  {
+    "id": "mainSelectedServerHint",
+    "text": "El servidor seleccionado se comprobara antes de iniciar."
+  },
+  {
+    "id": "mainSelectedServerStatusOnline",
+    "text": "El servidor seleccionado respondio a la comprobacion."
+  },
+  {
+    "id": "mainSelectedServerStatusOffline",
+    "text": "El servidor seleccionado no respondio. Aun puedes revisar la configuracion en Ajustes."
+  },
+  {
+    "id": "mainServerStatusOnline",
+    "text": "EN LINEA"
+  },
+  {
+    "id": "mainServerStatusOffline",
+    "text": "OFFLINE"
+  },
+  {
+    "id": "mainServerStatusNeutral",
+    "text": "-"
+  },
+  {
+    "id": "mainFirstServerHint",
+    "text": "Abre Ajustes para crear o importar tu primera configuracion de servidor."
+  },
+  {
+    "id": "mainSetupFirstServerDescription",
+    "text": "Configura tu primer servidor y despues elige aqui como quieres iniciar el cliente."
+  },
+  {
+    "id": "mainHelperDefault",
+    "text": "Elige el servidor que quieres iniciar. Tu ultimo reino queda guardado para la siguiente vez."
+  },
+  {
+    "id": "mainLaunchTipDefault",
+    "text": "Elige primero un servidor para mantener sincronizados estado y resolucion."
+  },
+  {
+    "id": "mainHelperFirstRun",
+    "text": "Crea tu primer servidor y vuelve aqui para iniciarlo."
+  },
+  {
+    "id": "mainLaunchTipFirstRun",
+    "text": "El asistente guiado te ayudara a configurarlo paso a paso."
+  },
+  {
+    "id": "mainHelperAdvanced",
+    "text": "Selecciona el servidor a la izquierda y usa el panel derecho solo para los controles extra que necesites."
+  },
+  {
+    "id": "mainLaunchTipAdvanced",
+    "text": "El modo avanzado esta activo. Usa diagnostico y FPS unlock solo cuando haga falta."
+  },
+  {
+    "id": "mainFirstTimeSetup",
+    "text": "Primera configuracion"
+  },
+  {
+    "id": "mainFirstRunTitle",
+    "text": "Vamos a crear tu primer servidor"
+  },
+  {
+    "id": "mainFirstRunDescription",
+    "text": "ConquerLoader necesita al menos un servidor antes de poder iniciar el juego. El asistente te guiara paso a paso."
+  },
+  {
+    "id": "mainFirstRunStep1",
+    "text": "1. Elige un nombre para reconocer el servidor mas tarde."
+  },
+  {
+    "id": "mainFirstRunStep2",
+    "text": "2. Introduce la IP del servidor, la version del cliente y el ejecutable en el asistente."
+  },
+  {
+    "id": "mainFirstRunStep3",
+    "text": "3. Guarda el servidor y vuelve aqui para iniciar el juego."
+  },
+  {
+    "id": "mainResolutionSelected",
+    "text": "Resolucion elegida: {0}. Revisa pantalla completa y FPS antes de iniciar."
+  },
+  {
+    "id": "settingsWindowTitle",
+    "text": "Ajustes"
+  },
+  {
+    "id": "settingsWindowDescription",
+    "text": "Configura el comportamiento del launcher, el idioma y la gestion de servidores desde un solo sitio."
+  },
+  {
+    "id": "settingsLauncherTitle",
+    "text": "Launcher"
+  },
+  {
+    "id": "settingsLauncherDescription",
+    "text": "Comportamiento principal y preferencias visuales del loader."
+  },
+  {
+    "id": "settingsLoaderDescriptionLabel",
+    "text": "Descripcion en el loader"
+  },
+  {
+    "id": "settingsAdvancedTitle",
+    "text": "Avanzado"
+  },
+  {
+    "id": "settingsAdvancedDescription",
+    "text": "Estas acciones afectan al guardado y a las herramientas de depuracion."
+  },
+  {
+    "id": "settingsServersTitle",
+    "text": "Servidores"
+  },
+  {
+    "id": "settingsServersDescription",
+    "text": "Crea, edita y revisa los servidores disponibles en el launcher."
+  },
+  {
+    "id": "settingsWizardHint",
+    "text": "Usa Anadir + para abrir la configuracion guiada del servidor."
+  },
+  {
+    "id": "settingsCreateConfigWarning",
+    "text": "No se puede cargar config.json. Se va a crear uno nuevo. Reinicia la aplicacion."
+  },
+  {
+    "id": "settingsCustomDllWarning",
+    "text": "Para usar una DLL personalizada, coloca un archivo COHook.dll junto al loader para inyectarlo automaticamente."
+  },
+  {
+    "id": "settingsFpsWarning",
+    "text": "FPS Unlock puede causar inestabilidad en algunos sistemas, por ejemplo con tarjetas graficas antiguas. Usalo bajo tu responsabilidad."
+  },
+  {
+    "id": "aboutWindowTitle",
+    "text": "Acerca de"
+  },
+  {
+    "id": "aboutHeading",
+    "text": "Acerca de ConquerLoader"
+  },
+  {
+    "id": "aboutDescription",
+    "text": "Un launcher ligero con soporte de plugins y gestion de servidores para Conquer Online."
+  },
+  {
+    "id": "aboutCreatedBy",
+    "text": "Creado por Cristian Ocana Soler (DaRkFoxDeveloper)"
+  },
+  {
+    "id": "aboutPortuguese",
+    "text": "Traduccion al portugues por Louan Fontenele"
+  },
+  {
+    "id": "aboutTesters",
+    "text": "Testers: Robert Frias, Pezzi Tomas"
+  },
+  {
+    "id": "aboutVersionLabel",
+    "text": "Version:"
+  },
+  {
+    "id": "aboutLinks",
+    "text": "Enlaces"
+  },
+  {
+    "id": "aboutWebsiteLabel",
+    "text": "Web: "
+  },
+  {
+    "id": "aboutChangelogLabel",
+    "text": "Cambios: "
+  },
+  {
+    "id": "pluginsWindowTitle",
+    "text": "Plugins"
+  },
+  {
+    "id": "pluginsWindowDescription",
+    "text": "Abre la pantalla de configuracion de un plugin desde una lista mas clara de modulos instalados."
+  },
+  {
+    "id": "serverDatWindowTitle",
+    "text": "Visor de Server.dat"
+  },
+  {
+    "id": "serverDatHeading",
+    "text": "Visor de Server.dat"
+  },
+  {
+    "id": "serverDatDescription",
+    "text": "Inspecciona que grupos e iconos estan asociados a cada servidor configurado."
+  },
+  {
+    "id": "serverDatServersTitle",
+    "text": "Servidores"
+  },
+  {
+    "id": "serverDatGroupDetailsTitle",
+    "text": "Detalles del grupo"
+  },
+  {
+    "id": "serverDatNoSelection",
+    "text": "Selecciona un servidor para inspeccionar su grupo asignado en la pantalla de login."
+  },
+  {
+    "id": "serverDatNoGroup",
+    "text": "Este servidor no tiene actualmente un grupo de server.dat asignado."
+  },
+  {
+    "id": "serverDatGroupSummary",
+    "text": "Grupo: {0} | Icono: {1}"
+  },
+  {
+    "id": "setupLicenseWindowTitle",
+    "text": "Licencia"
+  },
+  {
+    "id": "setupLicenseHeading",
+    "text": "Configurar licencia"
+  },
+  {
+    "id": "setupLicenseDescription",
+    "text": "Pega aqui tu clave de licencia para desbloquear plugins premium y modulos remotos."
+  },
+  {
+    "id": "setupLicenseKeyLabel",
+    "text": "Clave de licencia"
+  },
+  {
+    "id": "setupLicenseExample",
+    "text": "Ejemplo: 2d32a164-fcd5-796b-b43f-005a78274cad"
+  },
+  {
+    "id": "setupLicenseSavedMessage",
+    "text": "Licencia guardada. Reinicia el loader para refrescar los plugins disponibles."
+  },
+  {
+    "id": "wizardWindowTitle",
+    "text": "Asistente de servidor"
+  },
+  {
+    "id": "wizardEditWindowTitle",
+    "text": "Editar servidor"
+  },
+  {
+    "id": "wizardIntro",
+    "text": "Este asistente te guia paso a paso para configurar un servidor sin tener que adivinar para que sirve cada campo."
+  },
+  {
+    "id": "wizardBadge1Title",
+    "text": "Basico"
+  },
+  {
+    "id": "wizardBadge2Title",
+    "text": "Cliente"
+  },
+  {
+    "id": "wizardBadge3Title",
+    "text": "Opciones"
+  },
+  {
+    "id": "wizardBadge4Title",
+    "text": "Revision"
+  },
+  {
+    "id": "wizardBadge1Subtitle",
+    "text": "Nombre e IP"
+  },
+  {
+    "id": "wizardBadge2Subtitle",
+    "text": "Version y exe"
+  },
+  {
+    "id": "wizardBadge3Subtitle",
+    "text": "Puertos y graficos"
+  },
+  {
+    "id": "wizardBadge4Subtitle",
+    "text": "Confirmar y guardar"
+  },
+  {
+    "id": "wizardFieldServerName",
+    "text": "Nombre del servidor"
+  },
+  {
+    "id": "wizardHelpServerName",
+    "text": "Usa el nombre publico que los jugadores deben reconocer dentro del loader."
+  },
+  {
+    "id": "wizardFieldServerIp",
+    "text": "IP del servidor"
+  },
+  {
+    "id": "wizardIpHelp",
+    "text": "Escribe la direccion IP de tu servidor de login."
+  },
+  {
+    "id": "wizardIpInvalid",
+    "text": "Escribe una direccion IP valida."
+  },
+  {
+    "id": "wizardFieldClientVersion",
+    "text": "Version del cliente"
+  },
+  {
+    "id": "wizardHelpClientVersion",
+    "text": "Este valor controla compatibilidad, assets disponibles y soporte de DirectX9."
+  },
+  {
+    "id": "wizardFieldExecutable",
+    "text": "Nombre del ejecutable"
+  },
+  {
+    "id": "wizardHelpExecutable",
+    "text": "Normalmente es Conquer.exe salvo que tu cliente use otro nombre."
+  },
+  {
+    "id": "wizardFieldLoginPort",
+    "text": "Puerto de login"
+  },
+  {
+    "id": "wizardFieldGamePort",
+    "text": "Puerto de juego"
+  },
+  {
+    "id": "wizardAssetsTitle",
+    "text": "Assets de la pantalla de login"
+  },
+  {
+    "id": "wizardAssetsDescription",
+    "text": "Solo los clientes mas nuevos necesitan estos valores. Elige primero el grupo visual y despues el icono."
+  },
+  {
+    "id": "wizardFieldGroup",
+    "text": "Grupo"
+  },
+  {
+    "id": "wizardFieldServerIcon",
+    "text": "Icono del servidor"
+  },
+  {
+    "id": "wizardServerIconHint",
+    "text": "Este icono pertenece al grupo seleccionado e identifica la entrada del servidor dentro de la pantalla de login."
+  },
+  {
+    "id": "wizardGraphicsTitle",
+    "text": "Compatibilidad grafica"
+  },
+  {
+    "id": "wizardDx9Help",
+    "text": "Activa esto solo si la version elegida del cliente soporta carpetas DirectX9."
+  },
+  {
+    "id": "wizardReadyTitle",
+    "text": "Listo para guardar"
+  },
+  {
+    "id": "wizardReadyDescription",
+    "text": "Revisa los valores de los pasos anteriores. Si todo esta correcto, guarda el servidor y aparecera en el launcher al instante."
+  },
+  {
+    "id": "wizardReadyWarning",
+    "text": "Si no estas seguro de los valores de grupo o icono, dejalos solo cuando la version elegida del cliente los requiera."
+  },
+  {
+    "id": "wizardRequirementsTitle",
+    "text": "Que necesita este paso"
+  },
+  {
+    "id": "wizardValidationTitle",
+    "text": "Validacion"
+  },
+  {
+    "id": "wizardValidationPending",
+    "text": "Completa los campos obligatorios para continuar."
+  },
+  {
+    "id": "wizardStep1Heading",
+    "text": "Paso 1. Identidad basica"
+  },
+  {
+    "id": "wizardStep1Description",
+    "text": "Empieza con los dos datos que necesita cualquier configuracion: nombre del servidor e IP del login."
+  },
+  {
+    "id": "wizardStep1Hint",
+    "text": "Usa un nombre claro y una IP valida. Cuando ambos sean correctos podras pasar a los detalles del cliente."
+  },
+  {
+    "id": "wizardStep2Heading",
+    "text": "Paso 2. Datos del cliente"
+  },
+  {
+    "id": "wizardStep2Description",
+    "text": "Ahora indica al loader que build del cliente usas y que ejecutable debe iniciar."
+  },
+  {
+    "id": "wizardStep2Hint",
+    "text": "La version es importante porque decide reglas de compatibilidad, assets y si puede usarse DirectX9."
+  },
+  {
+    "id": "wizardStep3Heading",
+    "text": "Paso 3. Opciones de compatibilidad"
+  },
+  {
+    "id": "wizardStep3Description",
+    "text": "Revisa puertos, compatibilidad grafica y los assets de login que necesiten los clientes mas nuevos."
+  },
+  {
+    "id": "wizardStep3Hint",
+    "text": "La mayoria de servidores usan los puertos por defecto. Elige primero el grupo de login y despues uno de sus iconos."
+  },
+  {
+    "id": "wizardStep4Heading",
+    "text": "Paso 4. Revisar y guardar"
+  },
+  {
+    "id": "wizardStep4Description",
+    "text": "Todo esta listo. Revisa los valores de los pasos anteriores y guarda el servidor cuando todo se vea correcto."
+  },
+  {
+    "id": "wizardStep4Hint",
+    "text": "Si algo no encaja, vuelve al paso anterior y ajustalo antes de guardar."
+  },
+  {
+    "id": "wizardMsgWriteServerName",
+    "text": "Escribe un nombre de servidor antes de guardar."
+  },
+  {
+    "id": "wizardMsgWriteValidIp",
+    "text": "Escribe una direccion IP valida antes de guardar."
+  },
+  {
+    "id": "wizardMsgWriteValidVersion",
+    "text": "Escribe una version valida del cliente antes de guardar."
+  },
+  {
+    "id": "wizardMsgSelectValidGroup",
+    "text": "Selecciona un grupo valido para esta version del cliente."
+  },
+  {
+    "id": "wizardMsgInvalidGroupIcon",
+    "text": "El icono elegido no es valido para esta version del cliente."
+  },
+  {
+    "id": "wizardValidationStep1Name",
+    "text": "Escribe un nombre de servidor para continuar."
+  },
+  {
+    "id": "wizardValidationStep1Ip",
+    "text": "Escribe una IP valida del servidor para continuar."
+  },
+  {
+    "id": "wizardValidationStep2Version",
+    "text": "Escribe una version valida del cliente para continuar."
+  },
+  {
+    "id": "wizardValidationStep2Exe",
+    "text": "Escribe el nombre del ejecutable para continuar."
+  },
+  {
+    "id": "wizardValidationStep3Ports",
+    "text": "El puerto de login y el de juego deben ser numeros validos."
+  },
+  {
+    "id": "wizardValidationStep3Group",
+    "text": "Elige un grupo visual para esta version del cliente."
+  },
+  {
+    "id": "wizardValidationStep3Icon",
+    "text": "Elige un icono valido para el grupo seleccionado."
+  },
+  {
+    "id": "wizardValidationStep4Previous",
+    "text": "Completa los pasos anteriores antes de guardar."
+  },
+  {
+    "id": "wizardValidationReady",
+    "text": "Todo lo necesario esta completo. Ya puedes guardar este servidor."
+  },
+  {
+    "id": "wizardValidationComplete",
+    "text": "Este paso esta completo. Puedes continuar."
+  },
+  {
+    "id": "commonEnabled",
+    "text": "Activado"
+  },
+  {
+    "id": "chromeMinimize",
+    "text": "Minimizar"
+  },
+  {
+    "id": "chromeMaximize",
+    "text": "Maximizar"
+  },
+  {
+    "id": "chromeRestore",
+    "text": "Restaurar"
+  },
+  {
+    "id": "chromeClose",
+    "text": "Cerrar"
+  },
+  {
+    "id": "mainFpsUnlockHint",
+    "text": "Usa esto solo cuando tu cliente y tu servidor lo soporten."
+  },
+  {
+    "id": "mainDiagnosticsTitle",
+    "text": "Diagnostico"
+  },
+  {
+    "id": "mainDiagnosticsDescription",
+    "text": "Estas acciones de depuracion solo se muestran cuando el Debug Mode esta activo en Ajustes."
+  },
+  {
+    "id": "settingsColumnServerName",
+    "text": "Nombre del servidor"
+  },
+  {
+    "id": "settingsColumnServerVersion",
+    "text": "Version del cliente"
+  },
+  {
+    "id": "settingsColumnLoginHost",
+    "text": "Host de login"
+  },
+  {
+    "id": "settingsColumnGameHost",
+    "text": "Host del juego"
+  },
+  {
+    "id": "settingsColumnLoginPort",
+    "text": "Puerto de login"
+  },
+  {
+    "id": "settingsColumnGamePort",
+    "text": "Puerto del juego"
+  },
+  {
+    "id": "settingsColumnExecutableName",
+    "text": "Ejecutable"
+  },
+  {
+    "id": "settingsColumnEnableHostName",
+    "text": "Usar hostname"
+  },
+  {
+    "id": "settingsColumnUseDirectX9",
+    "text": "DirectX9"
+  },
+  {
+    "id": "settingsColumnHostname",
+    "text": "Hostname"
+  },
+  {
+    "id": "settingsColumnServerNameMemoryAddress",
+    "text": "Direccion del nombre del servidor"
+  },
+  {
+    "id": "settingsColumnServerIcon",
+    "text": "Icono del servidor"
+  },
+  {
+    "id": "settingsColumnGroup",
+    "text": "Grupo"
   }
 ]

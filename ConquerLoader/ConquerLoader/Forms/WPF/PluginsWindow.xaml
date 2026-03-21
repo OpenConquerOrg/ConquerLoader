@@ -8,7 +8,7 @@
         MinWidth="820"
         MinHeight="560"
         Background="#09090D"
-        ResizeMode="CanResizeWithGrip"
+        ResizeMode="CanResize"
         WindowStyle="None"
         WindowStartupLocation="CenterOwner">
     <WindowChrome.WindowChrome>
@@ -16,7 +16,7 @@
                             CornerRadius="0"
                             GlassFrameThickness="0"
                             NonClientFrameEdges="None"
-                            ResizeBorderThickness="8"
+                            ResizeBorderThickness="6"
                             UseAeroCaptionButtons="False" />
     </WindowChrome.WindowChrome>
     <Window.Resources>
@@ -154,7 +154,7 @@
                                Margin="0,0,10,0"
                                Source="pack://application:,,,/Resources/ConquerLoaderICON.png"
                                Stretch="Uniform" />
-                        <TextBlock VerticalAlignment="Center" FontSize="14" FontWeight="SemiBold" Foreground="{StaticResource TextPrimaryBrush}" Text="Plugins" />
+                        <TextBlock x:Name="txtWindowTitleBar" VerticalAlignment="Center" FontSize="14" FontWeight="SemiBold" Foreground="{StaticResource TextPrimaryBrush}" Text="Plugins" />
                     </StackPanel>
                     <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center" shell:WindowChrome.IsHitTestVisibleInChrome="True">
                         <Button x:Name="btnMinimizeWindow" Click="BtnMinimizeWindow_Click" Content="_" Style="{StaticResource TitleBarButtonStyle}" />
@@ -177,10 +177,10 @@
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
                 <StackPanel Grid.Column="0">
-                    <TextBlock FontSize="28" FontWeight="SemiBold" Foreground="{StaticResource TextPrimaryBrush}" Text="Plugins" TextWrapping="Wrap" />
-                    <TextBlock Margin="0,8,0,0" FontSize="14" Foreground="{StaticResource TextSecondaryBrush}" Text="Open a plugin configuration screen from a clearer list of installed modules." TextWrapping="Wrap" />
+                    <TextBlock x:Name="txtPluginsHeading" FontSize="28" FontWeight="SemiBold" Foreground="{StaticResource TextPrimaryBrush}" Text="Plugins" TextWrapping="Wrap" />
+                    <TextBlock x:Name="txtPluginsDescription" Margin="0,8,0,0" FontSize="14" Foreground="{StaticResource TextSecondaryBrush}" Text="Open a plugin configuration screen from a clearer list of installed modules." TextWrapping="Wrap" />
                 </StackPanel>
-                <Button Grid.Column="2" Width="110" Click="BtnClose_Click" Content="Close" Style="{StaticResource SecondaryButtonStyle}" />
+                <Button x:Name="btnClose" Grid.Column="2" Width="110" Click="BtnClose_Click" Content="Close" Style="{StaticResource SecondaryButtonStyle}" />
             </Grid>
         </Border>
         <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto">
@@ -204,7 +204,7 @@
                                 <TextBlock FontSize="18" FontWeight="SemiBold" Foreground="{StaticResource TextPrimaryBrush}" Text="{Binding Name}" TextWrapping="Wrap" />
                                 <TextBlock Grid.Row="1" Margin="0,10,0,0" FontSize="13" Foreground="{StaticResource TextSecondaryBrush}" Text="{Binding Explanation}" TextWrapping="Wrap" />
                                 <TextBlock Grid.Row="2" Margin="0,12,0,0" FontSize="12" FontWeight="SemiBold" Foreground="{StaticResource PrimaryBrush}" Text="{Binding PluginType}" TextWrapping="Wrap" />
-                                <Button Grid.Row="4" Margin="0,18,0,0" Height="42" Click="BtnConfigure_Click" Content="Configure" Tag="{Binding}" Style="{StaticResource SecondaryButtonStyle}" />
+                                <Button Grid.Row="4" Margin="0,18,0,0" Height="42" Click="BtnConfigure_Click" Loaded="ConfigureButton_Loaded" Content="Configure" Tag="{Binding}" Style="{StaticResource SecondaryButtonStyle}" />
                             </Grid>
                         </Border>
                     </DataTemplate>

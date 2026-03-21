@@ -8,7 +8,7 @@
         MinWidth="820"
         MinHeight="560"
         Background="#09090D"
-        ResizeMode="CanResizeWithGrip"
+        ResizeMode="CanResize"
         WindowStyle="None"
         WindowStartupLocation="CenterOwner">
     <WindowChrome.WindowChrome>
@@ -16,7 +16,7 @@
                             CornerRadius="0"
                             GlassFrameThickness="0"
                             NonClientFrameEdges="None"
-                            ResizeBorderThickness="8"
+                            ResizeBorderThickness="6"
                             UseAeroCaptionButtons="False" />
     </WindowChrome.WindowChrome>
     <Window.Resources>
@@ -188,7 +188,7 @@
                                Margin="0,0,10,0"
                                 Source="pack://application:,,,/Resources/ConquerLoaderICON.png"
                                Stretch="Uniform" />
-                        <TextBlock VerticalAlignment="Center" FontSize="14" FontWeight="SemiBold" Foreground="{StaticResource TextPrimaryBrush}" Text="Server.dat Viewer" />
+                        <TextBlock x:Name="txtWindowTitleBar" VerticalAlignment="Center" FontSize="14" FontWeight="SemiBold" Foreground="{StaticResource TextPrimaryBrush}" Text="Server.dat Viewer" />
                     </StackPanel>
                     <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center" shell:WindowChrome.IsHitTestVisibleInChrome="True">
                         <Button x:Name="btnMinimizeWindow" Click="BtnMinimizeWindow_Click" Content="_" Style="{StaticResource TitleBarButtonStyle}" />
@@ -213,8 +213,8 @@
                     </Grid.RowDefinitions>
                     <Border Style="{StaticResource CardStyle}">
                         <StackPanel>
-                            <TextBlock FontSize="28" FontWeight="SemiBold" Foreground="{StaticResource TextPrimaryBrush}" Text="Server.dat viewer" TextWrapping="Wrap" />
-                            <TextBlock Margin="0,8,0,0" FontSize="14" Foreground="{StaticResource TextSecondaryBrush}" Text="Inspect which server groups and icons are associated with each configured server." TextWrapping="Wrap" />
+                            <TextBlock x:Name="txtServerDatHeading" FontSize="28" FontWeight="SemiBold" Foreground="{StaticResource TextPrimaryBrush}" Text="Server.dat viewer" TextWrapping="Wrap" />
+                            <TextBlock x:Name="txtServerDatDescription" Margin="0,8,0,0" FontSize="14" Foreground="{StaticResource TextSecondaryBrush}" Text="Inspect which server groups and icons are associated with each configured server." TextWrapping="Wrap" />
                         </StackPanel>
                     </Border>
                     <Grid Grid.Row="2">
@@ -230,7 +230,7 @@
                                     <RowDefinition Height="16" />
                                     <RowDefinition Height="*" />
                                 </Grid.RowDefinitions>
-                                <TextBlock FontSize="20" FontWeight="SemiBold" Foreground="{StaticResource TextPrimaryBrush}" Text="Servers" />
+                                <TextBlock x:Name="txtServersTitle" FontSize="20" FontWeight="SemiBold" Foreground="{StaticResource TextPrimaryBrush}" Text="Servers" />
                                 <ListBox x:Name="lstServers" Grid.Row="2" SelectionChanged="LstServers_SelectionChanged" ScrollViewer.HorizontalScrollBarVisibility="Auto" />
                             </Grid>
                         </Border>
@@ -242,14 +242,14 @@
                                     <RowDefinition Height="16" />
                                     <RowDefinition Height="*" />
                                 </Grid.RowDefinitions>
-                                <TextBlock FontSize="20" FontWeight="SemiBold" Foreground="{StaticResource TextPrimaryBrush}" Text="Group details" />
+                                <TextBlock x:Name="txtGroupDetailsTitle" FontSize="20" FontWeight="SemiBold" Foreground="{StaticResource TextPrimaryBrush}" Text="Group details" />
                                 <TextBlock x:Name="txtGroupSummary" Grid.Row="1" Margin="0,12,0,0" FontSize="14" Foreground="{StaticResource TextSecondaryBrush}" Text="Select a server to inspect its assigned login screen group." TextWrapping="Wrap" />
                                 <ListBox x:Name="lstGroups" Grid.Row="3" ScrollViewer.HorizontalScrollBarVisibility="Auto" />
                             </Grid>
                         </Border>
                     </Grid>
                     <DockPanel Grid.Row="4" LastChildFill="False">
-                        <Button DockPanel.Dock="Right" Width="120" Click="BtnClose_Click" Content="Close" Style="{StaticResource SecondaryButtonStyle}" />
+                        <Button x:Name="btnClose" DockPanel.Dock="Right" Width="120" Click="BtnClose_Click" Content="Close" Style="{StaticResource SecondaryButtonStyle}" />
                     </DockPanel>
                 </Grid>
             </ScrollViewer>

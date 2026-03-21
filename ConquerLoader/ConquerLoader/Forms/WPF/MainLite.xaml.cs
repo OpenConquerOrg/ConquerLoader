@@ -28,7 +28,6 @@ namespace ConquerLoader.Forms.WPF
         public bool AllStarted = false;
         public bool DX9Allowed = false;
         public bool CustomDLLs = false;
-        public bool AdvancedModeEnabled = false;
         public bool FirstRunModeEnabled = false;
 
         private readonly BackgroundWorker worker;
@@ -66,7 +65,6 @@ namespace ConquerLoader.Forms.WPF
             if (Core.UseEncryptedConfig)
             {
                 btnSettings.IsEnabled = false;
-                btnSettingsHeader.IsEnabled = false;
             }
 
             if (LoaderConfig != null)
@@ -185,7 +183,7 @@ namespace ConquerLoader.Forms.WPF
                     noty.Visible = true;
                     Hide();
                     noty.BalloonTipTitle = ProductNameText + " " + ProductVersionText;
-                    noty.BalloonTipText = "The extensible loader for ConquerOnline";
+                    noty.BalloonTipText = T("mainTrayBalloon", "The extensible loader for ConquerOnline");
                     noty.ShowBalloonTip(1000);
                 }
                 else if (WindowState == WindowState.Normal)
@@ -281,34 +279,33 @@ namespace ConquerLoader.Forms.WPF
 
         private void LoadConfigInForm()
         {
-            cbxServers.Items.Clear();
+            lstServers.Items.Clear();
 
             if (!string.IsNullOrEmpty(LoaderConfig.Title))
             {
                 Title = LoaderConfig.Title;
                 txtWindowTitle.Text = LoaderConfig.Title;
+                txtTopBarTitle.Text = LoaderConfig.Title;
             }
             else
             {
                 Title = "ConquerLoader";
                 txtWindowTitle.Text = "ConquerLoader";
+                txtTopBarTitle.Text = "ConquerLoader";
             }
 
             ApplyStaticTexts();
             ApplyWindowTitle();
             Core.LogWritter.Write("Loaded config.json");
-            btnLogModules.IsEnabled = LoaderConfig.DebugMode;
-            btnLogModules.Visibility = LoaderConfig.DebugMode ? Visibility.Visible : Visibility.Collapsed;
-            btnCloseCO.IsEnabled = LoaderConfig.DebugMode;
-            btnCloseCO.Visibility = LoaderConfig.DebugMode ? Visibility.Visible : Visibility.Collapsed;
             btnStart.IsEnabled = LoaderConfig.Servers.Count > 0;
             tglFPSUnlock.IsChecked = LoaderConfig.FPSUnlock;
             Constants.LicenseKey = LoaderConfig.LicenseKey;
-            UpdateAdvancedModeUI();
+            UpdateDebugToolsVisibility();
+            UpdateLauncherHints();
 
             foreach (ServerConfiguration server in LoaderConfig.Servers)
             {
-                cbxServers.Items.Add(server.ServerName);
+                lstServers.Items.Add(server.ServerName);
             }
 
             SetResolutionSelectionFromConfig();
@@ -320,20 +317,20 @@ namespace ConquerLoader.Forms.WPF
             if (LoaderConfig.Servers.Count <= 0)
             {
                 EnableFirstRunMode();
-                txtSelectedServer.Text = "No server selected";
-                txtServerStatusHint.Text = "Open Settings to create or import your first server configuration.";
-                txtHeaderDescription.Text = "Set up your first server, then choose it here to launch the client with the correct options.";
-                txtActionsDescription.Text = "Use the guided setup to create your first server. Advanced tools stay hidden unless you ask for them.";
-                btnCreateServer.Visibility = Visibility.Visible;
+                txtSelectedServer.Text = T("mainNoServerSelected", "No server selected");
+                txtServerStatusHint.Text = T("mainFirstServerHint", "Open Settings to create or import your first server configuration.");
+                txtHeaderDescription.Text = T("mainSetupFirstServerDescription", "Set up your first server, then choose it here to launch the client with the correct options.");
+                txtActionsDescription.Text = T("mainOptionsDescription", "Choose the resolution and FPS behavior before launching.");
                 btnStart.IsEnabled = false;
                 UpdateStatusBadgeNeutral();
+                UpdateLauncherHints();
                 return;
             }
 
             DisableFirstRunMode();
-            txtHeaderDescription.Text = "Choose a server, review the launch options, and start the client from a single clear screen.";
-            txtActionsDescription.Text = "Open settings for full configuration, or reveal advanced options only when you need them.";
-            btnCreateServer.Visibility = Visibility.Collapsed;
+            ApplyHeaderDescription();
+            txtActionsDescription.Text = T("mainOptionsDescription", "Choose the resolution and FPS behavior before launching.");
+            UpdateLauncherHints();
 
             if (LoaderConfig.DefaultServer == null)
             {
@@ -342,14 +339,14 @@ namespace ConquerLoader.Forms.WPF
 
             if (LoaderConfig.Servers.Count > 0)
             {
-                foreach (object s in cbxServers.Items)
+                foreach (object s in lstServers.Items)
                 {
                     if (LoaderConfig.DefaultServer != null && s.Equals(LoaderConfig.DefaultServer.ServerName))
                     {
                         UpdateResolutionOptionsForServer(LoaderConfig.DefaultServer);
                         if (selectDefault)
                         {
-                            cbxServers.SelectedItem = s;
+                            lstServers.SelectedItem = s;
                             txtSelectedServer.Text = s.ToString();
                         }
                         if (checkServerStatus)
@@ -366,11 +363,13 @@ namespace ConquerLoader.Forms.WPF
             if (AllStarted && LoaderConfig != null && LoaderConfig.DefaultServer != null)
             {
                 bool online = Core.ServerAvailable(LoaderConfig.DefaultServer.LoginHost, LoaderConfig.DefaultServer.GamePort);
-                serverStatus.Text = online ? "ONLINE" : "OFFLINE";
+                serverStatus.Text = online
+                    ? T("mainServerStatusOnline", "ONLINE")
+                    : T("mainServerStatusOffline", "OFFLINE");
                 serverStatusBadge.Background = online ? CreateBrush("#15803D") : CreateBrush("#B91C1C");
                 txtServerStatusHint.Text = online
-                    ? "The selected server responded to the reachability check."
-                    : "The selected server did not respond. You can still review the configuration in Settings.";
+                    ? T("mainSelectedServerStatusOnline", "The selected server responded to the reachability check.")
+                    : T("mainSelectedServerStatusOffline", "The selected server did not respond. You can still review the configuration in Settings.");
             }
         }
 
@@ -378,12 +377,12 @@ namespace ConquerLoader.Forms.WPF
         {
             try
             {
-                if (LoaderConfig == null || cbxServers.SelectedItem == null)
+                if (LoaderConfig == null || lstServers.SelectedItem == null)
                 {
                     return;
                 }
 
-                SelectedServer = LoaderConfig.Servers.Where(x => x.ServerName == cbxServers.SelectedItem.ToString()).FirstOrDefault();
+                SelectedServer = LoaderConfig.Servers.Where(x => x.ServerName == lstServers.SelectedItem.ToString()).FirstOrDefault();
                 if (SelectedServer != null)
                 {
                     LoaderConfig.DefaultServer = SelectedServer;
@@ -733,14 +732,14 @@ namespace ConquerLoader.Forms.WPF
 
         private void CbxServers_SelectedIndexChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (AllStarted && cbxServers.SelectedItem != null)
+            if (AllStarted && lstServers.SelectedItem != null)
             {
-                txtSelectedServer.Text = cbxServers.SelectedItem.ToString();
-                foreach (object s in cbxServers.Items)
+                txtSelectedServer.Text = lstServers.SelectedItem.ToString();
+                foreach (object s in lstServers.Items)
                 {
-                    if (s.Equals(cbxServers.SelectedItem.ToString()))
+                    if (s.Equals(lstServers.SelectedItem.ToString()))
                     {
-                        LoaderConfig.DefaultServer = LoaderConfig.Servers.Where(x => x.ServerName == cbxServers.SelectedItem.ToString()).FirstOrDefault();
+                        LoaderConfig.DefaultServer = LoaderConfig.Servers.Where(x => x.ServerName == lstServers.SelectedItem.ToString()).FirstOrDefault();
                         UpdateResolutionOptionsForServer(LoaderConfig.DefaultServer);
                         SetServerStatus();
                         Core.SaveLoaderConfig(LoaderConfig);
@@ -759,6 +758,19 @@ namespace ConquerLoader.Forms.WPF
             if (LoaderConfig != null) LoadConfigInForm();
         }
 
+        public void ReloadLocalizedUi()
+        {
+            LoaderConfig = Core.GetLoaderConfig() ?? LoaderConfig;
+            if (LoaderConfig != null)
+            {
+                LoadConfigInForm();
+            }
+            else
+            {
+                ApplyStaticTexts();
+            }
+        }
+
         private void BtnCreateServer_Click(object sender, RoutedEventArgs e)
         {
             WizardWindow wizard = new WizardWindow();
@@ -775,12 +787,6 @@ namespace ConquerLoader.Forms.WPF
         private void BtnStartFirstRun_Click(object sender, RoutedEventArgs e)
         {
             BtnCreateServer_Click(sender, e);
-        }
-
-        private void TglAdvancedMode_CheckedChanged(object sender, RoutedEventArgs e)
-        {
-            AdvancedModeEnabled = tglAdvancedMode.IsChecked == true;
-            UpdateAdvancedModeUI();
         }
 
         private void BtnCloseCO_Click(object sender, RoutedEventArgs e)
@@ -822,7 +828,7 @@ namespace ConquerLoader.Forms.WPF
                     LoaderConfig.FHDResolution = selectedRes == "1920x1080";
                 }
                 Core.SaveLoaderConfig(LoaderConfig);
-                txtLaunchTip.Text = "Selected resolution: " + selectedRes + ". Review fullscreen and FPS options before launching.";
+                txtLaunchTip.Text = TF("mainResolutionSelected", "Selected resolution: {0}. Review fullscreen and FPS options before launching.", selectedRes);
             }
         }
 
@@ -881,38 +887,44 @@ namespace ConquerLoader.Forms.WPF
 
         private void ApplyStaticTexts()
         {
-            txtHelper.Text = "Choose your server and resolution, then launch. Most users do not need anything else here.";
-            txtLaunchTip.Text = "Choose a server first so the launch options stay in sync.";
-            txtHeaderDescription.Text = "Choose a server, review the launch options, and start the client from a single clear screen.";
-            txtActionsDescription.Text = "Open settings for full configuration, or reveal advanced options only when you need them.";
-            txtAdvancedDescription.Text = "These options are useful for diagnostics and compatibility changes.";
-            btnSettingsHeader.Content = "Settings";
-            btnCreateServer.Content = "Create First Server";
-            btnStartFirstRun.Content = "Create My First Server";
-            btnOpenSettingsFromOverlay.Content = "Open Settings";
-            btnAboutFromOverlay.Content = "About";
-            txtFirstRunTitle.Text = "Let's create your first server";
-            txtFirstRunDescription.Text = "ConquerLoader needs at least one server before it can launch the game. The guided wizard will walk you through the setup step by step.";
-            txtFirstRunStep1.Text = "1. Choose a name for the server so you can recognize it later.";
-            txtFirstRunStep2.Text = "2. Enter the server IP, client version, and executable in the wizard.";
-            txtFirstRunStep3.Text = "3. Save the server and come back here to launch the game.";
-            txtGuideLine1.Text = "1. Create or choose a server.";
-            txtGuideLine2.Text = "2. Pick the resolution that matches your client.";
-            txtGuideLine3.Text = "3. Press Start when the setup looks correct.";
-            ApplyTranslation("btnStart", btnStart, "START");
+            txtServerSelectionTitle.Text = T("mainServerSelection", "Server Selection");
+            txtAvailableServers.Text = T("mainAvailableServers", "Available servers");
+            txtLauncherNoteTitle.Text = T("mainLauncherNote", "Launcher note");
+            txtEnterLabel.Text = T("mainEnterLabel", "ENTER THE REALM");
+            txtOptionsTitle.Text = T("mainOptionsTitle", "Options");
+            txtResolutionLabel.Text = T("mainResolution", "Resolution");
+            txtFirstRunBadge.Text = T("mainFirstTimeSetup", "First-time setup");
+            txtHelper.Text = T("mainHelperDefault", "Pick the server you want to launch. Your last realm stays selected for the next session.");
+            txtLaunchTip.Text = T("mainLaunchTipDefault", "Choose a server first so the launch status and resolution stay in sync.");
+            ApplyHeaderDescription();
+            txtActionsDescription.Text = T("mainOptionsDescription", "Choose the resolution and FPS behavior before launching.");
+            txtFpsUnlockHint.Text = T("mainFpsUnlockHint", "Use this only when your client and server support it.");
+            ApplyTranslation("btnStartFirstRun", btnStartFirstRun, "Create My First Server");
+            ApplyTranslation("btnSettings", btnOpenSettingsFromOverlay, "Open Settings");
+            ApplyTranslation("lblAbout", btnAboutFromOverlay, "About");
+            txtFirstRunTitle.Text = T("mainFirstRunTitle", "Let's create your first server");
+            txtFirstRunDescription.Text = T("mainFirstRunDescription", "ConquerLoader needs at least one server before it can launch the game. The guided wizard will walk you through the setup step by step.");
+            txtFirstRunStep1.Text = T("mainFirstRunStep1", "1. Choose a name for the server so you can recognize it later.");
+            txtFirstRunStep2.Text = T("mainFirstRunStep2", "2. Enter the server IP, client version, and executable in the wizard.");
+            txtFirstRunStep3.Text = T("mainFirstRunStep3", "3. Save the server and come back here to launch the game.");
+            ApplyTranslation("btnStart", btnStart, "ENTER");
             ApplyTranslation("btnSettings", btnSettings, "Settings");
-            btnCloseCO.Content = "Close Game Process";
+            ApplyTranslation("btnCloseCO", btnCloseCO, "Close Game Process");
             ApplyTranslation("btnLogModules", btnLogModules, "Log Modules");
             ApplyTranslation("lblFPSUnlock", lblFPSUnlock, "Unlock FPS");
-            lblAbout.Content = "About";
+            ApplyTranslation("lblAbout", lblAbout, "About");
+            ApplyTranslation("commonEnabled", tglFPSUnlock, "Enabled");
+            ApplyTranslation("mainDiagnosticsTitle", txtDiagnosticsTitle, "Diagnostics");
+            ApplyTranslation("mainDiagnosticsDescription", txtDiagnosticsDescription, "These debug actions are only shown when Debug Mode is enabled in Settings.");
             noty.Visible = true;
             txtProgressValue.Text = "0%";
             UpdateStatusBadgeNeutral();
-            txtServerStatusHint.Text = "The selected server will be checked before launch.";
+            txtServerStatusHint.Text = T("mainSelectedServerHint", "The selected server will be checked before launch.");
             txtSelectedServer.Text = LoaderConfig != null && LoaderConfig.DefaultServer != null
                 ? LoaderConfig.DefaultServer.ServerName
-                : "No server selected";
-            UpdateAdvancedModeUI();
+                : T("mainNoServerSelected", "No server selected");
+            UpdateDebugToolsVisibility();
+            UpdateLauncherHints();
         }
 
         private void ApplyWindowTitle()
@@ -921,29 +933,53 @@ namespace ConquerLoader.Forms.WPF
             {
                 Title = LoaderConfig.Title;
                 txtWindowTitle.Text = LoaderConfig.Title;
+                txtTopBarTitle.Text = LoaderConfig.Title;
             }
             else
             {
                 Title = "ConquerLoader";
                 txtWindowTitle.Text = "ConquerLoader";
+                txtTopBarTitle.Text = "ConquerLoader";
+            }
+        }
+
+        private void ApplyHeaderDescription()
+        {
+            string fallback = T("mainHeaderDescription", "Choose your realm, set the launch options, and enter from a single launcher screen.");
+
+            if (LoaderConfig != null && !string.IsNullOrWhiteSpace(LoaderConfig.Description))
+            {
+                txtHeaderDescription.Text = LoaderConfig.Description.Trim();
+            }
+            else
+            {
+                txtHeaderDescription.Text = fallback;
             }
         }
 
         private void ApplyTranslation(string key, ContentControl control, string fallback)
         {
-            TextTranslation translation = Core.TextTranslations.Where(x => x.Id == key).FirstOrDefault();
-            control.Content = translation != null && !string.IsNullOrEmpty(translation.Text) ? translation.Text : fallback;
+            control.Content = Core.TranslateText(key, fallback);
         }
 
         private void ApplyTranslation(string key, TextBlock control, string fallback)
         {
-            TextTranslation translation = Core.TextTranslations.Where(x => x.Id == key).FirstOrDefault();
-            control.Text = translation != null && !string.IsNullOrEmpty(translation.Text) ? translation.Text : fallback;
+            control.Text = Core.TranslateText(key, fallback);
+        }
+
+        private string T(string key, string fallback)
+        {
+            return Core.TranslateText(key, fallback);
+        }
+
+        private string TF(string key, string fallback, params object[] args)
+        {
+            return string.Format(T(key, fallback), args);
         }
 
         private void UpdateStatusBadgeNeutral()
         {
-            serverStatus.Text = "-";
+            serverStatus.Text = T("mainServerStatusNeutral", "-");
             serverStatusBadge.Background = CreateBrush("#94A3B8");
         }
 
@@ -955,37 +991,42 @@ namespace ConquerLoader.Forms.WPF
             }
 
             btnMinimizeWindow.Content = "\uE921";
-            btnMinimizeWindow.ToolTip = "Minimize";
+            btnMinimizeWindow.ToolTip = T("chromeMinimize", "Minimize");
             btnCloseWindow.Content = "\uE8BB";
             btnCloseWindow.Tag = "Close";
-            btnCloseWindow.ToolTip = "Close";
+            btnCloseWindow.ToolTip = T("chromeClose", "Close");
             btnMaxRestoreWindow.Content = WindowState == WindowState.Maximized ? "\uE923" : "\uE922";
-            btnMaxRestoreWindow.ToolTip = WindowState == WindowState.Maximized ? "Restore" : "Maximize";
+            btnMaxRestoreWindow.ToolTip = WindowState == WindowState.Maximized
+                ? T("chromeRestore", "Restore")
+                : T("chromeMaximize", "Maximize");
         }
 
-        private void UpdateAdvancedModeUI()
+        private void UpdateDebugToolsVisibility()
         {
-            if (advancedOptionsCard == null || tglAdvancedMode == null)
+            if (diagnosticsCard == null)
             {
                 return;
             }
 
-            advancedOptionsCard.Visibility = AdvancedModeEnabled ? Visibility.Visible : Visibility.Collapsed;
+            bool showDiagnostics = LoaderConfig != null && LoaderConfig.DebugMode;
+            diagnosticsCard.Visibility = showDiagnostics ? Visibility.Visible : Visibility.Collapsed;
+            btnLogModules.IsEnabled = showDiagnostics;
+            btnLogModules.Visibility = showDiagnostics ? Visibility.Visible : Visibility.Collapsed;
+            btnCloseCO.IsEnabled = showDiagnostics;
+            btnCloseCO.Visibility = showDiagnostics ? Visibility.Visible : Visibility.Collapsed;
+        }
 
+        private void UpdateLauncherHints()
+        {
             if (LoaderConfig != null && LoaderConfig.Servers.Count <= 0)
             {
-                txtHelper.Text = "Create your first server, then come back here to launch it.";
-                txtLaunchTip.Text = "The guided wizard will help you configure the server step by step.";
-            }
-            else if (AdvancedModeEnabled)
-            {
-                txtHelper.Text = "Basic launch options stay on the left. Advanced controls are available on the right.";
-                txtLaunchTip.Text = "Advanced mode is enabled. Use diagnostics and FPS unlock only when you really need them.";
+                txtHelper.Text = T("mainHelperFirstRun", "Create your first server, then come back here to launch it.");
+                txtLaunchTip.Text = T("mainLaunchTipFirstRun", "The guided wizard will help you configure the server step by step.");
             }
             else
             {
-                txtHelper.Text = "Choose your server and resolution, then launch. Most users do not need anything else here.";
-                txtLaunchTip.Text = "Choose a server first so the launch options stay in sync.";
+                txtHelper.Text = T("mainHelperDefault", "Pick the server you want to launch. Your last realm stays selected for the next session.");
+                txtLaunchTip.Text = T("mainLaunchTipDefault", "Choose a server first so the launch status and resolution stay in sync.");
             }
         }
 

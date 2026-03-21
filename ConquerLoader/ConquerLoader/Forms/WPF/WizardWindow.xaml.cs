@@ -55,8 +55,6 @@ namespace ConquerLoader.Forms.WPF
                     selectedServer.Group = new ServerDatGroup();
                 }
 
-                txtWizardTitle.Text = "Edit Server Wizard";
-                Title = "Edit Server Wizard";
                 tbxServerName.Text = selectedServer.ServerName;
                 tbxIP.Text = selectedServer.LoginHost;
                 tbxConquerExe.Text = selectedServer.ExecutableName;
@@ -98,8 +96,8 @@ namespace ConquerLoader.Forms.WPF
 
             TbxVersion_TextChanged(null, null);
             RestoreSavedGroupSelection();
-            UpdateSummary();
             UpdateWizardStepUI();
+            ApplyTranslations();
         }
 
         private void LoadServerDatGroups()
@@ -226,36 +224,36 @@ namespace ConquerLoader.Forms.WPF
             int version;
             if (string.IsNullOrWhiteSpace(tbxServerName.Text))
             {
-                MessageBox.Show("Write a server name before saving.", Title, MessageBoxButton.OK, MessageBoxImage.Warning);
+                MessageBox.Show(T("wizardMsgWriteServerName", "Write a server name before saving."), Title, MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
 
             if (!IPAddress.TryParse(tbxIP.Text, out _))
             {
-                MessageBox.Show("Write a valid IP address before saving.", Title, MessageBoxButton.OK, MessageBoxImage.Warning);
+                MessageBox.Show(T("wizardMsgWriteValidIp", "Write a valid IP address before saving."), Title, MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
 
             if (!int.TryParse(tbxVersion.Text, out version))
             {
-                MessageBox.Show("Write a valid client version before saving.", Title, MessageBoxButton.OK, MessageBoxImage.Warning);
+                MessageBox.Show(T("wizardMsgWriteValidVersion", "Write a valid client version before saving."), Title, MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
 
-            string groupName = ResolveGroupName(version, true);
+            string groupName = ResolveGroupName(version, false);
             string selectedIcon = SelectedGroupIcon();
             List<string> valids = ServerDatGroupIcons(groupName);
             if (RequiresValidatedServerIcon(version) && visualGroupCard.Visibility == Visibility.Visible)
             {
                 if (string.IsNullOrWhiteSpace(groupName))
                 {
-                    MessageBox.Show("Select a valid group for this client version.", Title, MessageBoxButton.OK, MessageBoxImage.Warning);
+                    MessageBox.Show(T("wizardMsgSelectValidGroup", "Select a valid group for this client version."), Title, MessageBoxButton.OK, MessageBoxImage.Warning);
                     return;
                 }
 
                 if (!valids.Contains(selectedIcon))
                 {
-                    MessageBox.Show("This group icon is invalid for this client version.", Title, MessageBoxButton.OK, MessageBoxImage.Warning);
+                    MessageBox.Show(T("wizardMsgInvalidGroupIcon", "This group icon is invalid for this client version."), Title, MessageBoxButton.OK, MessageBoxImage.Warning);
                     return;
                 }
             }
@@ -341,7 +339,6 @@ namespace ConquerLoader.Forms.WPF
             int version;
             if (!int.TryParse(tbxVersion.Text, out version))
             {
-                UpdateSummary();
                 return;
             }
 
@@ -349,11 +346,7 @@ namespace ConquerLoader.Forms.WPF
             visualGroupCard.Visibility = usesRawServerDat ? Visibility.Visible : Visibility.Collapsed;
             if (usesRawServerDat)
             {
-                if (string.IsNullOrWhiteSpace(SelectedGroupName()) && tbxGroup.Items.Count > 0)
-                {
-                    tbxGroup.SelectedIndex = 0;
-                }
-                else if (!string.IsNullOrWhiteSpace(SelectedGroupName()))
+                if (!string.IsNullOrWhiteSpace(SelectedGroupName()))
                 {
                     TbxGroup_SelectionChanged(null, null);
                 }
@@ -371,7 +364,6 @@ namespace ConquerLoader.Forms.WPF
                 tglUseDX9.IsChecked = false;
             }
 
-            UpdateSummary();
             UpdateWizardStepUI();
         }
 
@@ -394,7 +386,6 @@ namespace ConquerLoader.Forms.WPF
                 }
             }
 
-            UpdateSummary();
         }
 
         private void TbxIP_LostFocus(object sender, RoutedEventArgs e)
@@ -403,31 +394,27 @@ namespace ConquerLoader.Forms.WPF
             if (!IPAddress.TryParse(tbxIP.Text, out ip))
             {
                 tbxIP.Text = "";
-                lblHelpIP.Text = "Please write a valid IP address.";
+                lblHelpIP.Text = T("wizardIpInvalid", "Please write a valid IP address.");
             }
             else
             {
-                lblHelpIP.Text = "Write the IP address of your login server.";
+                lblHelpIP.Text = T("wizardIpHelp", "Write the IP address of your login server.");
             }
-
-            UpdateSummary();
+            ValidateCurrentStep(currentStep, false);
         }
 
         private void InputValueChanged(object sender, TextChangedEventArgs e)
         {
-            UpdateSummary();
             ValidateCurrentStep(currentStep, false);
         }
 
         private void InputSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            UpdateSummary();
             ValidateCurrentStep(currentStep, false);
         }
 
         private void Dx9ValueChanged(object sender, RoutedEventArgs e)
         {
-            UpdateSummary();
             ValidateCurrentStep(currentStep, false);
         }
 
@@ -471,7 +458,6 @@ namespace ConquerLoader.Forms.WPF
                 tbxGroupIcon.SelectedIndex = -1;
             }
 
-            UpdateSummary();
             UpdateWizardStepUI();
         }
 
@@ -494,24 +480,24 @@ namespace ConquerLoader.Forms.WPF
             switch (currentStep)
             {
                 case 1:
-                    txtStepHeading.Text = "Step 1. Basic identity";
-                    txtStepDescription.Text = "Start with the two pieces of information every setup needs: the server name and the login server IP.";
-                    txtStepHint.Text = "Use a friendly name and a valid IP address. Once both are correct, you can continue to the client details.";
+                    txtStepHeading.Text = T("wizardStep1Heading", "Step 1. Basic identity");
+                    txtStepDescription.Text = T("wizardStep1Description", "Start with the two pieces of information every setup needs: the server name and the login server IP.");
+                    txtStepHint.Text = T("wizardStep1Hint", "Use a friendly name and a valid IP address. Once both are correct, you can continue to the client details.");
                     break;
                 case 2:
-                    txtStepHeading.Text = "Step 2. Client details";
-                    txtStepDescription.Text = "Now tell the loader which client build you use and which executable should be launched.";
-                    txtStepHint.Text = "The version number is important because it decides compatibility rules, available assets, and whether DirectX9 can be used.";
+                    txtStepHeading.Text = T("wizardStep2Heading", "Step 2. Client details");
+                    txtStepDescription.Text = T("wizardStep2Description", "Now tell the loader which client build you use and which executable should be launched.");
+                    txtStepHint.Text = T("wizardStep2Hint", "The version number is important because it decides compatibility rules, available assets, and whether DirectX9 can be used.");
                     break;
                 case 3:
-                    txtStepHeading.Text = "Step 3. Compatibility options";
-                    txtStepDescription.Text = "Review ports, graphics compatibility, and any login screen assets required by newer clients.";
-                    txtStepHint.Text = "Most servers keep the default ports. Choose the login screen group first, then pick one of the server icons available inside that group.";
+                    txtStepHeading.Text = T("wizardStep3Heading", "Step 3. Compatibility options");
+                    txtStepDescription.Text = T("wizardStep3Description", "Review ports, graphics compatibility, and any login screen assets required by newer clients.");
+                    txtStepHint.Text = T("wizardStep3Hint", "Most servers keep the default ports. Choose the login screen group first, then pick one of the server icons available inside that group.");
                     break;
                 default:
-                    txtStepHeading.Text = "Step 4. Review and save";
-                    txtStepDescription.Text = "Everything is ready. Review the values from the previous steps and save the server when they look correct.";
-                    txtStepHint.Text = "If something looks wrong, go back to the previous step and adjust it before saving.";
+                    txtStepHeading.Text = T("wizardStep4Heading", "Step 4. Review and save");
+                    txtStepDescription.Text = T("wizardStep4Description", "Everything is ready. Review the values from the previous steps and save the server when they look correct.");
+                    txtStepHint.Text = T("wizardStep4Hint", "If something looks wrong, go back to the previous step and adjust it before saving.");
                     break;
             }
 
@@ -548,47 +534,47 @@ namespace ConquerLoader.Forms.WPF
                 case 1:
                     if (string.IsNullOrWhiteSpace(tbxServerName.Text))
                     {
-                        message = "Write a server name to continue.";
+                        message = T("wizardValidationStep1Name", "Write a server name to continue.");
                     }
                     else if (!IPAddress.TryParse(tbxIP.Text, out _))
                     {
-                        message = "Write a valid server IP to continue.";
+                        message = T("wizardValidationStep1Ip", "Write a valid server IP to continue.");
                     }
                     break;
                 case 2:
                     if (version <= 0)
                     {
-                        message = "Write a valid client version to continue.";
+                        message = T("wizardValidationStep2Version", "Write a valid client version to continue.");
                     }
                     else if (string.IsNullOrWhiteSpace(tbxConquerExe.Text))
                     {
-                        message = "Write the executable name to continue.";
+                        message = T("wizardValidationStep2Exe", "Write the executable name to continue.");
                     }
                     break;
                 case 3:
                     if (!uint.TryParse(tbxLoginPort.Text, out _) || !uint.TryParse(tbxGamePort.Text, out _))
                     {
-                        message = "Login port and game port must be valid numbers.";
+                        message = T("wizardValidationStep3Ports", "Login port and game port must be valid numbers.");
                     }
                     else if (visualGroupCard.Visibility == Visibility.Visible && RequiresValidatedServerIcon(version))
                     {
-                        string selectedGroup = ResolveGroupName(version, true);
+                        string selectedGroup = ResolveGroupName(version, false);
                         List<string> valids = ServerDatGroupIcons(selectedGroup);
                         string selectedIcon = SelectedGroupIcon();
                         if (string.IsNullOrWhiteSpace(selectedGroup))
                         {
-                            message = "Choose a visual group for this client version.";
+                            message = T("wizardValidationStep3Group", "Choose a visual group for this client version.");
                         }
                         else if (!valids.Contains(selectedIcon))
                         {
-                            message = "Choose a valid server icon for the selected group.";
+                            message = T("wizardValidationStep3Icon", "Choose a valid server icon for the selected group.");
                         }
                     }
                     break;
                 case 4:
                     if (!ValidateCurrentStep(1, false) || !ValidateCurrentStep(2, false) || !ValidateCurrentStep(3, false))
                     {
-                        message = "Finish the previous steps before saving.";
+                        message = T("wizardValidationStep4Previous", "Finish the previous steps before saving.");
                     }
                     break;
             }
@@ -597,8 +583,8 @@ namespace ConquerLoader.Forms.WPF
             {
                 txtValidation.Foreground = BrushFromHex("#137333");
                 txtValidation.Text = step == 4
-                    ? "Everything required is complete. You can save this server now."
-                    : "This step is complete. You can continue.";
+                    ? T("wizardValidationReady", "Everything required is complete. You can save this server now.")
+                    : T("wizardValidationComplete", "This step is complete. You can continue.");
                 return true;
             }
 
@@ -611,16 +597,6 @@ namespace ConquerLoader.Forms.WPF
             }
 
             return false;
-        }
-
-        private void UpdateSummary()
-        {
-            // Summary panel removed from the wizard UI.
-        }
-
-        private static string SafeText(string text)
-        {
-            return string.IsNullOrWhiteSpace(text) ? "-" : text.Trim();
         }
 
         private void WizardWindow_StateChanged(object sender, EventArgs e)
@@ -685,17 +661,79 @@ namespace ConquerLoader.Forms.WPF
             }
 
             btnMinimizeWindow.Content = "\uE921";
-            btnMinimizeWindow.ToolTip = "Minimize";
+            btnMinimizeWindow.ToolTip = T("chromeMinimize", "Minimize");
             btnCloseWindow.Content = "\uE8BB";
             btnCloseWindow.Tag = "Close";
-            btnCloseWindow.ToolTip = "Close";
+            btnCloseWindow.ToolTip = T("chromeClose", "Close");
             btnMaxRestoreWindow.Content = WindowState == WindowState.Maximized ? "\uE923" : "\uE922";
-            btnMaxRestoreWindow.ToolTip = WindowState == WindowState.Maximized ? "Restore" : "Maximize";
+            btnMaxRestoreWindow.ToolTip = WindowState == WindowState.Maximized
+                ? T("chromeRestore", "Restore")
+                : T("chromeMaximize", "Maximize");
+        }
+
+        private void ApplyTranslations()
+        {
+            if (btnPrevious == null)
+            {
+                return;
+            }
+
+            Title = indexSelectedServer >= 0
+                ? T("wizardEditWindowTitle", "Edit Server Wizard")
+                : T("wizardWindowTitle", "Server Setup Wizard");
+            txtWindowTitleBar.Text = Title;
+            txtWizardTitle.Text = Title;
+            txtWizardIntro.Text = T("wizardIntro", "This assistant guides you step by step so you can configure a server without guessing what each field means.");
+            btnCancel.Content = T("btnClose", "Close");
+            btnPrevious.Content = Core.TranslateText("btnPrevious", "Previous");
+            btnNext.Content = Core.TranslateText("btnNext", "Next");
+            btnSave.Content = Core.TranslateText("btnSave", "Save Server");
+            tglUseDX9.Content = Core.TranslateText("tglUseDX9", "Use DirectX9 environment");
+            stepTitle1.Text = T("wizardBadge1Title", "Basics");
+            stepTitle2.Text = T("wizardBadge2Title", "Client");
+            stepTitle3.Text = T("wizardBadge3Title", "Options");
+            stepTitle4.Text = T("wizardBadge4Title", "Review");
+            stepSubtitle1.Text = T("wizardBadge1Subtitle", "Name and address");
+            stepSubtitle2.Text = T("wizardBadge2Subtitle", "Version and executable");
+            stepSubtitle3.Text = T("wizardBadge3Subtitle", "Ports and graphics");
+            stepSubtitle4.Text = T("wizardBadge4Subtitle", "Confirm and save");
+            txtServerNameLabel.Text = T("wizardFieldServerName", "Server name");
+            txtServerNameHelp.Text = T("wizardHelpServerName", "Use the public name players should recognize inside the loader.");
+            txtServerIpLabel.Text = T("wizardFieldServerIp", "Server IP");
+            lblHelpIP.Text = T("wizardIpHelp", "Write the IP address of your login server.");
+            txtClientVersionLabel.Text = T("wizardFieldClientVersion", "Client version");
+            txtClientVersionHelp.Text = T("wizardHelpClientVersion", "This value controls compatibility, available assets, and DirectX9 support.");
+            txtExecutableLabel.Text = T("wizardFieldExecutable", "Executable name");
+            txtExecutableHelp.Text = T("wizardHelpExecutable", "Usually this is Conquer.exe unless your client uses another file name.");
+            txtLoginPortLabel.Text = T("wizardFieldLoginPort", "Login port");
+            txtGamePortLabel.Text = T("wizardFieldGamePort", "Game port");
+            txtAssetsTitle.Text = T("wizardAssetsTitle", "Login screen assets");
+            txtAssetsDescription.Text = T("wizardAssetsDescription", "Only newer clients need these values. Choose the visual group first, then the icon.");
+            txtGroupLabel.Text = T("wizardFieldGroup", "Group");
+            txtServerIconLabel.Text = T("wizardFieldServerIcon", "Server icon");
+            txtServerIconHint.Text = T("wizardServerIconHint", "This icon belongs to the selected group and identifies the server entry inside the login screen.");
+            txtGraphicsTitle.Text = T("wizardGraphicsTitle", "Graphics compatibility");
+            lblUseDX9.Text = T("wizardDx9Help", "Enable this only if your selected client version supports DirectX9 folders.");
+            txtReadyTitle.Text = T("wizardReadyTitle", "Ready to save");
+            txtReadyDescription.Text = T("wizardReadyDescription", "Review the values from the previous steps. If everything looks correct, save the server and it will appear in the launcher immediately.");
+            txtReadyWarning.Text = T("wizardReadyWarning", "If you are not sure about group or icon values, leave them only when the selected client version requires them.");
+            txtRequirementsTitle.Text = T("wizardRequirementsTitle", "What this step needs");
+            txtValidationTitle.Text = T("wizardValidationTitle", "Validation");
+            if (string.IsNullOrWhiteSpace(txtValidation.Text) || txtValidation.Text == "Complete the required fields to continue.")
+            {
+                txtValidation.Text = T("wizardValidationPending", "Complete the required fields to continue.");
+            }
+            UpdateWizardStepUI();
         }
 
         private SolidColorBrush BrushFromHex(string color)
         {
             return new SolidColorBrush((Color)ColorConverter.ConvertFromString(color));
+        }
+
+        private string T(string key, string fallback)
+        {
+            return Core.TranslateText(key, fallback);
         }
     }
 }

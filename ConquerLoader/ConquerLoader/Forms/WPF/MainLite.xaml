@@ -9,7 +9,7 @@
         MinWidth="1120"
         MinHeight="760"
         Background="#07090E"
-        ResizeMode="CanResizeWithGrip"
+        ResizeMode="CanResize"
         WindowStyle="None"
         WindowStartupLocation="CenterScreen">
     <WindowChrome.WindowChrome>
@@ -17,7 +17,7 @@
                             CornerRadius="0"
                             GlassFrameThickness="0"
                             NonClientFrameEdges="None"
-                            ResizeBorderThickness="8"
+                            ResizeBorderThickness="6"
                             UseAeroCaptionButtons="False" />
     </WindowChrome.WindowChrome>
     <Window.Resources>
@@ -34,7 +34,6 @@
         <SolidColorBrush x:Key="TextPrimaryBrush" Color="#F4F7FC" />
         <SolidColorBrush x:Key="TextSecondaryBrush" Color="#D3D9E3" />
         <SolidColorBrush x:Key="SuccessBrush" Color="#73D995" />
-        <SolidColorBrush x:Key="InfoSoftBrush" Color="#241816" />
         <SolidColorBrush x:Key="DangerBrush" Color="#FF8974" />
         <SolidColorBrush x:Key="GoldBrush" Color="#E7EBF3" />
 
@@ -63,14 +62,6 @@
             <Setter Property="BorderThickness" Value="1.4" />
         </Style>
 
-        <Style x:Key="ScenePlateStyle" TargetType="Border">
-            <Setter Property="Padding" Value="16,8" />
-            <Setter Property="Background" Value="#341118" />
-            <Setter Property="BorderBrush" Value="#BEC4D0" />
-            <Setter Property="BorderThickness" Value="1" />
-            <Setter Property="CornerRadius" Value="18" />
-        </Style>
-
         <Style x:Key="SectionTitleStyle" TargetType="TextBlock">
             <Setter Property="FontSize" Value="24" />
             <Setter Property="FontWeight" Value="SemiBold" />
@@ -88,6 +79,83 @@
             <Setter Property="FontSize" Value="12" />
             <Setter Property="FontWeight" Value="SemiBold" />
             <Setter Property="Foreground" Value="{StaticResource TextSecondaryBrush}" />
+        </Style>
+
+        <Style x:Key="ServerListStyle" TargetType="ListBox">
+            <Setter Property="Background" Value="#24171B" />
+            <Setter Property="BorderBrush" Value="#AAB2C0" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="Padding" Value="10" />
+            <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled" />
+            <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ListBox">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="22">
+                            <ScrollViewer Padding="{TemplateBinding Padding}"
+                                          Focusable="False">
+                                <ItemsPresenter />
+                            </ScrollViewer>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="ServerListItemStyle" TargetType="ListBoxItem">
+            <Setter Property="Margin" Value="0,0,0,10" />
+            <Setter Property="Padding" Value="0" />
+            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ListBoxItem">
+                        <Border x:Name="ItemBorder"
+                                Background="#1A1012"
+                                BorderBrush="#7F8792"
+                                BorderThickness="1"
+                                CornerRadius="16">
+                            <Grid Margin="16,14">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <TextBlock VerticalAlignment="Center"
+                                           FontSize="16"
+                                           FontWeight="SemiBold"
+                                           Foreground="{StaticResource TextPrimaryBrush}"
+                                           Text="{TemplateBinding Content}" />
+                                <Border Grid.Column="1"
+                                        Padding="10,4"
+                                        Background="#6A1C17"
+                                        BorderBrush="#D8AE77"
+                                        BorderThickness="1"
+                                        CornerRadius="12">
+                                    <TextBlock FontFamily="Segoe MDL2 Assets"
+                                               FontSize="11"
+                                               Foreground="White"
+                                               Text="&#xE72A;" />
+                                </Border>
+                            </Grid>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="ItemBorder" Property="Background" Value="#231417" />
+                                <Setter TargetName="ItemBorder" Property="BorderBrush" Value="#D6B686" />
+                            </Trigger>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter TargetName="ItemBorder" Property="Background" Value="#401614" />
+                                <Setter TargetName="ItemBorder" Property="BorderBrush" Value="#E6C28B" />
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter TargetName="ItemBorder" Property="Opacity" Value="0.45" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
         </Style>
 
         <Style x:Key="PrimaryButtonStyle" TargetType="Button">
@@ -292,13 +360,6 @@
             <Setter Property="Foreground" Value="{StaticResource DangerBrush}" />
             <Setter Property="BorderBrush" Value="#7F1D1D" />
             <Setter Property="Background" Value="#2A1317" />
-        </Style>
-
-        <Style x:Key="GhostButtonStyle" TargetType="Button" BasedOn="{StaticResource SecondaryButtonStyle}">
-            <Setter Property="Height" Value="42" />
-            <Setter Property="Padding" Value="16,8" />
-            <Setter Property="Background" Value="#191113" />
-            <Setter Property="BorderBrush" Value="#503725" />
         </Style>
 
         <Style x:Key="ComboToggleButtonStyle" TargetType="ToggleButton">
@@ -510,14 +571,14 @@
                    Opacity="1"
                    IsHitTestVisible="False" />
             <Rectangle IsHitTestVisible="False"
-                       Fill="#02000000" />
+                       Fill="#04000000" />
             <Rectangle IsHitTestVisible="False">
                 <Rectangle.Fill>
                     <LinearGradientBrush StartPoint="0.5,0" EndPoint="0.5,1">
                         <GradientStop Color="#00000000" Offset="0" />
-                        <GradientStop Color="#06020406" Offset="0.18" />
-                        <GradientStop Color="#2805070C" Offset="0.72" />
-                        <GradientStop Color="#64030508" Offset="1" />
+                        <GradientStop Color="#04020406" Offset="0.18" />
+                        <GradientStop Color="#1805070C" Offset="0.72" />
+                        <GradientStop Color="#3A030508" Offset="1" />
                     </LinearGradientBrush>
                 </Rectangle.Fill>
             </Rectangle>
@@ -577,17 +638,13 @@
                                        Source="/ConquerLoader;component/Resources/ConquerLoaderICON.png"
                                        Stretch="Uniform" />
                             </Border>
-                            <StackPanel Margin="12,0,0,0"
-                                        VerticalAlignment="Center"
-                                        PreviewMouseLeftButtonDown="TitleBar_MouseLeftButtonDown">
-                                <TextBlock Text="ConquerLoader"
-                                           FontSize="14"
-                                           FontWeight="SemiBold"
-                                           Foreground="{StaticResource TextPrimaryBrush}" />
-                                <TextBlock Text="fantasy launcher"
-                                           FontSize="11"
-                                           Foreground="{StaticResource TextSecondaryBrush}" />
-                            </StackPanel>
+                            <TextBlock x:Name="txtTopBarTitle"
+                                       Margin="12,0,0,0"
+                                       VerticalAlignment="Center"
+                                       FontSize="14"
+                                       FontWeight="SemiBold"
+                                       Foreground="{StaticResource TextPrimaryBrush}"
+                                       Text="ConquerLoader" />
                         </StackPanel>
 
                         <StackPanel Grid.Column="1"
@@ -597,7 +654,6 @@
                             <Button x:Name="btnMinimizeWindow"
                                     Click="BtnMinimizeWindow_Click"
                                     Content="&#xE921;"
-                                    ToolTip="Minimize"
                                     Style="{StaticResource TitleBarButtonStyle}" />
                             <Button x:Name="btnMaxRestoreWindow"
                                     Click="BtnMaxRestoreWindow_Click"
@@ -607,397 +663,360 @@
                                     Click="BtnCloseWindow_Click"
                                     Content="&#xE8BB;"
                                     Tag="Close"
-                                    ToolTip="Close"
                                     Style="{StaticResource TitleBarButtonStyle}" />
                         </StackPanel>
                     </Grid>
                 </Border>
 
                 <ScrollViewer Grid.Row="1"
+                              Margin="0,0,8,8"
                               Padding="0"
-                              VerticalScrollBarVisibility="Auto"
+                              VerticalScrollBarVisibility="Visible"
                               HorizontalScrollBarVisibility="Disabled"
                               PanningMode="VerticalOnly">
-                    <Grid Margin="22,12,22,24">
+                    <Grid Margin="42,8,42,34"
+                          MinHeight="720">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto" />
-                            <RowDefinition Height="30" />
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="28" />
-                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="22" />
+                            <RowDefinition Height="*" />
                         </Grid.RowDefinitions>
 
-                <Grid Grid.Row="0">
-                    <StackPanel HorizontalAlignment="Center">
-                        <Border Width="190"
-                                Height="38"
-                                HorizontalAlignment="Center"
-                                Background="#2E1016"
-                                BorderBrush="#BBC2CF"
-                                BorderThickness="1"
-                                CornerRadius="19">
-                            <TextBlock HorizontalAlignment="Center"
-                                       VerticalAlignment="Center"
-                                       FontSize="12"
-                                       FontWeight="SemiBold"
-                                       Foreground="{StaticResource GoldBrush}"
-                                       Text="Created by DaRkFox" />
-                        </Border>
+                <StackPanel Grid.Row="0"
+                            HorizontalAlignment="Center">
+                    <Image Width="252"
+                           Height="252"
+                           Margin="0,8,0,0"
+                           HorizontalAlignment="Center"
+                           Source="/ConquerLoader;component/Resources/ConquerLoaderICON.png"
+                           Stretch="Uniform">
+                        <Image.Effect>
+                            <DropShadowEffect BlurRadius="42"
+                                              Direction="270"
+                                              Opacity="0.5"
+                                              ShadowDepth="16"
+                                              Color="#2D0E09" />
+                        </Image.Effect>
+                    </Image>
 
-                        <Image Width="290"
-                               Height="290"
+                    <TextBlock x:Name="txtWindowTitle"
+                               Margin="0,0,0,0"
+                               FontFamily="Palatino Linotype"
+                               FontSize="32"
+                               FontWeight="Bold"
+                               Foreground="{StaticResource TextPrimaryBrush}"
+                               TextAlignment="Center"
+                               TextWrapping="Wrap" />
+                    <TextBlock x:Name="txtHeaderDescription"
                                Margin="0,8,0,0"
-                               HorizontalAlignment="Center"
-                               Source="/ConquerLoader;component/Resources/ConquerLoaderICON.png"
-                               Stretch="Uniform">
-                            <Image.Effect>
-                                <DropShadowEffect BlurRadius="42"
-                                                  Direction="270"
-                                                  Opacity="0.5"
-                                                  ShadowDepth="16"
-                                                  Color="#2D0E09" />
-                            </Image.Effect>
-                        </Image>
-
-                        <TextBlock x:Name="txtWindowTitle"
-                                   Margin="0,2,0,0"
-                                   FontFamily="Palatino Linotype"
-                                   FontSize="34"
-                                   FontWeight="Bold"
-                                   Foreground="{StaticResource TextPrimaryBrush}"
-                                   TextAlignment="Center"
-                                   TextWrapping="Wrap" />
-                        <TextBlock x:Name="txtHeaderDescription"
-                                   Margin="0,6,0,0"
-                                   MaxWidth="460"
-                                   FontSize="12"
-                                   Foreground="#E0E5EF"
-                                   Text="Choose your realm, review the launch panel, and enter the client from one guided launcher."
-                                   TextAlignment="Center"
-                                   TextWrapping="Wrap" />
-                    </StackPanel>
-
-                    <WrapPanel HorizontalAlignment="Right"
-                               VerticalAlignment="Top"
-                               Visibility="Collapsed">
-                        <Button x:Name="btnSettingsHeader"
-                                Width="116"
-                                Margin="0,0,10,10"
-                                Click="BtnSettings_Click"
-                                Content="Settings"
-                                Style="{StaticResource GhostButtonStyle}" />
-                        <Button
-                                Width="104"
-                                Margin="0,0,0,10"
-                                Content="About"
-                                Style="{StaticResource GhostButtonStyle}" />
-                    </WrapPanel>
-                </Grid>
+                               MaxWidth="410"
+                               FontSize="12"
+                               Foreground="#DCE3EC"
+                               Text="Choose your realm, set the launch options, and enter from a single launcher screen."
+                               TextAlignment="Center"
+                               TextWrapping="Wrap" />
+                </StackPanel>
 
                 <Grid Grid.Row="2"
-                      Margin="0,8,0,0">
+                      MinHeight="540">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="270" />
-                        <ColumnDefinition Width="22" />
+                        <ColumnDefinition Width="308" />
+                        <ColumnDefinition Width="42" />
                         <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="22" />
-                        <ColumnDefinition Width="248" />
+                        <ColumnDefinition Width="42" />
+                        <ColumnDefinition Width="336" />
                     </Grid.ColumnDefinitions>
 
                     <Border Grid.Column="0"
-                            Margin="0,168,0,22"
+                            Margin="0,118,0,42"
+                            VerticalAlignment="Top"
                             Style="{StaticResource ScenePanelStyle}"
-                            Background="#4C100E14"
-                            BorderBrush="#C3C9D4">
-                        <StackPanel>
-                            <TextBlock FontFamily="Palatino Linotype"
-                                       Style="{StaticResource SectionTitleStyle}"
-                                       Text="Server Selection" />
-                            <TextBlock x:Name="txtHelper"
-                                       Margin="0,10,0,22"
-                                       Style="{StaticResource BodyStyle}"
-                                       Text="Pick a configured server. The launcher will keep the selected realm ready for the next start." />
-
-                            <TextBlock Text="Available servers" Style="{StaticResource FieldLabelStyle}" />
-                            <ComboBox x:Name="cbxServers"
-                                      IsEditable="False"
-                                      Style="{StaticResource InputComboBoxStyle}"
-                                      SelectionChanged="CbxServers_SelectedIndexChanged" />
-
-                            <Border Margin="0,22,0,0"
-                                    Padding="20"
-                                    Background="#361117"
-                                    BorderBrush="#8E97A6"
-                                    BorderThickness="1"
-                                    CornerRadius="22">
-                                <StackPanel>
-                                    <TextBlock FontSize="12"
-                                               FontWeight="SemiBold"
-                                               Foreground="{StaticResource GoldBrush}"
-                                               Text="Launch note" />
-                                    <TextBlock x:Name="txtLaunchTip"
-                                               Margin="0,10,0,0"
-                                               Style="{StaticResource BodyStyle}"
-                                               Text="Choose a server first so the launch options stay in sync." />
-                                </StackPanel>
-                            </Border>
-                        </StackPanel>
-                    </Border>
-
-                    <Border Grid.Column="2"
-                            Style="{StaticResource ScenePanelStyle}"
-                            Background="#4E110F15"
-                            BorderBrush="#C8CED8"
-                            Margin="0,220,0,0"
-                            Padding="28,24,28,26">
+                            Background="#4A0F131A"
+                            BorderBrush="#D0D6E0"
+                            Padding="22,20,22,20">
                         <Grid>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto" />
-                                <RowDefinition Height="22" />
+                                <RowDefinition Height="18" />
                                 <RowDefinition Height="Auto" />
-                                <RowDefinition Height="26" />
+                                <RowDefinition Height="18" />
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="22" />
                                 <RowDefinition Height="Auto" />
                             </Grid.RowDefinitions>
 
                             <StackPanel>
-                                <TextBlock HorizontalAlignment="Center"
-                                           FontSize="12"
-                                           FontWeight="SemiBold"
-                                           Foreground="{StaticResource GoldBrush}"
-                                           Text="ENTER THE REALM" />
-                                <TextBlock Margin="0,12,0,0"
-                                           HorizontalAlignment="Center"
-                                           FontFamily="Palatino Linotype"
-                                           FontSize="32"
-                                           FontWeight="Bold"
-                                           Foreground="{StaticResource TextPrimaryBrush}"
-                                           Text="Launch Client"
-                                           TextAlignment="Center" />
-                                <TextBlock x:Name="txtSelectedServer"
-                                           Margin="0,14,0,0"
-                                           HorizontalAlignment="Center"
-                                           FontFamily="Palatino Linotype"
-                                           FontSize="24"
-                                           FontWeight="SemiBold"
-                                           Foreground="{StaticResource TextPrimaryBrush}"
-                                           Text="No server selected"
-                                           TextAlignment="Center"
-                                           TextWrapping="Wrap" />
-                                <TextBlock x:Name="txtServerStatusHint"
-                                           Margin="0,10,0,0"
-                                           HorizontalAlignment="Center"
-                                           MaxWidth="520"
+                                <TextBlock FontFamily="Palatino Linotype"
+                                           x:Name="txtServerSelectionTitle"
+                                           Style="{StaticResource SectionTitleStyle}"
+                                           Text="Server Selection" />
+                                <TextBlock x:Name="txtHelper"
+                                           Margin="0,8,0,0"
                                            Style="{StaticResource BodyStyle}"
-                                           Text="The selected server will be checked before launch."
-                                           TextAlignment="Center" />
+                                           Text="Pick the server you want to launch. Your last realm stays selected for the next session." />
                             </StackPanel>
 
-                            <Grid Grid.Row="2">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="24" />
-                                    <ColumnDefinition Width="170" />
-                                </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Row="2">
+                                <TextBlock x:Name="txtAvailableServers"
+                                           Text="Available servers"
+                                           Style="{StaticResource FieldLabelStyle}" />
+                                <ListBox x:Name="lstServers"
+                                         Height="224"
+                                         ItemContainerStyle="{StaticResource ServerListItemStyle}"
+                                         Style="{StaticResource ServerListStyle}"
+                                          SelectionChanged="CbxServers_SelectedIndexChanged" />
+                            </StackPanel>
 
+                            <Border Grid.Row="4"
+                                    Padding="20"
+                                    Background="#311216"
+                                    BorderBrush="#A8B0BC"
+                                    BorderThickness="1"
+                                    CornerRadius="22"
+                                    VerticalAlignment="Top">
                                 <StackPanel>
-                                    <TextBlock Text="Launch status" Style="{StaticResource FieldLabelStyle}" />
-                                    <DockPanel Margin="0,10,0,0" LastChildFill="False">
-                                        <Border x:Name="serverStatusBadge"
-                                                Width="120"
-                                                Height="40"
-                                                Background="#6B4C2D"
-                                                CornerRadius="20">
-                                            <TextBlock x:Name="serverStatus"
-                                                       HorizontalAlignment="Center"
-                                                       VerticalAlignment="Center"
-                                                       FontWeight="Bold"
-                                                       Foreground="White"
-                                                       Text="-" />
-                                        </Border>
-                                        <TextBlock x:Name="txtProgressValue"
-                                                   Margin="14,9,0,0"
-                                                   FontSize="12"
-                                                   Foreground="{StaticResource TextSecondaryBrush}"
-                                                   Text="0%" />
-                                    </DockPanel>
-                                    <ProgressBar x:Name="pBar"
-                                                 Margin="0,14,0,0"
-                                                 Minimum="0"
-                                                 Maximum="100"
-                                                 Style="{StaticResource ProgressStyle}" />
+                                    <TextBlock x:Name="txtLauncherNoteTitle"
+                                               FontSize="12"
+                                               FontWeight="SemiBold"
+                                               Foreground="{StaticResource GoldBrush}"
+                                               Text="Launcher note" />
+                                    <TextBlock x:Name="txtLaunchTip"
+                                               Margin="0,10,0,0"
+                                               Style="{StaticResource BodyStyle}"
+                                               Text="Choose a server first so the launch status and resolution stay in sync." />
                                 </StackPanel>
+                            </Border>
 
-                                <StackPanel Grid.Column="2">
-                                    <TextBlock Text="Resolution" Style="{StaticResource FieldLabelStyle}" />
+                            <UniformGrid Grid.Row="6"
+                                         Columns="2">
+                                <Button x:Name="btnSettings"
+                                        Margin="0,0,12,0"
+                                        Click="BtnSettings_Click"
+                                        Content="Settings"
+                                        Style="{StaticResource SecondaryButtonStyle}" />
+                                <Button x:Name="lblAbout"
+                                        Margin="12,0,0,0"
+                                        Click="LblAbout_Click"
+                                        Content="About"
+                                        Style="{StaticResource SecondaryButtonStyle}" />
+                            </UniformGrid>
+                        </Grid>
+                    </Border>
+
+                    <Grid Grid.Column="2"
+                          Margin="0,8,0,0"
+                          VerticalAlignment="Top">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="16" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+
+                        <StackPanel Grid.Row="0"
+                                    Width="460"
+                                    HorizontalAlignment="Center">
+                            <Border Padding="24,20"
+                                    Background="#55111318"
+                                    BorderBrush="#D7DDE6"
+                                    BorderThickness="1.2"
+                                    CornerRadius="28">
+                                <StackPanel>
+                                    <TextBlock x:Name="txtEnterLabel"
+                                               HorizontalAlignment="Center"
+                                               FontSize="12"
+                                               FontWeight="SemiBold"
+                                               Foreground="{StaticResource GoldBrush}"
+                                               Text="ENTER THE REALM" />
+                                    <TextBlock x:Name="txtSelectedServer"
+                                               Margin="0,12,0,0"
+                                               HorizontalAlignment="Center"
+                                               FontFamily="Palatino Linotype"
+                                               FontSize="25"
+                                               FontWeight="Bold"
+                                               Foreground="{StaticResource TextPrimaryBrush}"
+                                               Text="No server selected"
+                                               TextAlignment="Center"
+                                               TextWrapping="Wrap" />
+                                    <TextBlock x:Name="txtServerStatusHint"
+                                               Margin="0,10,0,0"
+                                               HorizontalAlignment="Center"
+                                               MaxWidth="430"
+                                               Style="{StaticResource BodyStyle}"
+                                               Text="The selected server will be checked before launch."
+                                               TextAlignment="Center" />
+                                    <Border x:Name="serverStatusBadge"
+                                            Width="126"
+                                            Height="40"
+                                            Margin="0,18,0,0"
+                                            HorizontalAlignment="Center"
+                                            Background="#6B4C2D"
+                                            CornerRadius="20">
+                                        <TextBlock x:Name="serverStatus"
+                                                   HorizontalAlignment="Center"
+                                                   VerticalAlignment="Center"
+                                                   FontWeight="Bold"
+                                                   Foreground="White"
+                                                   Text="-" />
+                                    </Border>
+                                </StackPanel>
+                            </Border>
+                        </StackPanel>
+
+                        <WrapPanel Grid.Row="1"
+                                   HorizontalAlignment="Center">
+                            <Button x:Name="btnStart"
+                                    Width="384"
+                                    Height="82"
+                                    Margin="0,0,0,12"
+                                    Click="BtnStart_Click"
+                                    Content="ENTER"
+                                    Style="{StaticResource LaunchButtonStyle}" />
+                        </WrapPanel>
+
+                        <Border Grid.Row="3"
+                                Width="384"
+                                HorizontalAlignment="Center"
+                                Padding="18,16"
+                                Background="#4C111319"
+                                BorderBrush="#D0D6E0"
+                                BorderThickness="1"
+                                CornerRadius="24">
+                            <StackPanel>
+                                <ProgressBar x:Name="pBar"
+                                             Height="12"
+                                             Minimum="0"
+                                             Maximum="100"
+                                             VerticalAlignment="Center"
+                                             Style="{StaticResource ProgressStyle}" />
+                                <TextBlock x:Name="txtProgressValue"
+                                           Margin="0,10,0,0"
+                                           HorizontalAlignment="Center"
+                                           FontSize="12"
+                                           FontWeight="SemiBold"
+                                           Foreground="{StaticResource TextSecondaryBrush}"
+                                           Text="0%" />
+                            </StackPanel>
+                        </Border>
+                    </Grid>
+
+                    <Border Grid.Column="4"
+                            Margin="0,118,0,54"
+                            VerticalAlignment="Top"
+                            Style="{StaticResource ScenePanelStyle}"
+                            Background="#48111617"
+                            BorderBrush="#D0D6E0"
+                            Padding="24,20,24,20">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="18" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="18" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="18" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+
+                            <StackPanel>
+                                <TextBlock FontFamily="Palatino Linotype"
+                                           x:Name="txtOptionsTitle"
+                                           Style="{StaticResource SectionTitleStyle}"
+                                           Text="Options" />
+                                <TextBlock x:Name="txtActionsDescription"
+                                           Margin="0,8,0,0"
+                                           Style="{StaticResource BodyStyle}"
+                                           Text="Set the resolution first, then reveal the advanced tools only when you really need them." />
+                            </StackPanel>
+
+                            <Border Grid.Row="2"
+                                    Padding="18"
+                                    Background="#3A1218"
+                                    BorderBrush="#98A2B0"
+                                    BorderThickness="1"
+                                    CornerRadius="22">
+                                <StackPanel>
+                                    <TextBlock x:Name="txtResolutionLabel"
+                                               Text="Resolution"
+                                               Style="{StaticResource FieldLabelStyle}" />
                                     <ComboBox x:Name="cbxResolutions"
+                                              Margin="0,8,0,0"
                                               Style="{StaticResource InputComboBoxStyle}"
                                               SelectionChanged="CbxResolutions_SelectedIndexChanged">
                                         <sys:String>800x600</sys:String>
                                         <sys:String>1024x768</sys:String>
                                     </ComboBox>
                                 </StackPanel>
-                            </Grid>
-
-                            <Border Grid.Row="4"
-                                    Margin="38,0,38,0"
-                                    Padding="16,12"
-                                    Background="#68131018"
-                                    BorderBrush="#959EAC"
-                                    BorderThickness="1"
-                                    CornerRadius="22"
-                                    VerticalAlignment="Top">
-                                <TextBlock HorizontalAlignment="Center"
-                                           TextAlignment="Center"
-                                           Style="{StaticResource BodyStyle}"
-                                           Foreground="{StaticResource TextPrimaryBrush}"
-                                           Text="Choose your server, confirm the launch status, and enter with one clear primary action." />
                             </Border>
 
-                            <StackPanel Grid.Row="4"
-                                        Margin="0,70,0,0"
-                                        HorizontalAlignment="Center">
-                                <Button x:Name="btnStart"
-                                        Width="340"
-                                        Height="74"
-                                        Click="BtnStart_Click"
-                                        Content="ENTER"
-                                        Style="{StaticResource LaunchButtonStyle}" />
-                                <TextBlock Margin="0,14,0,0"
-                                           HorizontalAlignment="Center"
-                                           FontSize="12"
-                                           Foreground="{StaticResource TextSecondaryBrush}"
-                                           Text="The launcher saves your selected server and resolution automatically."
-                                           TextAlignment="Center"
-                                           TextWrapping="Wrap" />
-                            </StackPanel>
+                            <Border Grid.Row="4"
+                                    Padding="18"
+                                    Background="#2A1418"
+                                    BorderBrush="#A0A9B6"
+                                    BorderThickness="1"
+                                    CornerRadius="22">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="18" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+
+                                    <StackPanel Grid.Column="0">
+                                        <TextBlock x:Name="lblFPSUnlock"
+                                                   FontSize="15"
+                                                   FontWeight="SemiBold"
+                                                   Foreground="{StaticResource TextPrimaryBrush}" />
+                                        <TextBlock x:Name="txtFpsUnlockHint"
+                                                   Margin="0,6,0,0"
+                                                   Style="{StaticResource BodyStyle}"
+                                                   Text="Use this only when your client and server support it." />
+                                    </StackPanel>
+
+                                    <CheckBox x:Name="tglFPSUnlock"
+                                              Grid.Column="2"
+                                              VerticalAlignment="Center"
+                                              Foreground="{StaticResource TextPrimaryBrush}"
+                                              Content="Enabled"
+                                              Checked="TglFPSUnlock_CheckedChanged"
+                                              Unchecked="TglFPSUnlock_CheckedChanged" />
+                                </Grid>
+                            </Border>
+
+                            <Border x:Name="diagnosticsCard"
+                                    Grid.Row="6"
+                                    Style="{StaticResource ScenePanelStyle}"
+                                    Background="#5A12141A"
+                                    BorderBrush="#CED5DE"
+                                    Padding="20"
+                                    Visibility="Collapsed">
+                                <StackPanel>
+                                    <TextBlock x:Name="txtDiagnosticsTitle"
+                                               FontSize="14"
+                                               FontWeight="SemiBold"
+                                               Foreground="{StaticResource TextPrimaryBrush}"
+                                               Text="Diagnostics" />
+                                    <TextBlock x:Name="txtDiagnosticsDescription"
+                                               Margin="0,8,0,0"
+                                               Style="{StaticResource BodyStyle}"
+                                               Text="These debug actions are only shown when Debug Mode is enabled in Settings." />
+
+                                    <Button x:Name="btnLogModules"
+                                            Height="44"
+                                            Margin="0,18,0,12"
+                                            Click="BtnLogModules_Click"
+                                            Content="Log Modules"
+                                            Style="{StaticResource SecondaryButtonStyle}" />
+
+                                    <Button x:Name="btnCloseCO"
+                                            Height="44"
+                                            Click="BtnCloseCO_Click"
+                                            Content="Close Game Process"
+                                            Style="{StaticResource DangerButtonStyle}" />
+                                </StackPanel>
+                            </Border>
                         </Grid>
                     </Border>
-
-                    <StackPanel Grid.Column="4"
-                                Margin="0,186,0,0">
-                        <Border Style="{StaticResource ScenePanelStyle}"
-                                Background="#4C100E14"
-                                BorderBrush="#C3C9D4">
-                            <StackPanel>
-                                <TextBlock FontFamily="Palatino Linotype"
-                                           Style="{StaticResource SectionTitleStyle}"
-                                           Text="Options" />
-                                <TextBlock x:Name="txtActionsDescription"
-                                           Margin="0,10,0,0"
-                                           Style="{StaticResource BodyStyle}"
-                                           Text="Open settings, create a server, or reveal advanced controls only when you need them." />
-
-                                <Button x:Name="btnSettings"
-                                        Margin="0,22,0,0"
-                                        Click="BtnSettings_Click"
-                                        Content="Open Settings"
-                                        Style="{StaticResource SecondaryButtonStyle}" />
-
-                                <Button x:Name="lblAbout"
-                                        Margin="0,12,0,0"
-                                        Click="LblAbout_Click"
-                                        Content="About"
-                                        Style="{StaticResource SecondaryButtonStyle}" />
-
-                                <Button x:Name="btnCreateServer"
-                                        Margin="0,12,0,0"
-                                        Click="BtnCreateServer_Click"
-                                        Content="Create First Server"
-                                        Style="{StaticResource SecondaryButtonStyle}"
-                                        Visibility="Collapsed" />
-
-                                <CheckBox x:Name="tglAdvancedMode"
-                                          Margin="0,18,0,0"
-                                          Foreground="{StaticResource TextPrimaryBrush}"
-                                          Checked="TglAdvancedMode_CheckedChanged"
-                                          Unchecked="TglAdvancedMode_CheckedChanged"
-                                          Content="Show advanced options" />
-                            </StackPanel>
-                        </Border>
-
-                        <Border x:Name="advancedOptionsCard"
-                                Margin="0,20,0,0"
-                                Style="{StaticResource ScenePanelStyle}"
-                                Visibility="Collapsed">
-                            <StackPanel>
-                                <TextBlock FontFamily="Palatino Linotype"
-                                           Style="{StaticResource SectionTitleStyle}"
-                                           Text="Advanced" />
-                                <TextBlock x:Name="txtAdvancedDescription"
-                                           Margin="0,8,0,0"
-                                           Style="{StaticResource BodyStyle}"
-                                           Text="These options are useful for diagnostics and compatibility changes." />
-
-                                <Border Margin="0,18,0,0"
-                                        Padding="18"
-                                        Background="#231719"
-                                        BorderBrush="#6B4C2D"
-                                        BorderThickness="1"
-                                        CornerRadius="18">
-                                    <Grid>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="*" />
-                                            <ColumnDefinition Width="Auto" />
-                                        </Grid.ColumnDefinitions>
-
-                                        <StackPanel>
-                                            <TextBlock x:Name="lblFPSUnlock"
-                                                       FontSize="15"
-                                                       FontWeight="SemiBold"
-                                                       Foreground="{StaticResource TextPrimaryBrush}" />
-                                            <TextBlock Margin="0,4,0,0"
-                                                       Style="{StaticResource BodyStyle}"
-                                                       Text="Use this only when your client and server support it." />
-                                        </StackPanel>
-
-                                        <CheckBox x:Name="tglFPSUnlock"
-                                                  Grid.Column="1"
-                                                  Margin="18,0,0,0"
-                                                  VerticalAlignment="Center"
-                                                  Foreground="{StaticResource TextPrimaryBrush}"
-                                                  Content="Enabled"
-                                                  Checked="TglFPSUnlock_CheckedChanged"
-                                                  Unchecked="TglFPSUnlock_CheckedChanged" />
-                                    </Grid>
-                                </Border>
-
-                                <Button x:Name="btnLogModules"
-                                        Margin="0,18,0,0"
-                                        Click="BtnLogModules_Click"
-                                        Content="Log Modules"
-                                        Style="{StaticResource SecondaryButtonStyle}" />
-
-                                <Button x:Name="btnCloseCO"
-                                        Margin="0,12,0,0"
-                                        Click="BtnCloseCO_Click"
-                                        Content="Close Game Process"
-                                        Style="{StaticResource DangerButtonStyle}" />
-                            </StackPanel>
-                        </Border>
-
-                        <Border Margin="0,20,0,0"
-                                Style="{StaticResource ScenePanelStyle}"
-                                Background="#B4151012"
-                                Visibility="Collapsed">
-                            <StackPanel>
-                                <TextBlock FontFamily="Palatino Linotype"
-                                           Style="{StaticResource SectionTitleStyle}"
-                                           Text="Quick Guide" />
-                                <TextBlock x:Name="txtGuideLine1"
-                                           Margin="0,18,0,0"
-                                           Style="{StaticResource BodyStyle}"
-                                           Text="1. Create or choose a server." />
-                                <TextBlock x:Name="txtGuideLine2"
-                                           Margin="0,8,0,0"
-                                           Style="{StaticResource BodyStyle}"
-                                           Text="2. Pick the resolution that matches your client." />
-                                <TextBlock x:Name="txtGuideLine3"
-                                           Margin="0,8,0,0"
-                                           Style="{StaticResource BodyStyle}"
-                                           Text="3. Press Enter when the setup looks correct." />
-                            </StackPanel>
-                        </Border>
-                    </StackPanel>
                 </Grid>
             </Grid>
         </ScrollViewer>
@@ -1031,7 +1050,8 @@
                                     HorizontalAlignment="Left"
                                     Background="{StaticResource PrimarySoftBrush}"
                                     CornerRadius="17">
-                                <TextBlock HorizontalAlignment="Center"
+                                <TextBlock x:Name="txtFirstRunBadge"
+                                           HorizontalAlignment="Center"
                                            VerticalAlignment="Center"
                                            FontSize="12"
                                            FontWeight="SemiBold"

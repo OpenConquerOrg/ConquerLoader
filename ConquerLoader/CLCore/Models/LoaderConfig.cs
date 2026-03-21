@@ -16,6 +16,7 @@ namespace CLCore.Models
         public bool ServernameChange { get; set; }
         public bool DisableAutoFixFlash { get; set; }
         public string Title { get; set; }
+        public string Description { get; set; }
         public string Lang { get; set; }
         public string LicenseKey { get; set; }
         public bool DisableScreenChanges { get; set; }

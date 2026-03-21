@@ -13,11 +13,6 @@ namespace ConquerLoader.Forms.WPF
     {
         public LoaderConfig CurrentLoaderConfig = null;
 
-        private WizardWindow WizardForm = null;
-        private WizardWindow WizardEditForm = null;
-        private ServerDatManagerWindow ServerDatForm = null;
-        private PluginsWindow PluginsForm = null;
-
         public SettingsWindow()
         {
             InitializeComponent();
@@ -43,6 +38,7 @@ namespace ConquerLoader.Forms.WPF
             tglUseCustomDLLs.IsChecked = CurrentLoaderConfig.UseCustomDLLs;
             tglFPSUnlock.IsChecked = CurrentLoaderConfig.FPSUnlock;
             tbxTitle.Text = CurrentLoaderConfig.Title ?? string.Empty;
+            tbxDescription.Text = CurrentLoaderConfig.Description ?? string.Empty;
             RefreshServersGrid();
 
             if (CurrentLoaderConfig.FHDResolution)
@@ -70,7 +66,7 @@ namespace ConquerLoader.Forms.WPF
             {
                 LoaderConfig lc = new LoaderConfig();
                 Core.SaveLoaderConfig(lc);
-                MessageBox.Show("Cannot load config.json. Creating one... Restart App!", Title, MessageBoxButton.OK, MessageBoxImage.Warning);
+                MessageBox.Show(T("settingsCreateConfigWarning", "Cannot load config.json. Creating one... Restart App!"), Title, MessageBoxButton.OK, MessageBoxImage.Warning);
                 Application.Current.Shutdown();
                 return;
             }
@@ -88,6 +84,7 @@ namespace ConquerLoader.Forms.WPF
                 }
                 langSelector.SelectedIndex = langSelector.Items.IndexOf(findStr);
                 SetDefaultUI();
+                ApplyTranslations();
             }
         }
 
@@ -95,6 +92,7 @@ namespace ConquerLoader.Forms.WPF
         {
             gridViewSettings.ItemsSource = null;
             gridViewSettings.ItemsSource = CurrentLoaderConfig != null ? CurrentLoaderConfig.Servers : null;
+            RefreshServerColumnHeaders();
         }
 
         private void BtnSave_Click(object sender, RoutedEventArgs e)
@@ -171,12 +169,14 @@ namespace ConquerLoader.Forms.WPF
             }
 
             btnMinimizeWindow.Content = "\uE921";
-            btnMinimizeWindow.ToolTip = "Minimize";
+            btnMinimizeWindow.ToolTip = T("chromeMinimize", "Minimize");
             btnCloseWindow.Content = "\uE8BB";
             btnCloseWindow.Tag = "Close";
-            btnCloseWindow.ToolTip = "Close";
+            btnCloseWindow.ToolTip = T("chromeClose", "Close");
             btnMaxRestoreWindow.Content = WindowState == WindowState.Maximized ? "\uE923" : "\uE922";
-            btnMaxRestoreWindow.ToolTip = WindowState == WindowState.Maximized ? "Restore" : "Maximize";
+            btnMaxRestoreWindow.ToolTip = WindowState == WindowState.Maximized
+                ? T("chromeRestore", "Restore")
+                : T("chromeMaximize", "Maximize");
         }
 
         private void TglDebugMode_CheckedChanged(object sender, RoutedEventArgs e)
@@ -194,6 +194,14 @@ namespace ConquerLoader.Forms.WPF
             if (CurrentLoaderConfig != null)
             {
                 CurrentLoaderConfig.Title = tbxTitle.Text;
+            }
+        }
+
+        private void TbxDescription_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (CurrentLoaderConfig != null)
+            {
+                CurrentLoaderConfig.Description = tbxDescription.Text;
             }
         }
 
@@ -238,7 +246,7 @@ namespace ConquerLoader.Forms.WPF
             CurrentLoaderConfig.UseCustomDLLs = tglUseCustomDLLs.IsChecked == true;
             if (CurrentLoaderConfig.UseCustomDLLs)
             {
-                MessageBox.Show("For use Custom DLL can put a DLL called COHook.dll for be auto-injected like native lib of loader.", Title, MessageBoxButton.OK, MessageBoxImage.Warning);
+                MessageBox.Show(T("settingsCustomDllWarning", "To use a custom DLL, place a file called COHook.dll next to the loader so it can be injected automatically."), Title, MessageBoxButton.OK, MessageBoxImage.Warning);
             }
         }
 
@@ -257,46 +265,35 @@ namespace ConquerLoader.Forms.WPF
             importantInfoCard.Visibility = visible ? Visibility.Visible : Visibility.Collapsed;
             if (visible)
             {
-                lblImportantInfo.Text = "FPS Unlock may cause instability in some systems, for example with old graphic cards. Use at your own risk.";
+                lblImportantInfo.Text = T("settingsFpsWarning", "FPS Unlock may cause instability in some systems, for example with old graphic cards. Use at your own risk.");
             }
         }
 
         private void BtnWizard_Click(object sender, RoutedEventArgs e)
         {
-            if (WizardForm == null)
-            {
-                WizardForm = new WizardWindow();
-            }
-            WizardForm.Owner = this;
-            WizardForm.ShowDialog();
+            WizardWindow wizardForm = new WizardWindow();
+            wizardForm.Owner = this;
+            wizardForm.ShowDialog();
             CurrentLoaderConfig = Core.GetLoaderConfig();
             RefreshServersGrid();
         }
 
         private void BtnPlugins_Click(object sender, RoutedEventArgs e)
         {
-            if (PluginsForm == null)
-            {
-                PluginsForm = new PluginsWindow();
-            }
-            PluginsForm.Owner = this;
-            PluginsForm.ShowDialog();
+            PluginsWindow pluginsForm = new PluginsWindow();
+            pluginsForm.Owner = this;
+            pluginsForm.ShowDialog();
         }
 
         private void BtnEdit_Click(object sender, RoutedEventArgs e)
         {
             if (gridViewSettings.SelectedIndex < 0) return;
 
-            if (WizardEditForm != null)
-            {
-                WizardEditForm.Close();
-            }
-
             if (Core.GetLoaderConfig().Servers.Count > gridViewSettings.SelectedIndex)
             {
-                WizardEditForm = new WizardWindow(gridViewSettings.SelectedIndex);
-                WizardEditForm.Owner = this;
-                WizardEditForm.ShowDialog();
+                WizardWindow wizardEditForm = new WizardWindow(gridViewSettings.SelectedIndex);
+                wizardEditForm.Owner = this;
+                wizardEditForm.ShowDialog();
                 CurrentLoaderConfig = Core.GetLoaderConfig();
                 RefreshServersGrid();
             }
@@ -304,13 +301,9 @@ namespace ConquerLoader.Forms.WPF
 
         private void BtnServerDat_Click(object sender, RoutedEventArgs e)
         {
-            if (ServerDatForm != null)
-            {
-                ServerDatForm.Close();
-            }
-            ServerDatForm = new ServerDatManagerWindow();
-            ServerDatForm.Owner = this;
-            ServerDatForm.ShowDialog();
+            ServerDatManagerWindow serverDatForm = new ServerDatManagerWindow();
+            serverDatForm.Owner = this;
+            serverDatForm.ShowDialog();
         }
 
         private void LangSelector_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -334,7 +327,112 @@ namespace ConquerLoader.Forms.WPF
             }
 
             Core.DetectLang(CurrentLoaderConfig);
+            ApplyTranslations();
+            if (Owner is MainLite mainLite)
+            {
+                mainLite.ReloadLocalizedUi();
+            }
             Core.SaveLoaderConfig(CurrentLoaderConfig);
+        }
+
+        private void ApplyTranslations()
+        {
+            if (btnSave == null)
+            {
+                return;
+            }
+
+            btnClose.Content = Core.TranslateText("btnClose", "Close");
+            btnSave.Content = Core.TranslateText("btnSave", "Save");
+            btnLockConfig.Content = Core.TranslateText("btnLockConfig", "Lock Config");
+            btnSetupLicense.Content = Core.TranslateText("btnSetupLicense", "Setup License");
+            btnServerDat.Content = Core.TranslateText("btnServerDat", "Server.dat");
+            btnPlugins.Content = Core.TranslateText("btnPlugins", "Plugins");
+            btnWizard.Content = Core.TranslateText("btnWizard", "New +");
+            btnEdit.Content = Core.TranslateText("btnEdit", "Edit");
+
+            tglDebugMode.Content = Core.TranslateText("lblDebugMode", "Debug Mode");
+            tglCloseOnFinish.Content = Core.TranslateText("lblCloseOnFinish", "Close On Finish");
+            tglHighResolution.Content = Core.TranslateText("lblHighResolution", "High Resolution Mode");
+            tglFullscreen.Content = Core.TranslateText("lblFullscreen", "Fullscreen");
+            tglDisableAutoFixFlash.Content = Core.TranslateText("lblDisableAutoFixFlash", "Disable AutoFix Flash");
+            tglDisableScreenChanges.Content = Core.TranslateText("lblDisableScreenChanges", "Disable Screen Changes");
+            tglUseCustomDLLs.Content = Core.TranslateText("lblUseCustomDLLs", "Use Custom DLLs");
+            tglFPSUnlock.Content = Core.TranslateText("lblFPSUnlock", "FPS Unlock");
+            Title = T("settingsWindowTitle", "Settings");
+            txtWindowTitleBar.Text = T("settingsWindowTitle", "Settings");
+            txtWindowHeading.Text = T("settingsWindowTitle", "Settings");
+            txtWindowDescription.Text = T("settingsWindowDescription", "Configure launcher behavior, language, and server management from one place.");
+            txtLauncherHeading.Text = T("settingsLauncherTitle", "Launcher");
+            txtLauncherDescription.Text = T("settingsLauncherDescription", "Core behavior and UI preferences for the loader.");
+            txtLoaderTitleLabel.Text = T("lblTitle", "Title in Loader");
+            txtLoaderDescriptionLabel.Text = T("settingsLoaderDescriptionLabel", "Description in Loader");
+            txtAdvancedHeading.Text = T("settingsAdvancedTitle", "Advanced");
+            txtAdvancedDescription.Text = T("settingsAdvancedDescription", "These actions affect persistence and debugging tools.");
+            txtServersHeading.Text = T("settingsServersTitle", "Servers");
+            txtServersDescription.Text = T("settingsServersDescription", "Create, edit, and review the servers available in the launcher.");
+            txtWizardHint.Text = T("settingsWizardHint", "Use New + to open the guided server setup.");
+            UpdateImportantInfo();
+            RefreshServerColumnHeaders();
+        }
+
+        private void GridViewSettings_AutoGeneratingColumn(object sender, DataGridAutoGeneratingColumnEventArgs e)
+        {
+            e.Column.Header = TranslateServerColumnHeader(e.PropertyName);
+        }
+
+        private void RefreshServerColumnHeaders()
+        {
+            if (gridViewSettings == null)
+            {
+                return;
+            }
+
+            foreach (DataGridColumn column in gridViewSettings.Columns)
+            {
+                string propertyName = column.SortMemberPath;
+                if (string.IsNullOrWhiteSpace(propertyName))
+                {
+                    propertyName = column.Header != null ? column.Header.ToString() : string.Empty;
+                }
+
+                column.Header = TranslateServerColumnHeader(propertyName);
+            }
+        }
+
+        private string TranslateServerColumnHeader(string propertyName)
+        {
+            switch (propertyName)
+            {
+                case "ServerName":
+                    return T("settingsColumnServerName", "Server name");
+                case "ServerVersion":
+                    return T("settingsColumnServerVersion", "Client version");
+                case "LoginHost":
+                    return T("settingsColumnLoginHost", "Login host");
+                case "GameHost":
+                    return T("settingsColumnGameHost", "Game host");
+                case "LoginPort":
+                    return T("settingsColumnLoginPort", "Login port");
+                case "GamePort":
+                    return T("settingsColumnGamePort", "Game port");
+                case "ExecutableName":
+                    return T("settingsColumnExecutableName", "Executable");
+                case "EnableHostName":
+                    return T("settingsColumnEnableHostName", "Use hostname");
+                case "UseDirectX9":
+                    return T("settingsColumnUseDirectX9", "DirectX9");
+                case "Hostname":
+                    return T("settingsColumnHostname", "Hostname");
+                case "ServerNameMemoryAddress":
+                    return T("settingsColumnServerNameMemoryAddress", "Server name address");
+                case "ServerIcon":
+                    return T("settingsColumnServerIcon", "Server icon");
+                case "Group":
+                    return T("settingsColumnGroup", "Group");
+                default:
+                    return propertyName;
+            }
         }
 
         private void BtnLockConfig_Click(object sender, RoutedEventArgs e)
@@ -350,6 +448,11 @@ namespace ConquerLoader.Forms.WPF
             SetupLicenseWindow setupLic = new SetupLicenseWindow();
             setupLic.Owner = this;
             setupLic.ShowDialog();
+        }
+
+        private string T(string key, string fallback)
+        {
+            return Core.TranslateText(key, fallback);
         }
     }
 }

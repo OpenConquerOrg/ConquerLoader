@@ -24,6 +24,7 @@ namespace ConquerLoader.Forms.WPF
             Assembly assembly = Assembly.GetExecutingAssembly();
             FileVersionInfo fvi = FileVersionInfo.GetVersionInfo(assembly.Location);
             lblAboutVersionN.Text = "v" + fvi.ProductVersion;
+            ApplyTranslations();
         }
 
         private void BtnChangelog_Click(object sender, RoutedEventArgs e)
@@ -114,12 +115,34 @@ namespace ConquerLoader.Forms.WPF
             }
 
             btnMinimizeWindow.Content = "\uE921";
-            btnMinimizeWindow.ToolTip = "Minimize";
+            btnMinimizeWindow.ToolTip = T("chromeMinimize", "Minimize");
             btnCloseWindow.Content = "\uE8BB";
             btnCloseWindow.Tag = "Close";
-            btnCloseWindow.ToolTip = "Close";
+            btnCloseWindow.ToolTip = T("chromeClose", "Close");
             btnMaxRestoreWindow.Content = WindowState == WindowState.Maximized ? "\uE923" : "\uE922";
-            btnMaxRestoreWindow.ToolTip = WindowState == WindowState.Maximized ? "Restore" : "Maximize";
+            btnMaxRestoreWindow.ToolTip = WindowState == WindowState.Maximized
+                ? T("chromeRestore", "Restore")
+                : T("chromeMaximize", "Maximize");
+        }
+
+        private void ApplyTranslations()
+        {
+            Title = T("aboutWindowTitle", "About");
+            txtWindowTitleBar.Text = T("aboutWindowTitle", "About");
+            txtAboutHeading.Text = T("aboutHeading", "About ConquerLoader");
+            txtAboutDescription.Text = T("aboutDescription", "A lightweight launcher with plugin support and server management for Conquer Online.");
+            txtAboutCreatedBy.Text = T("aboutCreatedBy", "Created by Cristian Ocana Soler (DaRkFoxDeveloper)");
+            txtAboutPortuguese.Text = T("aboutPortuguese", "Portuguese translation by Louan Fontenele");
+            txtAboutTesters.Text = T("aboutTesters", "Testers: Robert Frias, Pezzi Tomas");
+            txtAboutVersionLabel.Text = T("aboutVersionLabel", "Version:");
+            txtAboutLinks.Text = T("aboutLinks", "Links");
+            runWebsiteLabel.Text = T("aboutWebsiteLabel", "Website: ");
+            runChangelogLabel.Text = T("aboutChangelogLabel", "Changelog: ");
+        }
+
+        private string T(string key, string fallback)
+        {
+            return Core.TranslateText(key, fallback);
         }
     }
 }

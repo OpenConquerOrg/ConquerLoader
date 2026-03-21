@@ -8,7 +8,7 @@
         MinWidth="980"
         MinHeight="760"
         Background="#09090D"
-        ResizeMode="CanResizeWithGrip"
+        ResizeMode="CanResize"
         WindowStyle="None"
         WindowStartupLocation="CenterOwner">
     <WindowChrome.WindowChrome>
@@ -16,7 +16,7 @@
                             CornerRadius="0"
                             GlassFrameThickness="0"
                             NonClientFrameEdges="None"
-                            ResizeBorderThickness="8"
+                            ResizeBorderThickness="6"
                             UseAeroCaptionButtons="False" />
     </WindowChrome.WindowChrome>
     <Window.Resources>
@@ -154,6 +154,14 @@
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
+        </Style>
+
+        <Style x:Key="InputMultilineTextBoxStyle" TargetType="TextBox" BasedOn="{StaticResource InputTextBoxStyle}">
+            <Setter Property="Height" Value="84" />
+            <Setter Property="TextWrapping" Value="Wrap" />
+            <Setter Property="AcceptsReturn" Value="True" />
+            <Setter Property="VerticalContentAlignment" Value="Top" />
+            <Setter Property="VerticalScrollBarVisibility" Value="Auto" />
         </Style>
         <Style x:Key="TitleBarButtonStyle" TargetType="Button">
             <Setter Property="Width" Value="38" />
@@ -385,6 +393,7 @@
                                    FontSize="14"
                                    FontWeight="SemiBold"
                                    Foreground="{StaticResource TextPrimaryBrush}"
+                                   x:Name="txtWindowTitleBar"
                                    Text="Settings" />
                     </StackPanel>
                     <StackPanel Grid.Column="1"
@@ -423,12 +432,12 @@
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
                 <StackPanel Grid.Column="0">
-                    <TextBlock Style="{StaticResource SectionTitleStyle}" Text="Settings" />
-                    <TextBlock Margin="0,8,0,0" Style="{StaticResource BodyStyle}" Text="Configure launcher behavior, language, and server management from one place." />
+                    <TextBlock x:Name="txtWindowHeading" Style="{StaticResource SectionTitleStyle}" Text="Settings" />
+                    <TextBlock x:Name="txtWindowDescription" Margin="0,8,0,0" Style="{StaticResource BodyStyle}" Text="Configure launcher behavior, language, and server management from one place." />
                 </StackPanel>
                 <WrapPanel Grid.Column="2" VerticalAlignment="Top">
                     <ComboBox x:Name="langSelector" Width="160" Margin="0,0,12,12" SelectionChanged="LangSelector_SelectionChanged" Style="{StaticResource InputComboBoxStyle}" />
-                    <Button Width="120" Margin="0,0,12,12" Click="BtnClose_Click" Content="Close" Style="{StaticResource SecondaryButtonStyle}" />
+                    <Button x:Name="btnClose" Width="120" Margin="0,0,12,12" Click="BtnClose_Click" Content="Close" Style="{StaticResource SecondaryButtonStyle}" />
                     <Button x:Name="btnSave" Width="120" Margin="0,0,0,12" Click="BtnSave_Click" Content="Save" Style="{StaticResource PrimaryButtonStyle}" />
                 </WrapPanel>
             </Grid>
@@ -448,10 +457,12 @@
                 <StackPanel>
                     <Border Style="{StaticResource CardStyle}">
                         <StackPanel>
-                            <TextBlock Style="{StaticResource SectionTitleStyle}" Text="Launcher" />
-                            <TextBlock Margin="0,8,0,0" Style="{StaticResource BodyStyle}" Text="Core behavior and UI preferences for the loader." />
-                            <TextBlock Margin="0,22,0,8" FontSize="12" FontWeight="SemiBold" Foreground="{StaticResource TextSecondaryBrush}" Text="Title In Loader" />
+                            <TextBlock x:Name="txtLauncherHeading" Style="{StaticResource SectionTitleStyle}" Text="Launcher" />
+                            <TextBlock x:Name="txtLauncherDescription" Margin="0,8,0,0" Style="{StaticResource BodyStyle}" Text="Core behavior and UI preferences for the loader." />
+                            <TextBlock x:Name="txtLoaderTitleLabel" Margin="0,22,0,8" FontSize="12" FontWeight="SemiBold" Foreground="{StaticResource TextSecondaryBrush}" Text="Title In Loader" />
                             <TextBox x:Name="tbxTitle" Style="{StaticResource InputTextBoxStyle}" TextChanged="TbxTitle_TextChanged" />
+                            <TextBlock x:Name="txtLoaderDescriptionLabel" Margin="0,18,0,8" FontSize="12" FontWeight="SemiBold" Foreground="{StaticResource TextSecondaryBrush}" Text="Description In Loader" />
+                            <TextBox x:Name="tbxDescription" Style="{StaticResource InputMultilineTextBoxStyle}" TextChanged="TbxDescription_TextChanged" />
                             <UniformGrid Margin="0,22,0,0" Columns="2">
                                 <CheckBox x:Name="tglDebugMode" Margin="0,0,16,14" Checked="TglDebugMode_CheckedChanged" Unchecked="TglDebugMode_CheckedChanged" Content="Debug Mode" />
                                 <CheckBox x:Name="tglCloseOnFinish" Margin="0,0,0,14" Checked="TglCloseOnFinish_CheckedChanged" Unchecked="TglCloseOnFinish_CheckedChanged" Content="Close On Finish" />
@@ -470,8 +481,8 @@
 
                     <Border Margin="0,20,0,0" Style="{StaticResource CardStyle}">
                         <StackPanel>
-                            <TextBlock Style="{StaticResource SectionTitleStyle}" Text="Advanced" />
-                            <TextBlock Margin="0,8,0,0" Style="{StaticResource BodyStyle}" Text="These actions affect persistence and debugging tools." />
+                            <TextBlock x:Name="txtAdvancedHeading" Style="{StaticResource SectionTitleStyle}" Text="Advanced" />
+                            <TextBlock x:Name="txtAdvancedDescription" Margin="0,8,0,0" Style="{StaticResource BodyStyle}" Text="These actions affect persistence and debugging tools." />
                             <WrapPanel Margin="0,22,0,0">
                                 <Button x:Name="btnLockConfig" Width="160" Margin="0,0,12,12" Click="BtnLockConfig_Click" Content="Lock Config" Style="{StaticResource SecondaryButtonStyle}" />
                                 <Button x:Name="btnSetupLicense" Width="160" Margin="0,0,0,12" Click="BtnSetupLicense_Click" Content="Setup License" Style="{StaticResource SecondaryButtonStyle}" Visibility="Collapsed" />
@@ -498,18 +509,19 @@
                             <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
                         <StackPanel Grid.Column="0">
-                            <TextBlock Style="{StaticResource SectionTitleStyle}" Text="Servers" />
-                            <TextBlock Margin="0,8,0,0" Style="{StaticResource BodyStyle}" Text="Create, edit, and review the servers available in the launcher." />
+                            <TextBlock x:Name="txtServersHeading" Style="{StaticResource SectionTitleStyle}" Text="Servers" />
+                            <TextBlock x:Name="txtServersDescription" Margin="0,8,0,0" Style="{StaticResource BodyStyle}" Text="Create, edit, and review the servers available in the launcher." />
                         </StackPanel>
                         <WrapPanel Grid.Column="2" VerticalAlignment="Top">
-                            <Button Width="110" Margin="0,0,10,12" Click="BtnServerDat_Click" Content="Server.dat" Style="{StaticResource SecondaryButtonStyle}" />
-                            <Button Width="90" Margin="0,0,0,12" Click="BtnPlugins_Click" Content="Plugins" Style="{StaticResource SecondaryButtonStyle}" />
+                            <Button x:Name="btnServerDat" Width="110" Margin="0,0,10,12" Click="BtnServerDat_Click" Content="Server.dat" Style="{StaticResource SecondaryButtonStyle}" />
+                            <Button x:Name="btnPlugins" Width="90" Margin="0,0,0,12" Click="BtnPlugins_Click" Content="Plugins" Style="{StaticResource SecondaryButtonStyle}" />
                         </WrapPanel>
                     </Grid>
 
                     <DataGrid x:Name="gridViewSettings"
                               Grid.Row="2"
                               AutoGenerateColumns="True"
+                              AutoGeneratingColumn="GridViewSettings_AutoGeneratingColumn"
                               CanUserAddRows="False"
                               CanUserDeleteRows="False"
                               CanUserResizeRows="False"
@@ -524,8 +536,8 @@
                               ScrollViewer.VerticalScrollBarVisibility="Auto" />
 
                     <WrapPanel Grid.Row="4">
-                        <Button Width="120" Margin="0,0,12,12" Click="BtnWizard_Click" Content="New +" Style="{StaticResource SecondaryButtonStyle}" />
-                        <Button Width="120" Margin="0,0,0,12" Click="BtnEdit_Click" Content="Edit" Style="{StaticResource SecondaryButtonStyle}" />
+                        <Button x:Name="btnWizard" Width="120" Margin="0,0,12,12" Click="BtnWizard_Click" Content="New +" Style="{StaticResource SecondaryButtonStyle}" />
+                        <Button x:Name="btnEdit" Width="120" Margin="0,0,0,12" Click="BtnEdit_Click" Content="Edit" Style="{StaticResource SecondaryButtonStyle}" />
                     </WrapPanel>
                 </Grid>
             </Border>
@@ -535,6 +547,7 @@
                    HorizontalAlignment="Right"
                    FontSize="12"
                    Foreground="{StaticResource TextSecondaryBrush}"
+                   x:Name="txtWizardHint"
                    Text="Use New + to open the guided server setup."
                    TextWrapping="Wrap" />
             </Grid>
