@@ -211,16 +211,17 @@
         </Style>
 
         <Style x:Key="LaunchButtonStyle" TargetType="Button" BasedOn="{StaticResource PrimaryButtonStyle}">
-            <Setter Property="Height" Value="66" />
-            <Setter Property="FontSize" Value="22" />
+            <Setter Property="Height" Value="76" />
+            <Setter Property="FontSize" Value="24" />
             <Setter Property="FontWeight" Value="Bold" />
             <Setter Property="Foreground" Value="#FFF8F1" />
+            <Setter Property="Padding" Value="28,10" />
             <Setter Property="Background">
                 <Setter.Value>
                     <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
-                        <GradientStop Color="#F35D3C" Offset="0" />
-                        <GradientStop Color="#B22819" Offset="0.55" />
-                        <GradientStop Color="#60110D" Offset="1" />
+                        <GradientStop Color="#D94B35" Offset="0" />
+                        <GradientStop Color="#9E2219" Offset="0.58" />
+                        <GradientStop Color="#56100D" Offset="1" />
                     </LinearGradientBrush>
                 </Setter.Value>
             </Setter>
@@ -228,82 +229,96 @@
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
                         <Grid>
-                            <Border x:Name="LaunchGlow"
-                                    Margin="18,14,18,2"
-                                    Background="#44CB4129"
-                                    CornerRadius="24"
-                                    Opacity="0.9">
+                            <Border x:Name="LaunchShadow"
+                                    Margin="22,14,22,0"
+                                    Background="#36000000"
+                                    CornerRadius="24">
                                 <Border.Effect>
-                                    <DropShadowEffect BlurRadius="30"
+                                    <DropShadowEffect BlurRadius="18"
                                                       Direction="270"
-                                                      Opacity="0.5"
-                                                      ShadowDepth="12"
-                                                      Color="#7A1A12" />
+                                                      Opacity="0.52"
+                                                      ShadowDepth="10"
+                                                      Color="#160708" />
                                 </Border.Effect>
                             </Border>
-                            <Border x:Name="LaunchBorder"
-                                    Background="{TemplateBinding Background}"
-                                    BorderBrush="#E4B77A"
-                                    BorderThickness="1.5"
-                                    CornerRadius="20">
+                            <Border x:Name="LaunchFrame"
+                                    Background="#160E12"
+                                    BorderBrush="#DCE2EA"
+                                    BorderThickness="1.4"
+                                    CornerRadius="24">
                                 <Grid>
-                                    <Border Margin="2"
-                                            BorderBrush="#2BFFE9C5"
+                                    <Border Margin="1.5"
+                                            BorderBrush="#5AFFFFFF"
                                             BorderThickness="1"
-                                            CornerRadius="18"
-                                            Opacity="0.45" />
-                                    <Border Height="20"
-                                            Margin="10,8,10,0"
+                                            CornerRadius="22"
+                                            Opacity="0.35" />
+                                    <Border x:Name="LaunchSurface"
+                                            Margin="5"
+                                            Background="{TemplateBinding Background}"
+                                            CornerRadius="19">
+                                        <Border.Effect>
+                                            <DropShadowEffect BlurRadius="10"
+                                                              Direction="270"
+                                                              Opacity="0.16"
+                                                              ShadowDepth="3"
+                                                              Color="#FFFFB19D" />
+                                        </Border.Effect>
+                                    </Border>
+                                    <Border x:Name="LaunchHighlight"
+                                            Height="16"
+                                            Margin="26,10,26,0"
                                             VerticalAlignment="Top"
-                                            Background="#33FFF3E1"
-                                            CornerRadius="10"
-                                            Opacity="0.7" />
+                                            Background="#36FFF7ED"
+                                            CornerRadius="8"
+                                            Opacity="0.55" />
                                     <ContentPresenter HorizontalAlignment="Center"
                                                       VerticalAlignment="Center"
-                                                      Margin="0,-2,0,0" />
+                                                      Margin="0,-1,0,1" />
                                 </Grid>
                             </Border>
                         </Grid>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="LaunchGlow" Property="Opacity" Value="1" />
-                                <Setter TargetName="LaunchBorder" Property="BorderBrush" Value="#F4CA90" />
-                                <Setter Property="Background">
+                                <Setter TargetName="LaunchFrame" Property="BorderBrush" Value="#F3F6FA" />
+                                <Setter TargetName="LaunchHighlight" Property="Opacity" Value="0.7" />
+                                <Setter TargetName="LaunchSurface" Property="Background">
                                     <Setter.Value>
                                         <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
-                                            <GradientStop Color="#FF6A46" Offset="0" />
-                                            <GradientStop Color="#C3301D" Offset="0.55" />
-                                            <GradientStop Color="#721713" Offset="1" />
+                                            <GradientStop Color="#EA5C42" Offset="0" />
+                                            <GradientStop Color="#B1291D" Offset="0.58" />
+                                            <GradientStop Color="#65130E" Offset="1" />
                                         </LinearGradientBrush>
                                     </Setter.Value>
                                 </Setter>
                             </Trigger>
                             <Trigger Property="IsPressed" Value="True">
-                                <Setter TargetName="LaunchGlow" Property="Opacity" Value="0.4" />
-                                <Setter TargetName="LaunchBorder" Property="BorderBrush" Value="#F6D4A3" />
-                                <Setter Property="Background">
+                                <Setter TargetName="LaunchShadow" Property="Opacity" Value="0.32" />
+                                <Setter TargetName="LaunchFrame" Property="BorderBrush" Value="#F6FAFF" />
+                                <Setter TargetName="LaunchHighlight" Property="Opacity" Value="0.35" />
+                                <Setter TargetName="LaunchSurface" Property="Background">
                                     <Setter.Value>
                                         <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
-                                            <GradientStop Color="#D94B2E" Offset="0" />
-                                            <GradientStop Color="#931E15" Offset="0.55" />
-                                            <GradientStop Color="#4A0D0A" Offset="1" />
+                                            <GradientStop Color="#B83A2A" Offset="0" />
+                                            <GradientStop Color="#7C1A14" Offset="0.58" />
+                                            <GradientStop Color="#410B09" Offset="1" />
                                         </LinearGradientBrush>
                                     </Setter.Value>
                                 </Setter>
                             </Trigger>
                             <Trigger Property="IsKeyboardFocused" Value="True">
-                                <Setter TargetName="LaunchBorder" Property="BorderBrush" Value="#FFE0B36D" />
+                                <Setter TargetName="LaunchFrame" Property="BorderBrush" Value="#FFF5FAFF" />
                             </Trigger>
                             <Trigger Property="IsEnabled" Value="False">
-                                <Setter TargetName="LaunchGlow" Property="Opacity" Value="0.2" />
-                                <Setter TargetName="LaunchBorder" Property="BorderBrush" Value="#8A6646" />
+                                <Setter TargetName="LaunchShadow" Property="Opacity" Value="0.16" />
+                                <Setter TargetName="LaunchFrame" Property="BorderBrush" Value="#8B9099" />
+                                <Setter TargetName="LaunchHighlight" Property="Opacity" Value="0.2" />
                                 <Setter Property="Foreground" Value="#DDC7B0" />
-                                <Setter Property="Background">
+                                <Setter TargetName="LaunchSurface" Property="Background">
                                     <Setter.Value>
                                         <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
-                                            <GradientStop Color="#704339" Offset="0" />
-                                            <GradientStop Color="#4E2A25" Offset="0.55" />
-                                            <GradientStop Color="#2E1715" Offset="1" />
+                                            <GradientStop Color="#5F3B37" Offset="0" />
+                                            <GradientStop Color="#422624" Offset="0.58" />
+                                            <GradientStop Color="#251616" Offset="1" />
                                         </LinearGradientBrush>
                                     </Setter.Value>
                                 </Setter>
@@ -674,19 +689,19 @@
                               VerticalScrollBarVisibility="Visible"
                               HorizontalScrollBarVisibility="Disabled"
                               PanningMode="VerticalOnly">
-                    <Grid Margin="42,8,42,34"
-                          MinHeight="720">
+                    <Grid Margin="42,0,42,24"
+                          MinHeight="620">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto" />
-                            <RowDefinition Height="22" />
+                            <RowDefinition Height="18" />
                             <RowDefinition Height="*" />
                         </Grid.RowDefinitions>
 
                 <StackPanel Grid.Row="0"
                             HorizontalAlignment="Center">
-                    <Image Width="252"
-                           Height="252"
-                           Margin="0,8,0,0"
+                    <Image Width="184"
+                           Height="184"
+                           Margin="0,0,0,0"
                            HorizontalAlignment="Center"
                            Source="/ConquerLoader;component/Resources/ConquerLoaderICON.png"
                            Stretch="Uniform">
@@ -700,16 +715,16 @@
                     </Image>
 
                     <TextBlock x:Name="txtWindowTitle"
-                               Margin="0,0,0,0"
+                               Margin="0,-4,0,0"
                                FontFamily="Palatino Linotype"
-                               FontSize="32"
+                               FontSize="30"
                                FontWeight="Bold"
                                Foreground="{StaticResource TextPrimaryBrush}"
                                TextAlignment="Center"
                                TextWrapping="Wrap" />
                     <TextBlock x:Name="txtHeaderDescription"
                                Margin="0,8,0,0"
-                               MaxWidth="410"
+                               MaxWidth="430"
                                FontSize="12"
                                Foreground="#DCE3EC"
                                Text="Choose your realm, set the launch options, and enter from a single launcher screen."
@@ -718,17 +733,17 @@
                 </StackPanel>
 
                 <Grid Grid.Row="2"
-                      MinHeight="540">
+                      MinHeight="458">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="308" />
-                        <ColumnDefinition Width="42" />
+                        <ColumnDefinition Width="34" />
                         <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="42" />
+                        <ColumnDefinition Width="34" />
                         <ColumnDefinition Width="336" />
                     </Grid.ColumnDefinitions>
 
                     <Border Grid.Column="0"
-                            Margin="0,118,0,42"
+                            Margin="0,54,0,18"
                             VerticalAlignment="Top"
                             Style="{StaticResource ScenePanelStyle}"
                             Background="#4A0F131A"
@@ -761,14 +776,14 @@
                                            Text="Available servers"
                                            Style="{StaticResource FieldLabelStyle}" />
                                 <ListBox x:Name="lstServers"
-                                         Height="224"
+                                         Height="210"
                                          ItemContainerStyle="{StaticResource ServerListItemStyle}"
                                          Style="{StaticResource ServerListStyle}"
                                           SelectionChanged="CbxServers_SelectedIndexChanged" />
                             </StackPanel>
 
                             <Border Grid.Row="4"
-                                    Padding="20"
+                                    Padding="18"
                                     Background="#311216"
                                     BorderBrush="#A8B0BC"
                                     BorderThickness="1"
@@ -804,19 +819,17 @@
                     </Border>
 
                     <Grid Grid.Column="2"
-                          Margin="0,8,0,0"
+                          Margin="0,-18,0,0"
                           VerticalAlignment="Top">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="Auto" />
-                            <RowDefinition Height="16" />
-                            <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
 
                         <StackPanel Grid.Row="0"
-                                    Width="460"
+                                    Width="448"
                                     HorizontalAlignment="Center">
-                            <Border Padding="24,20"
+                            <Border Padding="22,16"
                                     Background="#55111318"
                                     BorderBrush="#D7DDE6"
                                     BorderThickness="1.2"
@@ -832,7 +845,7 @@
                                                Margin="0,12,0,0"
                                                HorizontalAlignment="Center"
                                                FontFamily="Palatino Linotype"
-                                               FontSize="25"
+                                               FontSize="23"
                                                FontWeight="Bold"
                                                Foreground="{StaticResource TextPrimaryBrush}"
                                                Text="No server selected"
@@ -848,7 +861,7 @@
                                     <Border x:Name="serverStatusBadge"
                                             Width="126"
                                             Height="40"
-                                            Margin="0,18,0,0"
+                                            Margin="0,14,0,0"
                                             HorizontalAlignment="Center"
                                             Background="#6B4C2D"
                                             CornerRadius="20">
@@ -863,45 +876,46 @@
                             </Border>
                         </StackPanel>
 
-                        <WrapPanel Grid.Row="1"
-                                   HorizontalAlignment="Center">
+                        <StackPanel Grid.Row="1"
+                                    Width="392"
+                                    Margin="0,8,0,0"
+                                    HorizontalAlignment="Center">
                             <Button x:Name="btnStart"
-                                    Width="384"
-                                    Height="82"
-                                    Margin="0,0,0,12"
+                                    Width="392"
+                                    Height="78"
+                                    Margin="0,0,0,10"
                                     Click="BtnStart_Click"
                                     Content="ENTER"
                                     Style="{StaticResource LaunchButtonStyle}" />
-                        </WrapPanel>
 
-                        <Border Grid.Row="3"
-                                Width="384"
-                                HorizontalAlignment="Center"
-                                Padding="18,16"
-                                Background="#4C111319"
-                                BorderBrush="#D0D6E0"
-                                BorderThickness="1"
-                                CornerRadius="24">
-                            <StackPanel>
-                                <ProgressBar x:Name="pBar"
-                                             Height="12"
-                                             Minimum="0"
-                                             Maximum="100"
-                                             VerticalAlignment="Center"
-                                             Style="{StaticResource ProgressStyle}" />
-                                <TextBlock x:Name="txtProgressValue"
-                                           Margin="0,10,0,0"
-                                           HorizontalAlignment="Center"
-                                           FontSize="12"
-                                           FontWeight="SemiBold"
-                                           Foreground="{StaticResource TextSecondaryBrush}"
-                                           Text="0%" />
-                            </StackPanel>
-                        </Border>
+                            <Border Width="392"
+                                    HorizontalAlignment="Center"
+                                    Padding="18,14"
+                                    Background="#4C111319"
+                                    BorderBrush="#D0D6E0"
+                                    BorderThickness="1"
+                                    CornerRadius="24">
+                                <StackPanel>
+                                    <ProgressBar x:Name="pBar"
+                                                 Height="12"
+                                                 Minimum="0"
+                                                 Maximum="100"
+                                                 VerticalAlignment="Center"
+                                                 Style="{StaticResource ProgressStyle}" />
+                                    <TextBlock x:Name="txtProgressValue"
+                                               Margin="0,10,0,0"
+                                               HorizontalAlignment="Center"
+                                               FontSize="12"
+                                               FontWeight="SemiBold"
+                                               Foreground="{StaticResource TextSecondaryBrush}"
+                                               Text="0%" />
+                                </StackPanel>
+                            </Border>
+                        </StackPanel>
                     </Grid>
 
                     <Border Grid.Column="4"
-                            Margin="0,118,0,54"
+                            Margin="0,54,0,18"
                             VerticalAlignment="Top"
                             Style="{StaticResource ScenePanelStyle}"
                             Background="#48111617"

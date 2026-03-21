@@ -1,0 +1,16 @@
+{
+  "version": "1.0.0",
+  "baseUrl": "https://cdn.example.com/patch/",
+  "files": [
+    {
+      "path": "ini/server.dat",
+      "url": "ini/server.dat",
+      "size": 4096,
+      "sha256": "HEX_O_BASE64_SHA256"
+    },
+    {
+      "path": "patch/loader.dat",
+      "url": "files/loader.dat"
+    }
+  ]
+}

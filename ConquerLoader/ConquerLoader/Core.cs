@@ -172,6 +172,41 @@ namespace ConquerLoader
             }
         }
 
+        public static PluginPreLaunchResult RunPreLaunchPlugins(PluginPreLaunchContext context)
+        {
+            if (PluginLoader.Plugins == null || PluginLoader.Plugins.Count == 0)
+            {
+                return PluginPreLaunchResult.Success();
+            }
+
+            foreach (IPlugin plugin in PluginLoader.Plugins)
+            {
+                IPreLaunchPlugin preLaunchPlugin = plugin as IPreLaunchPlugin;
+                if (preLaunchPlugin == null)
+                {
+                    continue;
+                }
+
+                try
+                {
+                    LogWritter.Write("Running pre-launch plugin: " + plugin.Name + ".");
+                    PluginPreLaunchResult result = preLaunchPlugin.BeforeLaunch(context) ?? PluginPreLaunchResult.Success();
+                    if (!result.ContinueLaunch)
+                    {
+                        LogWritter.Write("Pre-launch plugin canceled launch: " + plugin.Name + ". Message: " + (result.Message ?? "No message."));
+                        return result;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    LogWritter.Write("Error on pre-launch plugin " + plugin.Name + ": " + ex);
+                    return PluginPreLaunchResult.Fail("Plugin \"" + plugin.Name + "\" failed before launch: " + ex.Message);
+                }
+            }
+
+            return PluginPreLaunchResult.Success();
+        }
+
         public static void SaveLoaderConfig(LoaderConfig LoaderConfig)
         {
             if (UseEncryptedConfig)

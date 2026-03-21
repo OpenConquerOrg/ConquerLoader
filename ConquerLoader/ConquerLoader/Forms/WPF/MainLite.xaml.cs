@@ -547,6 +547,35 @@ namespace ConquerLoader.Forms.WPF
                 RebuildServerDat();
             }
 
+            PluginPreLaunchContext preLaunchContext = new PluginPreLaunchContext
+            {
+                LoaderConfig = LoaderConfig,
+                Server = SelectedServer,
+                ExecutablePath = pathToConquerExe,
+                WorkingDirectory = workingDir,
+                StartupPath = WinForms.Application.StartupPath,
+                UseDecryptedServerDat = useDecryptedServerDat,
+                UseDirectX9Environment = string.Equals(pathToConquerExe, checkPathEnvDX9, StringComparison.OrdinalIgnoreCase),
+                ReportProgress = progressValue =>
+                {
+                    if (worker == null)
+                    {
+                        return;
+                    }
+
+                    int safeValue = Math.Max(1, Math.Min(8, progressValue));
+                    worker.ReportProgress(safeValue);
+                },
+                Log = message => Core.LogWritter.Write("[Plugin] " + message)
+            };
+
+            PluginPreLaunchResult preLaunchResult = Core.RunPreLaunchPlugins(preLaunchContext);
+            if (!preLaunchResult.ContinueLaunch)
+            {
+                ShowWarning(preLaunchResult.Message ?? ("[" + SelectedServer.ServerName + "] Launch canceled by plugin."));
+                return;
+            }
+
             Process conquerProc = Process.Start(new ProcessStartInfo
             {
                 FileName = pathToConquerExe,

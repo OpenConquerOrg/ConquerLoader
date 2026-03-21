@@ -476,6 +476,33 @@ namespace ConquerLoader.Forms
                     Core.LogWritter.Write($"Generating COFlashFixer.dll... [{(createdFlashFix ? "Created" : "Failed")}]");
                     RebuildServerDat();
                 }
+                PluginPreLaunchContext preLaunchContext = new PluginPreLaunchContext()
+                {
+                    LoaderConfig = LoaderConfig,
+                    Server = SelectedServer,
+                    ExecutablePath = PathToConquerExe,
+                    WorkingDirectory = WorkingDir,
+                    StartupPath = Application.StartupPath,
+                    UseDecryptedServerDat = UseDecryptedServerDat,
+                    UseDirectX9Environment = string.Equals(PathToConquerExe, CheckPathEnvDX9, StringComparison.OrdinalIgnoreCase),
+                    ReportProgress = progressValue =>
+                    {
+                        if (worker == null)
+                        {
+                            return;
+                        }
+
+                        int safeValue = Math.Max(1, Math.Min(8, progressValue));
+                        worker.ReportProgress(safeValue);
+                    },
+                    Log = message => Core.LogWritter.Write("[Plugin] " + message)
+                };
+                PluginPreLaunchResult preLaunchResult = Core.RunPreLaunchPlugins(preLaunchContext);
+                if (!preLaunchResult.ContinueLaunch)
+                {
+                    MetroFramework.MetroMessageBox.Show(this, preLaunchResult.Message ?? $"[{SelectedServer.ServerName}] Launch canceled by plugin.", this.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
                 Process conquerProc = Process.Start(new ProcessStartInfo() { FileName = PathToConquerExe, WorkingDirectory = WorkingDir, Arguments = "blacknull" });
                 if (conquerProc != null)
                 {
