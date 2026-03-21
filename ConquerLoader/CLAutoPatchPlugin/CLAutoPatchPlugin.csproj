@@ -7,8 +7,8 @@
     <ProjectGuid>{0F1D9C48-5B4D-4B36-9A97-64C612FC76C0}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>AutoPatchPlugin</RootNamespace>
-    <AssemblyName>AutoPatchPlugin</AssemblyName>
+    <RootNamespace>CLAutoPatchPlugin</RootNamespace>
+    <AssemblyName>CLAutoPatchPlugin</AssemblyName>
     <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -56,7 +56,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="AutoPatchManifest.cs" />
-    <Compile Include="AutoPatchPlugin.cs" />
+    <Compile Include="CLAutoPatchPlugin.cs" />
     <Compile Include="AutoPatchSettings.cs" />
     <Compile Include="AutoPatchSettingsStore.cs" />
     <Compile Include="AutoPatchState.cs" />
@@ -79,7 +79,12 @@
     <PropertyGroup>
       <LoaderPluginsDir>$(MSBuildProjectDirectory)\..\ConquerLoader\bin\$(Configuration)\Plugins</LoaderPluginsDir>
     </PropertyGroup>
+    <ItemGroup>
+      <LegacyPluginOutputs Include="$(LoaderPluginsDir)\AutoPatchPlugin.dll" />
+      <LegacyPluginOutputs Include="$(LoaderPluginsDir)\AutoPatchPlugin.pdb" />
+    </ItemGroup>
     <MakeDir Directories="$(LoaderPluginsDir)" />
+    <Delete Files="@(LegacyPluginOutputs)" TreatErrorsAsWarnings="true" />
     <Copy SourceFiles="$(TargetDir)$(TargetFileName)" DestinationFolder="$(LoaderPluginsDir)" SkipUnchangedFiles="false" />
   </Target>
 </Project>

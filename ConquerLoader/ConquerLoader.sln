@@ -9,7 +9,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CLHook", "..\ConquerHook\CL
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExamplePlugin", "ExamplePlugin\ExamplePlugin.csproj", "{2828D538-96AF-45EC-90FD-22555B20381B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutoPatchPlugin", "AutoPatchPlugin\AutoPatchPlugin.csproj", "{0F1D9C48-5B4D-4B36-9A97-64C612FC76C0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CLAutoPatchPlugin", "CLAutoPatchPlugin\CLAutoPatchPlugin.csproj", "{0F1D9C48-5B4D-4B36-9A97-64C612FC76C0}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CLCore", "CLCore\CLCore.csproj", "{B3D527DF-7ED0-4F05-9119-989B47B09C63}"
 EndProject

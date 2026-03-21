@@ -2,10 +2,18 @@ using Newtonsoft.Json;
 using System;
 using System.IO;
 
-namespace AutoPatchPlugin
+namespace CLAutoPatchPlugin
 {
     internal static class AutoPatchSettingsStore
     {
+        private static string LegacySettingsPath
+        {
+            get
+            {
+                return Path.Combine(PluginsDirectory, "AutoPatchPlugin.settings.json");
+            }
+        }
+
         internal static string PluginsDirectory
         {
             get
@@ -18,7 +26,7 @@ namespace AutoPatchPlugin
         {
             get
             {
-                return Path.Combine(PluginsDirectory, "AutoPatchPlugin.settings.json");
+                return Path.Combine(PluginsDirectory, "CLAutoPatchPlugin.settings.json");
             }
         }
 
@@ -26,12 +34,13 @@ namespace AutoPatchPlugin
         {
             try
             {
-                if (!File.Exists(SettingsPath))
+                string settingsPath = File.Exists(SettingsPath) ? SettingsPath : LegacySettingsPath;
+                if (!File.Exists(settingsPath))
                 {
                     return new AutoPatchSettings();
                 }
 
-                AutoPatchSettings settings = JsonConvert.DeserializeObject<AutoPatchSettings>(File.ReadAllText(SettingsPath));
+                AutoPatchSettings settings = JsonConvert.DeserializeObject<AutoPatchSettings>(File.ReadAllText(settingsPath));
                 return settings ?? new AutoPatchSettings();
             }
             catch

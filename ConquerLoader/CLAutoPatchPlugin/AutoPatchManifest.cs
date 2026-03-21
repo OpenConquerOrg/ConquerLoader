@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace AutoPatchPlugin
+namespace CLAutoPatchPlugin
 {
     internal class AutoPatchManifest
     {

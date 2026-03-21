@@ -451,6 +451,7 @@
             </Grid.ColumnDefinitions>
 
             <ScrollViewer Grid.Column="0"
+                          Margin="0,0,10,0"
                           VerticalScrollBarVisibility="Auto"
                           HorizontalScrollBarVisibility="Disabled"
                           Padding="0,0,8,0">

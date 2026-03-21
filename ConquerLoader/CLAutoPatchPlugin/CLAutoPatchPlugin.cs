@@ -9,15 +9,15 @@ using System.Net.Http;
 using System.Security.Cryptography;
 using System.Windows;
 
-namespace AutoPatchPlugin
+namespace CLAutoPatchPlugin
 {
-    public class AutoPatchPlugin : IPlugin, IPreLaunchPlugin
+    public class CLAutoPatchPlugin : IPlugin, IPreLaunchPlugin
     {
         private static readonly HttpClient HttpClient = new HttpClient();
 
         public string Name
         {
-            get { return "AutoPatch Plugin"; }
+            get { return "CLAutoPatchPlugin"; }
         }
 
         public string Explanation
@@ -53,7 +53,7 @@ namespace AutoPatchPlugin
             if (saved == true && window.UpdatedSettings != null)
             {
                 AutoPatchSettingsStore.Save(window.UpdatedSettings);
-                MessageBox.Show("AutoPatch settings saved.", Name, MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show("CLAutoPatchPlugin settings saved.", Name, MessageBoxButton.OK, MessageBoxImage.Information);
             }
         }
 
@@ -68,7 +68,7 @@ namespace AutoPatchPlugin
             if (string.IsNullOrWhiteSpace(settings.ManifestLocation))
             {
                 return settings.FailLaunchOnError
-                    ? PluginPreLaunchResult.Fail("AutoPatch is enabled but no manifest location is configured.")
+                    ? PluginPreLaunchResult.Fail("CLAutoPatchPlugin is enabled but no manifest location is configured.")
                     : PluginPreLaunchResult.Success();
             }
 
@@ -83,7 +83,7 @@ namespace AutoPatchPlugin
                 if (manifest.UsesLegacyFileEntries && manifest.GetPackages().Count == 0)
                 {
                     throw new InvalidOperationException(
-                        "This AutoPatch manifest still uses legacy file entries. Use the 'packages' or 'archives' list with .zip/.rar patches.");
+                        "This CLAutoPatchPlugin manifest still uses legacy file entries. Use the 'packages' or 'archives' list with .zip/.rar patches.");
                 }
 
                 AutoPatchManifestPackage[] patchPackages = manifest.GetPackages()
@@ -92,7 +92,7 @@ namespace AutoPatchPlugin
 
                 if (patchPackages.Length == 0)
                 {
-                    context.Log?.Invoke("AutoPatch manifest does not contain patch archives.");
+                    context.Log?.Invoke("CLAutoPatchPlugin manifest does not contain patch archives.");
                     return PluginPreLaunchResult.Success();
                 }
 

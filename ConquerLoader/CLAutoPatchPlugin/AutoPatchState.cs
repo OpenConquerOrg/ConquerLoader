@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 
-namespace AutoPatchPlugin
+namespace CLAutoPatchPlugin
 {
     internal class AutoPatchState
     {
@@ -13,7 +13,7 @@ namespace AutoPatchPlugin
 
     internal static class AutoPatchStateStore
     {
-        internal static string StatePath
+        private static string LegacyStatePath
         {
             get
             {
@@ -21,16 +21,25 @@ namespace AutoPatchPlugin
             }
         }
 
+        internal static string StatePath
+        {
+            get
+            {
+                return Path.Combine(AutoPatchSettingsStore.PluginsDirectory, "CLAutoPatchPlugin.state.json");
+            }
+        }
+
         internal static AutoPatchState Load()
         {
             try
             {
-                if (!File.Exists(StatePath))
+                string statePath = File.Exists(StatePath) ? StatePath : LegacyStatePath;
+                if (!File.Exists(statePath))
                 {
                     return new AutoPatchState();
                 }
 
-                AutoPatchState state = JsonConvert.DeserializeObject<AutoPatchState>(File.ReadAllText(StatePath));
+                AutoPatchState state = JsonConvert.DeserializeObject<AutoPatchState>(File.ReadAllText(statePath));
                 if (state == null)
                 {
                     return new AutoPatchState();

@@ -2,7 +2,7 @@
 
 ## What It Does
 
-`AutoPatchPlugin` is an optional plugin for `ConquerLoader` that applies compressed patches before the client is launched.
+`CLAutoPatchPlugin` is an optional plugin for `ConquerLoader` that applies compressed patches before the client is launched.
 
 It no longer downloads and writes individual files one by one. Instead, it works with a JSON manifest that lists `.zip` or `.rar` patch packages, validates them, and extracts them into the final client folder used by the launcher.
 
@@ -21,14 +21,14 @@ Actual flow:
 2. it creates instances for plugins implementing `IPlugin`
 3. it runs `Init()` as usual
 4. right before `Process.Start(...)`, the loader calls `Core.RunPreLaunchPlugins(...)`
-5. `AutoPatchPlugin` receives the `PluginPreLaunchContext`
+5. `CLAutoPatchPlugin` receives the `PluginPreLaunchContext`
 6. if autopatching fails and configuration requires it, launch is canceled
 
 ## Plugin Configuration
 
 The plugin stores its configuration in:
 
-`Plugins/AutoPatchPlugin.settings.json`
+`Plugins/CLAutoPatchPlugin.settings.json`
 
 Fields:
 
@@ -39,7 +39,7 @@ Fields:
 
 Applied package state is stored in:
 
-`Plugins/AutoPatchPlugin.state.json`
+`Plugins/CLAutoPatchPlugin.state.json`
 
 This state is used to avoid reapplying the same patch package every time if its signature has not changed.
 
@@ -135,7 +135,7 @@ In both `MainLite` and `Main`, the flow becomes:
 2. regenerate `server.dat` or pre-launch DLLs if required
 3. build the `PluginPreLaunchContext`
 4. execute `Core.RunPreLaunchPlugins(...)`
-5. `AutoPatchPlugin` applies pending patch packages
+5. `CLAutoPatchPlugin` applies pending patch packages
 6. if everything succeeds, the client is started
 
 That means autopatching runs against the real final client folder that will be used for launch.
@@ -159,14 +159,14 @@ The cleanest way to force reapplication is to change `version`, `sha256`, or bot
 
 ## Important Files
 
-- `AutoPatchPlugin/AutoPatchPlugin.cs`: main autopatch logic
-- `AutoPatchPlugin/AutoPatchManifest.cs`: new manifest model
-- `AutoPatchPlugin/AutoPatchState.cs`: applied package state
-- `AutoPatchPlugin/AutoPatchSettings.cs`: persisted configuration
-- `AutoPatchPlugin/AutoPatchSettingsStore.cs`: JSON settings persistence
-- `AutoPatchPlugin/AutoPatchConfigurationWindow.xaml`: WPF UI
-- `AutoPatchPlugin/AutoPatchConfigurationWindow.xaml.cs`: WPF code-behind
-- `AutoPatchPlugin/manifest.sample.json`: sample manifest
+- `CLAutoPatchPlugin/CLAutoPatchPlugin.cs`: main autopatch logic
+- `CLAutoPatchPlugin/AutoPatchManifest.cs`: new manifest model
+- `CLAutoPatchPlugin/AutoPatchState.cs`: applied package state
+- `CLAutoPatchPlugin/AutoPatchSettings.cs`: persisted configuration
+- `CLAutoPatchPlugin/AutoPatchSettingsStore.cs`: JSON settings persistence
+- `CLAutoPatchPlugin/AutoPatchConfigurationWindow.xaml`: WPF UI
+- `CLAutoPatchPlugin/AutoPatchConfigurationWindow.xaml.cs`: WPF code-behind
+- `CLAutoPatchPlugin/manifest.sample.json`: sample manifest
 
 ## Build And Deployment
 
@@ -174,7 +174,7 @@ The project:
 
 - is included in `ConquerLoader.sln`
 - builds as a .NET Framework 4.6.2 library
-- automatically copies `AutoPatchPlugin.dll` to `ConquerLoader/bin/<Configuration>/Plugins/`
+- automatically copies `CLAutoPatchPlugin.dll` to `ConquerLoader/bin/<Configuration>/Plugins/`
 
 ## Current Limitations
 

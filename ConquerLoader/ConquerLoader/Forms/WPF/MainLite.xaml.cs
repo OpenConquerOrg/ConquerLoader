@@ -284,13 +284,11 @@ namespace ConquerLoader.Forms.WPF
             if (!string.IsNullOrEmpty(LoaderConfig.Title))
             {
                 Title = LoaderConfig.Title;
-                txtWindowTitle.Text = LoaderConfig.Title;
                 txtTopBarTitle.Text = LoaderConfig.Title;
             }
             else
             {
                 Title = "ConquerLoader";
-                txtWindowTitle.Text = "ConquerLoader";
                 txtTopBarTitle.Text = "ConquerLoader";
             }
 
@@ -961,13 +959,11 @@ namespace ConquerLoader.Forms.WPF
             if (LoaderConfig != null && !string.IsNullOrEmpty(LoaderConfig.Title))
             {
                 Title = LoaderConfig.Title;
-                txtWindowTitle.Text = LoaderConfig.Title;
                 txtTopBarTitle.Text = LoaderConfig.Title;
             }
             else
             {
                 Title = "ConquerLoader";
-                txtWindowTitle.Text = "ConquerLoader";
                 txtTopBarTitle.Text = "ConquerLoader";
             }
         }

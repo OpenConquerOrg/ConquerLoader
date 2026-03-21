@@ -17,7 +17,7 @@
   Shared models, constants, plugin system, and common contracts.
 - `CLServer/`
   Supporting components related to server-side tooling in the ecosystem.
-- `AutoPatchPlugin/`
+- `CLAutoPatchPlugin/`
   Official autopatch plugin based on compressed `.zip` or `.rar` packages.
 - `ExamplePlugin/`
   Example plugin for simple extensions.
@@ -50,9 +50,9 @@ Execution of those plugins is handled from:
 
 - `ConquerLoader/Core.cs`
 
-## AutoPatchPlugin
+## CLAutoPatchPlugin
 
-`AutoPatchPlugin` is the official autopatch plugin included in the solution.
+`CLAutoPatchPlugin` is the official autopatch plugin included in the solution.
 
 Current capabilities:
 
@@ -65,17 +65,17 @@ Current capabilities:
 
 Key files:
 
-- `AutoPatchPlugin/AutoPatchPlugin.cs`
-- `AutoPatchPlugin/AutoPatchManifest.cs`
-- `AutoPatchPlugin/AutoPatchState.cs`
-- `AutoPatchPlugin/AutoPatchConfigurationWindow.xaml`
-- `AutoPatchPlugin/README.md`
-- `AutoPatchPlugin/manifest.sample.json`
+- `CLAutoPatchPlugin/CLAutoPatchPlugin.cs`
+- `CLAutoPatchPlugin/AutoPatchManifest.cs`
+- `CLAutoPatchPlugin/AutoPatchState.cs`
+- `CLAutoPatchPlugin/AutoPatchConfigurationWindow.xaml`
+- `CLAutoPatchPlugin/README.md`
+- `CLAutoPatchPlugin/manifest.sample.json`
 
 Important:
 
 - Older manifests using `files` are no longer valid for the new autopatch flow.
-- The current plugin format is documented in detail in `AutoPatchPlugin/README.md`.
+- The current plugin format is documented in detail in `CLAutoPatchPlugin/README.md`.
 
 ## Launch Flow
 
@@ -87,7 +87,7 @@ The overall launcher flow is:
 4. execute pre-launch plugins with `Core.RunPreLaunchPlugins(...)`
 5. if everything succeeds, start the client
 
-If `AutoPatchPlugin` is enabled and configured to block on error, a patch failure cancels the launch.
+If `CLAutoPatchPlugin` is enabled and configured to block on error, a patch failure cancels the launch.
 
 ## Build
 
@@ -95,9 +95,9 @@ Relevant projects:
 
 - `ConquerLoader.sln`
 - `ConquerLoader/ConquerLoader.csproj`
-- `AutoPatchPlugin/AutoPatchPlugin.csproj`
+- `CLAutoPatchPlugin/CLAutoPatchPlugin.csproj`
 
-The autopatch plugin automatically copies `AutoPatchPlugin.dll` to:
+The autopatch plugin automatically copies `CLAutoPatchPlugin.dll` to:
 
 `ConquerLoader/bin/<Configuration>/Plugins/`
 
@@ -105,8 +105,8 @@ The autopatch plugin automatically copies `AutoPatchPlugin.dll` to:
 
 For autopatch implementation details:
 
-- `AutoPatchPlugin/README.md`
+- `CLAutoPatchPlugin/README.md`
 
 For a sample manifest:
 
-- `AutoPatchPlugin/manifest.sample.json`
+- `CLAutoPatchPlugin/manifest.sample.json`

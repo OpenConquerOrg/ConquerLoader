@@ -1,4 +1,4 @@
-namespace AutoPatchPlugin
+namespace CLAutoPatchPlugin
 {
     public class AutoPatchSettings
     {
