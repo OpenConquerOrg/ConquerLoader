@@ -24,12 +24,21 @@ namespace AutoPatchPlugin
         {
             txtSchemaHelp.Text =
                 "{\r\n" +
+                "  \"version\": \"1.0.0\",\r\n" +
                 "  \"baseUrl\": \"https://cdn.example.com/patch/\",\r\n" +
-                "  \"files\": [\r\n" +
+                "  \"packages\": [\r\n" +
                 "    {\r\n" +
-                "      \"path\": \"ini/server.dat\",\r\n" +
-                "      \"url\": \"ini/server.dat\",\r\n" +
+                "      \"id\": \"base-client\",\r\n" +
+                "      \"archive\": \"base-client-100.zip\",\r\n" +
+                "      \"format\": \"zip\",\r\n" +
+                "      \"extractTo\": \".\",\r\n" +
                 "      \"sha256\": \"HEX_OR_BASE64_SHA256\"\r\n" +
+                "    },\r\n" +
+                "    {\r\n" +
+                "      \"id\": \"hd-textures\",\r\n" +
+                "      \"url\": \"patches/hd-textures.rar\",\r\n" +
+                "      \"format\": \"rar\",\r\n" +
+                "      \"extractTo\": \"data\"\r\n" +
                 "    }\r\n" +
                 "  ]\r\n" +
                 "}";
@@ -47,7 +56,7 @@ namespace AutoPatchPlugin
         {
             OpenFileDialog dialog = new OpenFileDialog
             {
-                Title = "Select manifest file",
+                Title = "Select patch manifest file",
                 Filter = "JSON files (*.json)|*.json|All files (*.*)|*.*",
                 CheckFileExists = true
             };

@@ -3,10 +3,10 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:shell="clr-namespace:System.Windows.Shell;assembly=PresentationFramework"
         Title="AutoPatch Plugin"
-        Width="860"
-        Height="680"
-        MinWidth="760"
-        MinHeight="600"
+        Width="940"
+        Height="736"
+        MinWidth="860"
+        MinHeight="640"
         Background="#0A090C"
         ResizeMode="CanResize"
         WindowStyle="None"
@@ -49,6 +49,11 @@
             <Setter Property="TextWrapping" Value="Wrap" />
         </Style>
 
+        <Style x:Key="HintStyle" TargetType="TextBlock" BasedOn="{StaticResource BodyStyle}">
+            <Setter Property="FontSize" Value="13" />
+            <Setter Property="Foreground" Value="#C9D0DA" />
+        </Style>
+
         <Style x:Key="FieldLabelStyle" TargetType="TextBlock">
             <Setter Property="Margin" Value="0,0,0,8" />
             <Setter Property="FontSize" Value="12" />
@@ -82,6 +87,72 @@
                             </Trigger>
                             <Trigger Property="IsEnabled" Value="False">
                                 <Setter TargetName="TextBorder" Property="Opacity" Value="0.5" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="SchemaTextBoxStyle" TargetType="TextBox" BasedOn="{StaticResource InputTextBoxStyle}">
+            <Setter Property="FontFamily" Value="Consolas" />
+            <Setter Property="FontSize" Value="13" />
+            <Setter Property="Background" Value="#130F14" />
+            <Setter Property="Padding" Value="14,12" />
+        </Style>
+
+        <Style x:Key="CheckBoxIndicatorStyle" TargetType="Border">
+            <Setter Property="Width" Value="20" />
+            <Setter Property="Height" Value="20" />
+            <Setter Property="CornerRadius" Value="6" />
+            <Setter Property="BorderBrush" Value="{StaticResource OutlineBrush}" />
+            <Setter Property="BorderThickness" Value="1.2" />
+            <Setter Property="Background" Value="#1E1418" />
+        </Style>
+
+        <Style x:Key="PluginCheckBoxStyle" TargetType="CheckBox">
+            <Setter Property="Foreground" Value="{StaticResource TextPrimaryBrush}" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="CheckBox">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="12" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <Border x:Name="Indicator"
+                                    Grid.Column="0"
+                                    VerticalAlignment="Top"
+                                    Style="{StaticResource CheckBoxIndicatorStyle}">
+                                <Path x:Name="CheckMark"
+                                      Width="10"
+                                      Height="8"
+                                      Stretch="Uniform"
+                                      Data="M 0 4 L 3 8 L 10 0"
+                                      Stroke="White"
+                                      StrokeThickness="2"
+                                      StrokeStartLineCap="Round"
+                                      StrokeEndLineCap="Round"
+                                      Visibility="Collapsed" />
+                            </Border>
+                            <ContentPresenter Grid.Column="2"
+                                              VerticalAlignment="Center"
+                                              Margin="0,-1,0,0" />
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter TargetName="Indicator" Property="Background" Value="#8E2118" />
+                                <Setter TargetName="Indicator" Property="BorderBrush" Value="#F1DCC2" />
+                                <Setter TargetName="CheckMark" Property="Visibility" Value="Visible" />
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Indicator" Property="BorderBrush" Value="#E1E7EF" />
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter TargetName="Indicator" Property="Opacity" Value="0.45" />
+                                <Setter Property="Opacity" Value="0.55" />
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -293,8 +364,9 @@
                                Text="AutoPatch" />
                     <TextBlock x:Name="txtDescription"
                                Margin="0,8,0,0"
+                               MaxWidth="720"
                                Style="{StaticResource BodyStyle}"
-                               Text="Configure a manifest source and patch target. The plugin checks the selected client folder before launch and downloads only the files that changed." />
+                               Text="Configure a patch manifest that lists compressed .zip or .rar packages. The plugin validates each archive and extracts it into the selected client folder before launch." />
                 </StackPanel>
             </Border>
 
@@ -323,17 +395,18 @@
                                   Grid.ColumnSpan="2"
                                   FontSize="15"
                                   FontWeight="SemiBold"
+                                  Style="{StaticResource PluginCheckBoxStyle}"
                                   Content="Enable autopatch before launch" />
 
                         <StackPanel Grid.Row="2" Grid.ColumnSpan="2">
                             <TextBlock x:Name="txtManifestLabel"
                                        Style="{StaticResource FieldLabelStyle}"
-                                       Text="Manifest URL or file path" />
+                                       Text="Patch manifest URL or file path" />
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*" />
                                     <ColumnDefinition Width="12" />
-                                    <ColumnDefinition Width="110" />
+                                    <ColumnDefinition Width="126" />
                                 </Grid.ColumnDefinitions>
                                 <TextBox x:Name="txtManifestLocation"
                                          Height="46"
@@ -342,9 +415,13 @@
                                 <Button x:Name="btnBrowseManifest"
                                         Grid.Column="2"
                                         Click="BtnBrowseManifest_Click"
-                                        Content="Browse..."
+                                        Content="Browse"
                                         Style="{StaticResource SecondaryButtonStyle}" />
                             </Grid>
+                            <TextBlock x:Name="txtManifestHint"
+                                       Margin="0,8,0,0"
+                                       Style="{StaticResource HintStyle}"
+                                       Text="Use either a local JSON manifest or an HTTP/HTTPS endpoint that describes the patch packages." />
                         </StackPanel>
 
                         <StackPanel Grid.Row="4" Grid.ColumnSpan="2">
@@ -357,15 +434,16 @@
                                      Style="{StaticResource InputTextBoxStyle}" />
                             <TextBlock x:Name="txtTargetFolderHint"
                                        Margin="0,8,0,0"
-                                       Style="{StaticResource BodyStyle}"
-                                       Text="Leave this empty to patch the executable working directory directly." />
+                                       Style="{StaticResource HintStyle}"
+                                       Text="Leave this empty to extract patches into the executable working directory. RAR packages require WinRAR or UnRAR to be installed." />
                         </StackPanel>
 
                         <CheckBox x:Name="chkFailLaunchOnError"
                                   Grid.Row="6"
                                   Grid.ColumnSpan="2"
                                   FontSize="14"
-                                  Content="Cancel launch if the autopatch fails" />
+                                  Style="{StaticResource PluginCheckBoxStyle}"
+                                  Content="Cancel launch if applying a patch package fails" />
 
                         <Border Grid.Row="8"
                                 Grid.ColumnSpan="2"
@@ -379,15 +457,15 @@
                                            FontSize="12"
                                            FontWeight="SemiBold"
                                            Foreground="{StaticResource GoldBrush}"
-                                           Text="Manifest schema" />
+                                           Text="Patch manifest schema" />
                                 <TextBox x:Name="txtSchemaHelp"
                                          Margin="0,10,0,0"
-                                         MinHeight="112"
+                                         MinHeight="132"
                                          IsReadOnly="True"
                                          AcceptsReturn="True"
                                          TextWrapping="Wrap"
                                          VerticalScrollBarVisibility="Auto"
-                                         Style="{StaticResource InputTextBoxStyle}" />
+                                         Style="{StaticResource SchemaTextBoxStyle}" />
                             </StackPanel>
                         </Border>
                     </Grid>

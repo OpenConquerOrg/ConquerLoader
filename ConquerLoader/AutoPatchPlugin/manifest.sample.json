@@ -1,16 +1,20 @@
 {
   "version": "1.0.0",
   "baseUrl": "https://cdn.example.com/patch/",
-  "files": [
+  "packages": [
     {
-      "path": "ini/server.dat",
-      "url": "ini/server.dat",
-      "size": 4096,
+      "id": "base-client",
+      "archive": "base-client-100.zip",
+      "format": "zip",
+      "extractTo": ".",
+      "size": 10485760,
       "sha256": "HEX_O_BASE64_SHA256"
     },
     {
-      "path": "patch/loader.dat",
-      "url": "files/loader.dat"
+      "id": "hd-textures",
+      "url": "patches/hd-textures.rar",
+      "format": "rar",
+      "extractTo": "data"
     }
   ]
 }

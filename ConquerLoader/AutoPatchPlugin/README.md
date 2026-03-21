@@ -1,166 +1,184 @@
 # AutoPatch Plugin
 
-## Que hace
+## What It Does
 
-`AutoPatchPlugin` es un plugin opcional para `ConquerLoader` que ejecuta un autoparche **antes** de abrir el cliente.
+`AutoPatchPlugin` is an optional plugin for `ConquerLoader` that applies compressed patches before the client is launched.
 
-Su objetivo es sencillo:
+It no longer downloads and writes individual files one by one. Instead, it works with a JSON manifest that lists `.zip` or `.rar` patch packages, validates them, and extracts them into the final client folder used by the launcher.
 
-1. leer una configuracion propia del plugin
-2. cargar un manifiesto de parche
-3. comparar archivos locales con lo que pide el manifiesto
-4. descargar o copiar solo los archivos necesarios
-5. continuar con el launch normal del cliente
+## How It Integrates With The Loader
 
-Si el plugin esta activado y configurado para bloquear el arranque en caso de error, puede cancelar el `launch` y mostrar el motivo al usuario.
-
-## Como se integra con el loader
-
-El loader ahora tiene un punto de extension de pre-lanzamiento:
+The loader now exposes a pre-launch extension point:
 
 - `ConquerLoader/Core.cs`
 - `CLCore/PluginSystem/IPreLaunchPlugin.cs`
 - `CLCore/PluginSystem/PluginPreLaunchContext.cs`
 - `CLCore/PluginSystem/PluginPreLaunchResult.cs`
 
-Flujo real:
+Actual flow:
 
-1. `ConquerLoader` carga los DLL de `Plugins`
-2. crea las instancias que implementan `IPlugin`
-3. ejecuta `Init()` como siempre
-4. justo antes de `Process.Start(...)`, el loader llama a `Core.RunPreLaunchPlugins(...)`
-5. solo los plugins que implementan `IPreLaunchPlugin` participan en ese paso
-6. si alguno devuelve `ContinueLaunch = false`, el cliente no se abre
+1. `ConquerLoader` loads DLLs from `Plugins`
+2. it creates instances for plugins implementing `IPlugin`
+3. it runs `Init()` as usual
+4. right before `Process.Start(...)`, the loader calls `Core.RunPreLaunchPlugins(...)`
+5. `AutoPatchPlugin` receives the `PluginPreLaunchContext`
+6. if autopatching fails and configuration requires it, launch is canceled
 
-Esto mantiene compatibilidad con plugins antiguos: si solo implementan `IPlugin`, siguen funcionando igual.
+## Plugin Configuration
 
-## Configuracion del plugin
-
-El plugin guarda su configuracion en:
+The plugin stores its configuration in:
 
 `Plugins/AutoPatchPlugin.settings.json`
 
-Campos:
+Fields:
 
-- `Enabled`: activa o desactiva el autoparche
-- `ManifestLocation`: URL HTTP/HTTPS o ruta local a un JSON de manifiesto
-- `FailLaunchOnError`: si es `true`, cancela el launch cuando el parche falla
-- `RelativeTargetFolder`: carpeta relativa opcional dentro del `working directory` del cliente
+- `Enabled`: enables or disables autopatching
+- `ManifestLocation`: HTTP/HTTPS URL or local path to a manifest JSON file
+- `FailLaunchOnError`: when `true`, cancels launch if patching fails
+- `RelativeTargetFolder`: optional relative folder inside the client working directory
 
-La configuracion se edita desde la ventana WPF del plugin:
+Applied package state is stored in:
 
-- `AutoPatchPlugin/AutoPatchConfigurationWindow.xaml`
-- `AutoPatchPlugin/AutoPatchConfigurationWindow.xaml.cs`
+`Plugins/AutoPatchPlugin.state.json`
 
-## Manifiesto de parche
+This state is used to avoid reapplying the same patch package every time if its signature has not changed.
 
-El plugin espera un JSON con este formato:
+## Manifest Format
+
+The plugin expects JSON in this format:
 
 ```json
 {
   "version": "1.0.0",
   "baseUrl": "https://cdn.example.com/patch/",
-  "files": [
+  "packages": [
     {
-      "path": "ini/server.dat",
-      "url": "ini/server.dat",
-      "size": 4096,
-      "sha256": "HEX_O_BASE64_SHA256"
+      "id": "base-client",
+      "archive": "base-client-100.zip",
+      "format": "zip",
+      "extractTo": ".",
+      "sha256": "HEX_OR_BASE64_SHA256"
     },
     {
-      "path": "patch/loader.dat",
-      "url": "files/loader.dat"
+      "id": "hd-textures",
+      "url": "patches/hd-textures.rar",
+      "format": "rar",
+      "extractTo": "data"
     }
   ]
 }
 ```
 
-Reglas:
+`archives` is also accepted as an alias for `packages`.
 
-- `path` es obligatorio y define donde se escribira el archivo dentro del cliente
-- `url` es opcional
-- si `url` no existe, se usa el propio `path`
-- `baseUrl` puede ser:
-  - una URL remota
-  - una ruta local
-  - o puede omitirse y entonces el plugin resuelve relativo al manifiesto
-- `sha256` acepta hash en hexadecimal o en base64
-- `size` es opcional, pero si existe ayuda a detectar cambios mas rapido
+Per-package fields:
 
-## Como resuelve rutas
+- `id`: stable package identifier
+- `archive`: file name or relative path to the compressed package
+- `url`: optional source; if present, it takes priority over `archive`
+- `format`: `zip` or `rar`; if missing, the plugin tries to infer it from the extension
+- `extractTo`: relative folder inside the client where the package should be extracted
+- `size`: optional compressed package size
+- `sha256`: optional compressed package hash
+- `enabled`: allows disabling a package from the manifest
 
-Destino:
+## Important Rule For Older Manifests
 
-- el destino base es `WorkingDirectory` del cliente
-- si `RelativeTargetFolder` tiene valor, se combina con ese `WorkingDirectory`
-- el plugin bloquea rutas peligrosas con `..` que intenten salir de la carpeta objetivo
+The new plugin version no longer supports manifests like this:
 
-Origen:
+```json
+{
+  "files": [...]
+}
+```
 
-- si el manifiesto esta en HTTP/HTTPS, los archivos se descargan con `HttpClient`
-- si el manifiesto es local, tambien puede apuntar a archivos locales
-- `baseUrl` y `url` se combinan de forma relativa cuando toca
+If the manifest still uses `files`, the plugin treats it as a legacy format and fails with a clear message so it can be migrated to the package-based model.
 
-## Orden exacto durante el launch
+## How Paths Are Resolved
 
-En `MainLite` y en `Main` el flujo queda asi:
+Destination:
 
-1. preparar entorno DX8/DX9 si aplica
-2. regenerar `server.dat` o DLLs previos si hace falta
-3. construir `PluginPreLaunchContext`
-4. ejecutar `Core.RunPreLaunchPlugins(...)`
-5. si todo sale bien, abrir el cliente
-6. continuar con hooks/inyeccion/CLServer como antes
+- the base destination is the client `WorkingDirectory`
+- if `RelativeTargetFolder` has a value, it is combined with that `WorkingDirectory`
+- `extractTo` is resolved relative to that destination
+- the plugin blocks unsafe paths using `..` if they attempt to escape the target folder
 
-Eso significa que el autoparche trabaja sobre la carpeta final real que se va a usar al lanzar el cliente.
+Source:
 
-## Progreso y logging
+- if the manifest is loaded over HTTP/HTTPS, packages can also come from HTTP/HTTPS
+- if the manifest is local, packages can also be local
+- `baseUrl` can be either a URL or a local path
+- `baseUrl` and `archive` or `url` are combined relatively when needed
 
-El contexto del plugin incluye:
+## ZIP And RAR
 
-- `ReportProgress`
-- `Log`
+### ZIP
 
-`AutoPatchPlugin` usa ambos:
+`.zip` packages are extracted directly through .NET using `System.IO.Compression`.
 
-- reporta progreso en la franja `1..8` antes del launch real
-- escribe trazas con prefijo `[Plugin]` en el log del loader
+### RAR
 
-## Archivos importantes
+`.rar` packages are supported through a tool installed on the machine:
 
-- `AutoPatchPlugin/AutoPatchPlugin.cs`: logica del plugin
-- `AutoPatchPlugin/AutoPatchManifest.cs`: clases del manifiesto
-- `AutoPatchPlugin/AutoPatchSettings.cs`: modelo de configuracion
-- `AutoPatchPlugin/AutoPatchSettingsStore.cs`: persistencia JSON
-- `AutoPatchPlugin/AutoPatchConfigurationWindow.xaml`: UI WPF del plugin
-- `ConquerLoader/Core.cs`: ejecucion de plugins de pre-launch
-- `ConquerLoader/Forms/WPF/MainLite.xaml.cs`: integracion WPF en el launch
-- `ConquerLoader/Forms/Main.cs`: integracion WinForms antigua en el launch
+- `UnRAR.exe`
+- `WinRAR.exe`
 
-## Build y despliegue
+The plugin tries to locate them in `PATH` and in common WinRAR installation paths.
 
-El proyecto:
+If neither tool exists and the manifest includes a `.rar` package, autopatching fails with a clear message.
 
-- esta añadido a `ConquerLoader.sln`
-- compila como libreria .NET Framework 4.6.2
-- copia automaticamente `AutoPatchPlugin.dll` a:
+## Exact Launch Order
 
-`ConquerLoader/bin/<Configuration>/Plugins/`
+In both `MainLite` and `Main`, the flow becomes:
 
-Asi el loader ya lo descubre usando el sistema de plugins existente.
+1. prepare DX8 or DX9 environment if needed
+2. regenerate `server.dat` or pre-launch DLLs if required
+3. build the `PluginPreLaunchContext`
+4. execute `Core.RunPreLaunchPlugins(...)`
+5. `AutoPatchPlugin` applies pending patch packages
+6. if everything succeeds, the client is started
 
-## Limitaciones actuales
+That means autopatching runs against the real final client folder that will be used for launch.
 
-- no hay UI dentro de `Settings` para el autoparche; la configuracion va desde la pantalla de plugins
-- no hay planificador de versiones ni delta patching; el manifiesto es por archivos
-- el plugin no implementa reintentos, mirrors ni rollback automatico
+## What "Already Applied" Means
 
-## Recomendacion de uso
+The plugin stores a signature per package and destination. That signature includes:
 
-Para una primera integracion estable:
+- `manifest.version`
+- `id`
+- `archive`
+- `url`
+- `format`
+- `extractTo`
+- `size`
+- `sha256`
 
-1. activa el plugin
-2. usa un manifiesto local primero
-3. comprueba hashes
-4. cuando funcione bien, cambia a CDN o HTTP
-5. deja `FailLaunchOnError = true` en produccion
+If that signature does not change, the package is considered already applied and is skipped.
+
+The cleanest way to force reapplication is to change `version`, `sha256`, or both.
+
+## Important Files
+
+- `AutoPatchPlugin/AutoPatchPlugin.cs`: main autopatch logic
+- `AutoPatchPlugin/AutoPatchManifest.cs`: new manifest model
+- `AutoPatchPlugin/AutoPatchState.cs`: applied package state
+- `AutoPatchPlugin/AutoPatchSettings.cs`: persisted configuration
+- `AutoPatchPlugin/AutoPatchSettingsStore.cs`: JSON settings persistence
+- `AutoPatchPlugin/AutoPatchConfigurationWindow.xaml`: WPF UI
+- `AutoPatchPlugin/AutoPatchConfigurationWindow.xaml.cs`: WPF code-behind
+- `AutoPatchPlugin/manifest.sample.json`: sample manifest
+
+## Build And Deployment
+
+The project:
+
+- is included in `ConquerLoader.sln`
+- builds as a .NET Framework 4.6.2 library
+- automatically copies `AutoPatchPlugin.dll` to `ConquerLoader/bin/<Configuration>/Plugins/`
+
+## Current Limitations
+
+- there is no binary delta patching
+- there is no automatic rollback
+- `.rar` support depends on an external tool installed on Windows
+- applied-package detection is based on stored package signatures, not on full verification of already extracted content

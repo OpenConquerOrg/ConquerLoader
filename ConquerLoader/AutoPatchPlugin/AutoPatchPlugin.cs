@@ -1,7 +1,9 @@
 using CLCore;
 using Newtonsoft.Json;
 using System;
+using System.Diagnostics;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Net.Http;
 using System.Security.Cryptography;
@@ -20,7 +22,7 @@ namespace AutoPatchPlugin
 
         public string Explanation
         {
-            get { return "Applies a manifest-driven autopatch to the client folder before launch."; }
+            get { return "Applies archive-based autopatches (.zip/.rar) to the client folder before launch."; }
         }
 
         public PluginType PluginType
@@ -73,29 +75,48 @@ namespace AutoPatchPlugin
             try
             {
                 AutoPatchManifest manifest = LoadManifest(settings.ManifestLocation);
-                if (manifest == null || manifest.Files == null || manifest.Files.Count == 0)
+                if (manifest == null)
                 {
-                    context.Log?.Invoke("AutoPatch manifest does not contain patch files.");
+                    throw new InvalidOperationException("The autopatch manifest is empty or invalid.");
+                }
+
+                if (manifest.UsesLegacyFileEntries && manifest.GetPackages().Count == 0)
+                {
+                    throw new InvalidOperationException(
+                        "This AutoPatch manifest still uses legacy file entries. Use the 'packages' or 'archives' list with .zip/.rar patches.");
+                }
+
+                AutoPatchManifestPackage[] patchPackages = manifest.GetPackages()
+                    .Where(package => package != null && package.Enabled && !string.IsNullOrWhiteSpace(GetPackageSource(package)))
+                    .ToArray();
+
+                if (patchPackages.Length == 0)
+                {
+                    context.Log?.Invoke("AutoPatch manifest does not contain patch archives.");
                     return PluginPreLaunchResult.Success();
                 }
 
                 string targetDirectory = ResolveTargetDirectory(context.WorkingDirectory, settings.RelativeTargetFolder);
                 Directory.CreateDirectory(targetDirectory);
 
-                AutoPatchManifestFile[] patchFiles = manifest.Files
-                    .Where(file => !string.IsNullOrWhiteSpace(file.Path))
-                    .ToArray();
+                AutoPatchState state = AutoPatchStateStore.Load();
+                bool stateChanged = false;
 
-                for (int index = 0; index < patchFiles.Length; index++)
+                for (int index = 0; index < patchPackages.Length; index++)
                 {
-                    AutoPatchManifestFile file = patchFiles[index];
-                    ApplyPatchFile(file, manifest, settings.ManifestLocation, targetDirectory, context);
+                    AutoPatchManifestPackage package = patchPackages[index];
+                    stateChanged |= ApplyPatchPackage(package, manifest, settings.ManifestLocation, targetDirectory, state, context);
 
                     if (context.ReportProgress != null)
                     {
-                        int progress = 1 + (int)Math.Round(((index + 1d) / Math.Max(1, patchFiles.Length)) * 7d);
+                        int progress = 1 + (int)Math.Round(((index + 1d) / Math.Max(1, patchPackages.Length)) * 7d);
                         context.ReportProgress(progress);
                     }
+                }
+
+                if (stateChanged)
+                {
+                    AutoPatchStateStore.Save(state);
                 }
 
                 context.Log?.Invoke("AutoPatch completed successfully for " + context.Server.ServerName + ".");
@@ -117,52 +138,332 @@ namespace AutoPatchPlugin
             return JsonConvert.DeserializeObject<AutoPatchManifest>(json);
         }
 
-        private static void ApplyPatchFile(AutoPatchManifestFile file, AutoPatchManifest manifest, string manifestLocation, string targetDirectory, PluginPreLaunchContext context)
+        private static bool ApplyPatchPackage(
+            AutoPatchManifestPackage package,
+            AutoPatchManifest manifest,
+            string manifestLocation,
+            string targetDirectory,
+            AutoPatchState state,
+            PluginPreLaunchContext context)
         {
-            string destinationPath = ResolveDestinationPath(targetDirectory, file.Path);
-            bool requiresUpdate = !File.Exists(destinationPath);
+            string stateKey = BuildPackageStateKey(targetDirectory, package);
+            string desiredFingerprint = BuildPackageFingerprint(manifest, package);
+            string currentFingerprint;
 
-            if (!requiresUpdate && file.Size.HasValue)
+            if (state.AppliedPackages.TryGetValue(stateKey, out currentFingerprint) &&
+                string.Equals(currentFingerprint, desiredFingerprint, StringComparison.OrdinalIgnoreCase))
             {
-                FileInfo localFile = new FileInfo(destinationPath);
-                requiresUpdate = localFile.Length != file.Size.Value;
-            }
-
-            if (!requiresUpdate && !string.IsNullOrWhiteSpace(file.Sha256))
-            {
-                requiresUpdate = !HashesMatch(ComputeSha256(destinationPath), file.Sha256);
-            }
-
-            if (!requiresUpdate)
-            {
-                context.Log?.Invoke("AutoPatch skipped " + file.Path + " (already up to date).");
-                return;
+                context.Log?.Invoke("AutoPatch skipped " + GetPackageDisplayName(package) + " (already applied).");
+                return false;
             }
 
             string sourceBase = string.IsNullOrWhiteSpace(manifest.BaseUrl)
                 ? manifestLocation
                 : ResolveSourcePath(manifest.BaseUrl, manifestLocation);
-            string source = ResolveSourcePath(string.IsNullOrWhiteSpace(file.Url) ? file.Path : file.Url, sourceBase);
+            string source = ResolveSourcePath(GetPackageSource(package), sourceBase);
+            string archiveFormat = ResolveArchiveFormat(package, source);
+            string archiveExtension = ResolveArchiveExtension(archiveFormat);
+            string tempArchivePath = MaterializeSourceToTempFile(source, archiveExtension);
 
-            context.Log?.Invoke("AutoPatch downloading " + file.Path + " from " + source + ".");
-            byte[] content = ReadBytes(source);
-
-            if (!string.IsNullOrWhiteSpace(file.Sha256))
+            try
             {
-                string contentHash = ComputeSha256(content);
-                if (!HashesMatch(contentHash, file.Sha256))
+                FileInfo archiveFile = new FileInfo(tempArchivePath);
+                if (package.Size.HasValue && archiveFile.Length != package.Size.Value)
                 {
-                    throw new InvalidOperationException("Hash mismatch for patched file " + file.Path + ".");
+                    throw new InvalidOperationException("Size mismatch for patch package " + GetPackageDisplayName(package) + ".");
+                }
+
+                if (!string.IsNullOrWhiteSpace(package.Sha256))
+                {
+                    string archiveHash = ComputeSha256(tempArchivePath);
+                    if (!HashesMatch(archiveHash, package.Sha256))
+                    {
+                        throw new InvalidOperationException("Hash mismatch for patch package " + GetPackageDisplayName(package) + ".");
+                    }
+                }
+
+                string extractDirectory = ResolveDestinationPath(targetDirectory, package.ExtractTo ?? string.Empty);
+                Directory.CreateDirectory(extractDirectory);
+
+                context.Log?.Invoke("AutoPatch applying " + GetPackageDisplayName(package) + " from " + source + ".");
+                ExtractArchive(tempArchivePath, archiveFormat, extractDirectory);
+
+                state.AppliedPackages[stateKey] = desiredFingerprint;
+                context.Log?.Invoke("AutoPatch applied " + GetPackageDisplayName(package) + ".");
+                return true;
+            }
+            finally
+            {
+                DeleteFileSafe(tempArchivePath);
+            }
+        }
+
+        private static string GetPackageSource(AutoPatchManifestPackage package)
+        {
+            return !string.IsNullOrWhiteSpace(package.Url)
+                ? package.Url
+                : package.Archive;
+        }
+
+        private static string GetPackageDisplayName(AutoPatchManifestPackage package)
+        {
+            if (!string.IsNullOrWhiteSpace(package.Id))
+            {
+                return package.Id;
+            }
+
+            if (!string.IsNullOrWhiteSpace(package.Archive))
+            {
+                return package.Archive;
+            }
+
+            if (!string.IsNullOrWhiteSpace(package.Url))
+            {
+                return package.Url;
+            }
+
+            return "patch package";
+        }
+
+        private static string BuildPackageStateKey(string targetDirectory, AutoPatchManifestPackage package)
+        {
+            string normalizedTarget = Path.GetFullPath(targetDirectory).TrimEnd(Path.DirectorySeparatorChar);
+            string packageKey = GetPackageDisplayName(package);
+            return normalizedTarget + "|" + packageKey;
+        }
+
+        private static string BuildPackageFingerprint(AutoPatchManifest manifest, AutoPatchManifestPackage package)
+        {
+            return string.Join("|", new[]
+            {
+                manifest.Version ?? string.Empty,
+                package.Id ?? string.Empty,
+                package.Archive ?? string.Empty,
+                package.Url ?? string.Empty,
+                package.Format ?? string.Empty,
+                package.ExtractTo ?? string.Empty,
+                package.Size.HasValue ? package.Size.Value.ToString() : string.Empty,
+                package.Sha256 ?? string.Empty
+            });
+        }
+
+        private static string ResolveArchiveFormat(AutoPatchManifestPackage package, string source)
+        {
+            if (!string.IsNullOrWhiteSpace(package.Format))
+            {
+                string normalizedFormat = package.Format.Trim().ToLowerInvariant();
+                if (normalizedFormat == "zip" || normalizedFormat == "rar")
+                {
+                    return normalizedFormat;
+                }
+
+                throw new InvalidOperationException("Unsupported patch format '" + package.Format + "'. Use zip or rar.");
+            }
+
+            string extension = GetSourceExtension(source);
+            if (string.Equals(extension, ".zip", StringComparison.OrdinalIgnoreCase))
+            {
+                return "zip";
+            }
+
+            if (string.Equals(extension, ".rar", StringComparison.OrdinalIgnoreCase))
+            {
+                return "rar";
+            }
+
+            throw new InvalidOperationException(
+                "Unable to infer the archive format for " + GetPackageDisplayName(package) + ". Set the 'format' field to zip or rar.");
+        }
+
+        private static string ResolveArchiveExtension(string archiveFormat)
+        {
+            return archiveFormat == "rar" ? ".rar" : ".zip";
+        }
+
+        private static string GetSourceExtension(string source)
+        {
+            Uri uri;
+            if (Uri.TryCreate(source, UriKind.Absolute, out uri))
+            {
+                return Path.GetExtension(uri.IsFile ? uri.LocalPath : uri.AbsolutePath);
+            }
+
+            return Path.GetExtension(source);
+        }
+
+        private static string MaterializeSourceToTempFile(string source, string extension)
+        {
+            string tempDirectory = Path.Combine(Path.GetTempPath(), "ConquerLoader", "AutoPatch");
+            Directory.CreateDirectory(tempDirectory);
+
+            string tempFilePath = Path.Combine(tempDirectory, Guid.NewGuid().ToString("N") + extension);
+            if (IsHttpSource(source))
+            {
+                using (HttpResponseMessage response = HttpClient.GetAsync(source).Result)
+                {
+                    response.EnsureSuccessStatusCode();
+                    using (Stream input = response.Content.ReadAsStreamAsync().Result)
+                    using (FileStream output = new FileStream(tempFilePath, FileMode.Create, FileAccess.Write, FileShare.None))
+                    {
+                        input.CopyTo(output);
+                    }
+                }
+            }
+            else
+            {
+                File.Copy(source, tempFilePath, true);
+            }
+
+            return tempFilePath;
+        }
+
+        private static void ExtractArchive(string archivePath, string archiveFormat, string extractDirectory)
+        {
+            switch (archiveFormat)
+            {
+                case "zip":
+                    ExtractZipArchive(archivePath, extractDirectory);
+                    break;
+                case "rar":
+                    ExtractRarArchive(archivePath, extractDirectory);
+                    break;
+                default:
+                    throw new InvalidOperationException("Unsupported patch format '" + archiveFormat + "'.");
+            }
+        }
+
+        private static void ExtractZipArchive(string archivePath, string extractDirectory)
+        {
+            using (FileStream archiveStream = File.OpenRead(archivePath))
+            using (ZipArchive zipArchive = new ZipArchive(archiveStream, ZipArchiveMode.Read))
+            {
+                foreach (ZipArchiveEntry entry in zipArchive.Entries)
+                {
+                    string normalizedEntryPath = (entry.FullName ?? string.Empty).Replace('/', Path.DirectorySeparatorChar);
+                    if (string.IsNullOrWhiteSpace(normalizedEntryPath))
+                    {
+                        continue;
+                    }
+
+                    bool isDirectory = normalizedEntryPath.EndsWith(Path.DirectorySeparatorChar.ToString(), StringComparison.Ordinal);
+                    string destinationPath = ResolveDestinationPath(extractDirectory, normalizedEntryPath);
+
+                    if (isDirectory)
+                    {
+                        Directory.CreateDirectory(destinationPath);
+                        continue;
+                    }
+
+                    string destinationFolder = Path.GetDirectoryName(destinationPath);
+                    if (!string.IsNullOrWhiteSpace(destinationFolder))
+                    {
+                        Directory.CreateDirectory(destinationFolder);
+                    }
+
+                    using (Stream entryStream = entry.Open())
+                    using (FileStream outputStream = new FileStream(destinationPath, FileMode.Create, FileAccess.Write, FileShare.None))
+                    {
+                        entryStream.CopyTo(outputStream);
+                    }
+
+                    if (entry.LastWriteTime != default(DateTimeOffset))
+                    {
+                        File.SetLastWriteTime(destinationPath, entry.LastWriteTime.LocalDateTime);
+                    }
+                }
+            }
+        }
+
+        private static void ExtractRarArchive(string archivePath, string extractDirectory)
+        {
+            string extractorPath = FindRarExtractor();
+            if (string.IsNullOrWhiteSpace(extractorPath))
+            {
+                throw new InvalidOperationException(
+                    "RAR extraction requires UnRAR.exe or WinRAR.exe to be installed on this machine.");
+            }
+
+            string destinationPath = extractDirectory.TrimEnd(Path.DirectorySeparatorChar) + Path.DirectorySeparatorChar;
+            ProcessStartInfo startInfo = new ProcessStartInfo
+            {
+                FileName = extractorPath,
+                Arguments = string.Format("x -o+ -y \"{0}\" \"{1}\"", archivePath, destinationPath),
+                UseShellExecute = false,
+                CreateNoWindow = true,
+                WindowStyle = ProcessWindowStyle.Hidden,
+                WorkingDirectory = extractDirectory
+            };
+
+            using (Process process = Process.Start(startInfo))
+            {
+                if (process == null)
+                {
+                    throw new InvalidOperationException("Unable to start the RAR extractor process.");
+                }
+
+                process.WaitForExit();
+                if (process.ExitCode != 0)
+                {
+                    throw new InvalidOperationException("RAR extraction failed with exit code " + process.ExitCode + ".");
+                }
+            }
+        }
+
+        private static string FindRarExtractor()
+        {
+            string[] candidates =
+            {
+                "unrar.exe",
+                "rar.exe",
+                @"C:\Program Files\WinRAR\UnRAR.exe",
+                @"C:\Program Files\WinRAR\WinRAR.exe",
+                @"C:\Program Files (x86)\WinRAR\UnRAR.exe",
+                @"C:\Program Files (x86)\WinRAR\WinRAR.exe"
+            };
+
+            foreach (string candidate in candidates)
+            {
+                if (Path.IsPathRooted(candidate))
+                {
+                    if (File.Exists(candidate))
+                    {
+                        return candidate;
+                    }
+
+                    continue;
+                }
+
+                string resolvedPath = FindExecutableInPath(candidate);
+                if (!string.IsNullOrWhiteSpace(resolvedPath))
+                {
+                    return resolvedPath;
                 }
             }
 
-            string destinationFolder = Path.GetDirectoryName(destinationPath);
-            if (!string.IsNullOrWhiteSpace(destinationFolder))
+            return null;
+        }
+
+        private static string FindExecutableInPath(string executableName)
+        {
+            string pathEnvironment = Environment.GetEnvironmentVariable("PATH") ?? string.Empty;
+            string[] directories = pathEnvironment.Split(new[] { Path.PathSeparator }, StringSplitOptions.RemoveEmptyEntries);
+
+            foreach (string directory in directories)
             {
-                Directory.CreateDirectory(destinationFolder);
+                try
+                {
+                    string fullPath = Path.Combine(directory.Trim(), executableName);
+                    if (File.Exists(fullPath))
+                    {
+                        return fullPath;
+                    }
+                }
+                catch
+                {
+                }
             }
 
-            File.WriteAllBytes(destinationPath, content);
+            return null;
         }
 
         private static string ResolveTargetDirectory(string workingDirectory, string relativeTargetFolder)
@@ -253,16 +554,6 @@ namespace AutoPatchPlugin
             return File.ReadAllText(source);
         }
 
-        private static byte[] ReadBytes(string source)
-        {
-            if (IsHttpSource(source))
-            {
-                return HttpClient.GetByteArrayAsync(source).Result;
-            }
-
-            return File.ReadAllBytes(source);
-        }
-
         private static bool IsHttpSource(string source)
         {
             Uri uri;
@@ -276,14 +567,6 @@ namespace AutoPatchPlugin
             using (SHA256 sha256 = SHA256.Create())
             {
                 return ConvertHashToHex(sha256.ComputeHash(stream));
-            }
-        }
-
-        private static string ComputeSha256(byte[] content)
-        {
-            using (SHA256 sha256 = SHA256.Create())
-            {
-                return ConvertHashToHex(sha256.ComputeHash(content));
             }
         }
 
@@ -314,6 +597,20 @@ namespace AutoPatchPlugin
             catch (FormatException)
             {
                 return false;
+            }
+        }
+
+        private static void DeleteFileSafe(string filePath)
+        {
+            try
+            {
+                if (!string.IsNullOrWhiteSpace(filePath) && File.Exists(filePath))
+                {
+                    File.Delete(filePath);
+                }
+            }
+            catch
+            {
             }
         }
     }
