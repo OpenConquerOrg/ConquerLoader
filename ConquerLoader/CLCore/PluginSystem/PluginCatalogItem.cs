@@ -15,6 +15,7 @@ namespace CLCore
         public bool IsInstalled { get; set; }
         public bool IsEnabled { get; set; }
         public bool IsLoadedInCurrentSession { get; set; }
+        public bool IsAssignedToLicense { get; set; }
         public string AssemblyPath { get; set; }
         public string RemoteName { get; set; }
         public IPlugin Instance { get; set; }
@@ -30,6 +31,7 @@ namespace CLCore
                 IsInstalled = IsInstalled,
                 IsEnabled = IsEnabled,
                 IsLoadedInCurrentSession = IsLoadedInCurrentSession,
+                IsAssignedToLicense = IsAssignedToLicense,
                 AssemblyPath = AssemblyPath,
                 RemoteName = RemoteName,
                 Instance = Instance

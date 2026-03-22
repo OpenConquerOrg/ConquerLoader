@@ -217,15 +217,15 @@
   },
   {
     "id": "pluginsHintLicensed",
-    "text": "Local plugins come from the Plugins folder. Remote plugins come from your license catalog and are installed on demand."
+    "text": "Local plugins come from the Plugins folder. Free remote plugins come from the public catalog, and premium remote plugins come from your license assignments."
   },
   {
     "id": "pluginsHintNoLicense",
-    "text": "Local plugins work without a license. Add a license key if you want to browse and install remote plugins."
+    "text": "Local plugins work without a license. You can still browse and install public free remote plugins, and add a license key later for premium assignments."
   },
   {
     "id": "pluginsEmptyState",
-    "text": "No plugins are available right now. Add local DLLs to the Plugins folder or configure a license to browse remote modules."
+    "text": "No plugins are available right now. Add local DLLs to the Plugins folder or wait for public free or assigned remote modules to appear."
   },
   {
     "id": "pluginsSourceLocal",
@@ -248,6 +248,14 @@
     "text": "Available"
   },
   {
+    "id": "pluginsStatusAssigned",
+    "text": "Assigned"
+  },
+  {
+    "id": "pluginsStatusCatalog",
+    "text": "Catalog"
+  },
+  {
     "id": "pluginsStatusEnabled",
     "text": "Enabled"
   },
@@ -257,7 +265,19 @@
   },
   {
     "id": "pluginsRemoteAvailableHint",
-    "text": "Available from your license catalog. Install it to download it into your local plugins folder."
+    "text": "Available for download. Install it to download it into your local plugins folder."
+  },
+  {
+    "id": "pluginsRemotePublicHint",
+    "text": "This free plugin is public and can be installed without a license."
+  },
+  {
+    "id": "pluginsRemoteNeedsLicenseHint",
+    "text": "This remote plugin is only visible in the catalog. Add a license key before you try to install remote modules."
+  },
+  {
+    "id": "pluginsRemoteNeedsAssignmentHint",
+    "text": "This plugin is not assigned to your license yet, so the API will not allow the download."
   },
   {
     "id": "pluginsRemoteInstalledHint",

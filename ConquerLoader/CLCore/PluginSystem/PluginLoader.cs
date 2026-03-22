@@ -82,14 +82,20 @@ namespace CLCore
 
         public PluginCatalogItem InstallRemotePlugin(LoaderConfig loaderConfig, string remotePluginName)
         {
-            if (loaderConfig == null || string.IsNullOrWhiteSpace(loaderConfig.LicenseKey))
-            {
-                throw new InvalidOperationException("A license key is required to install remote plugins.");
-            }
-
             if (string.IsNullOrWhiteSpace(remotePluginName))
             {
                 throw new InvalidOperationException("The remote plugin name cannot be empty.");
+            }
+
+            PluginCatalogItem remoteItem = LoadRemoteCatalog(loaderConfig)
+                .FirstOrDefault(item =>
+                    item != null &&
+                    string.Equals(item.RemoteName ?? item.Name, remotePluginName, StringComparison.OrdinalIgnoreCase));
+
+            if (remoteItem == null || !remoteItem.IsAssignedToLicense)
+            {
+                throw new InvalidOperationException(
+                    "This remote plugin is not available for download yet.");
             }
 
             string targetDirectory = Path.Combine(Constants.PluginsFolderName, "Remote");
@@ -99,8 +105,12 @@ namespace CLCore
             string targetPath = Path.Combine(targetDirectory, targetFileName);
 
             byte[] pluginBytes;
+            string downloadEndpoint = remoteItem.PluginType == PluginType.FREE
+                ? $"{CLServerConfig.APIBaseUri}/Plugin/DownloadFreePlugin/{remotePluginName}"
+                : $"{CLServerConfig.APIBaseUri}/Plugin/DownloadPlugin/{loaderConfig?.LicenseKey}/{remotePluginName}";
+
             using (HttpClient client = new HttpClient())
-            using (HttpResponseMessage response = client.GetAsync($"{CLServerConfig.APIBaseUri}/Plugin/DownloadPlugin/{loaderConfig.LicenseKey}/{remotePluginName}").Result)
+            using (HttpResponseMessage response = client.GetAsync(downloadEndpoint).Result)
             {
                 response.EnsureSuccessStatusCode();
                 pluginBytes = response.Content.ReadAsByteArrayAsync().Result;
@@ -238,6 +248,7 @@ namespace CLCore
                     IsInstalled = true,
                     IsEnabled = entry.Enabled,
                     IsLoadedInCurrentSession = isLoadedInCurrentSession && entry.Enabled,
+                    IsAssignedToLicense = source == PluginSource.Remote,
                     AssemblyPath = entry.AssemblyPath,
                     RemoteName = entry.RemoteName,
                     Instance = plugin
@@ -269,40 +280,34 @@ namespace CLCore
         private static List<PluginCatalogItem> LoadRemoteCatalog(LoaderConfig loaderConfig)
         {
             List<PluginCatalogItem> items = new List<PluginCatalogItem>();
-            if (loaderConfig == null || string.IsNullOrWhiteSpace(loaderConfig.LicenseKey))
+            List<ApiPluginRecord> publicPlugins = GetRemotePluginRecords($"{CLServerConfig.APIBaseUri}/Plugin/MyPlugins");
+            List<ApiPluginRecord> assignedPlugins = loaderConfig != null && !string.IsNullOrWhiteSpace(loaderConfig.LicenseKey)
+                ? GetRemotePluginRecords($"{CLServerConfig.APIBaseUri}/Plugin/MyPlugins/{loaderConfig.LicenseKey}")
+                : new List<ApiPluginRecord>();
+
+            if (publicPlugins.Count == 0 && assignedPlugins.Count == 0)
             {
                 return items;
             }
 
             try
             {
-                using (HttpClient client = new HttpClient())
-                using (HttpResponseMessage response = client.GetAsync($"{CLServerConfig.APIBaseUri}/Plugin/MyPlugins/{loaderConfig.LicenseKey}").Result)
-                {
-                    if (!response.IsSuccessStatusCode)
-                    {
-                        return items;
-                    }
+                HashSet<string> assignedNames = new HashSet<string>(
+                    assignedPlugins
+                        .Where(module => module != null && !string.IsNullOrWhiteSpace(module.Name))
+                        .Select(module => module.Name),
+                    StringComparer.OrdinalIgnoreCase);
 
-                    string result = response.Content.ReadAsStringAsync().Result;
-                    List<APIRemoteModule> apiRemoteModules = JsonConvert.DeserializeObject<List<APIRemoteModule>>(result) ?? new List<APIRemoteModule>();
-                    foreach (APIRemoteModule module in apiRemoteModules.Where(module => module != null && !string.IsNullOrWhiteSpace(module.Name)))
+                foreach (ApiPluginRecord module in publicPlugins.Where(module => module != null && !string.IsNullOrWhiteSpace(module.Name)))
+                {
+                    items.Add(CreateRemoteCatalogItem(module, assignedNames.Contains(module.Name)));
+                }
+
+                foreach (ApiPluginRecord module in assignedPlugins.Where(module => module != null && !string.IsNullOrWhiteSpace(module.Name)))
+                {
+                    if (!items.Any(item => string.Equals(item.RemoteName, module.Name, StringComparison.OrdinalIgnoreCase)))
                     {
-                        items.Add(new PluginCatalogItem
-                        {
-                            Name = string.IsNullOrWhiteSpace(module.DisplayName) ? module.Name : module.DisplayName,
-                            Explanation = string.IsNullOrWhiteSpace(module.Explanation)
-                                ? "This plugin is available from your remote license catalog and can be installed on demand."
-                                : module.Explanation,
-                            PluginType = ParsePluginType(module.PluginType),
-                            Source = PluginSource.Remote,
-                            IsInstalled = false,
-                            IsEnabled = false,
-                            IsLoadedInCurrentSession = false,
-                            AssemblyPath = null,
-                            RemoteName = module.Name,
-                            Instance = null
-                        });
+                        items.Add(CreateRemoteCatalogItem(module, true));
                     }
                 }
             }
@@ -318,15 +323,93 @@ namespace CLCore
                 .ToList();
         }
 
-        private static PluginType ParsePluginType(string pluginType)
+        private static List<ApiPluginRecord> GetRemotePluginRecords(string endpoint)
         {
-            PluginType parsedType;
-            if (!string.IsNullOrWhiteSpace(pluginType) && Enum.TryParse(pluginType, true, out parsedType))
+            try
             {
-                return parsedType;
+                using (HttpClient client = new HttpClient())
+                using (HttpResponseMessage response = client.GetAsync(endpoint).Result)
+                {
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        return new List<ApiPluginRecord>();
+                    }
+
+                    string result = response.Content.ReadAsStringAsync().Result;
+                    return JsonConvert.DeserializeObject<List<ApiPluginRecord>>(result) ?? new List<ApiPluginRecord>();
+                }
+            }
+            catch
+            {
+                return new List<ApiPluginRecord>();
+            }
+        }
+
+        private static PluginCatalogItem CreateRemoteCatalogItem(ApiPluginRecord module, bool isAssignedToLicense)
+        {
+            PluginType pluginType = ParsePluginType(module.RequiredLicenseType);
+            bool isDownloadAllowed = pluginType == PluginType.FREE || isAssignedToLicense;
+
+            return new PluginCatalogItem
+            {
+                Name = BuildRemoteDisplayName(module.Name),
+                Explanation = BuildRemoteExplanation(module, isDownloadAllowed),
+                PluginType = pluginType,
+                Source = PluginSource.Remote,
+                IsInstalled = false,
+                IsEnabled = false,
+                IsLoadedInCurrentSession = false,
+                IsAssignedToLicense = isDownloadAllowed,
+                AssemblyPath = null,
+                RemoteName = module.Name,
+                Instance = null
+            };
+        }
+
+        private static string BuildRemoteDisplayName(string pluginName)
+        {
+            return string.IsNullOrWhiteSpace(pluginName)
+                ? "Remote plugin"
+                : Path.GetFileNameWithoutExtension(pluginName);
+        }
+
+        private static string BuildRemoteExplanation(ApiPluginRecord module, bool isAssignedToLicense)
+        {
+            PluginType pluginType = ParsePluginType(module.RequiredLicenseType);
+            if (isAssignedToLicense)
+            {
+                return pluginType == PluginType.PREMIUM
+                    ? "Assigned to your license and ready to download."
+                    : "Available in the public catalog and ready to download.";
             }
 
-            return PluginType.PREMIUM;
+            return pluginType == PluginType.PREMIUM
+                ? "This premium plugin exists on the remote service, but it must be assigned to your license before it can be downloaded."
+                : "This free plugin is visible in the public catalog.";
+        }
+
+        private static PluginType ParsePluginType(object requiredLicenseType)
+        {
+            if (requiredLicenseType == null)
+            {
+                return PluginType.PREMIUM;
+            }
+
+            try
+            {
+                int numericValue = Convert.ToInt32(requiredLicenseType);
+                return numericValue <= 0 ? PluginType.FREE : PluginType.PREMIUM;
+            }
+            catch
+            {
+                PluginType parsedType;
+                if (Enum.TryParse(requiredLicenseType.ToString(), true, out parsedType))
+                {
+                    return parsedType;
+                }
+
+                return PluginType.PREMIUM;
+            }
         }
 
         private static void RemoveMatchingCatalogEntries(PluginCatalogItem installedItem)
@@ -414,15 +497,12 @@ namespace CLCore
             }
         }
 
-        protected class APIRemoteModule
+        protected class ApiPluginRecord
         {
             public uint Id { get; set; }
             public string Name { get; set; }
-            public string DisplayName { get; set; }
-            public string Explanation { get; set; }
-            public string PluginType { get; set; }
             public uint LicenseId { get; set; }
-            public byte[] Content { get; set; }
+            public object RequiredLicenseType { get; set; }
         }
     }
 }

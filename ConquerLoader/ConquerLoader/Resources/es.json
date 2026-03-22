@@ -393,7 +393,7 @@
   },
   {
     "id": "pluginsWindowDescription",
-    "text": "Revisa plugins locales, consulta los modulos remotos de tu licencia y decide cuales quieres instalar."
+    "text": "Revisa plugins locales, el catalogo publico free y tus modulos premium asignados, y decide cuales quieres instalar."
   },
   {
     "id": "serverDatWindowTitle",
@@ -777,15 +777,15 @@
   },
   {
     "id": "pluginsHintLicensed",
-    "text": "Los plugins locales salen de la carpeta Plugins. Los remotos salen de tu catalogo de licencia y se instalan solo cuando tu lo pides."
+    "text": "Los plugins locales salen de la carpeta Plugins. Los remotos free salen del catalogo publico y los premium de las asignaciones de tu licencia."
   },
   {
     "id": "pluginsHintNoLicense",
-    "text": "Los plugins locales funcionan sin licencia. Anade una clave si quieres ver e instalar plugins remotos."
+    "text": "Los plugins locales funcionan sin licencia. Tambien puedes ver e instalar plugins remotos free publicos y anadir una clave mas adelante para los premium asignados."
   },
   {
     "id": "pluginsEmptyState",
-    "text": "Ahora mismo no hay plugins disponibles. Anade DLL locales a la carpeta Plugins o configura una licencia para ver modulos remotos."
+    "text": "Ahora mismo no hay plugins disponibles. Anade DLL locales a la carpeta Plugins o espera a que aparezcan modulos remotos free publicos o asignados."
   },
   {
     "id": "pluginsSourceLocal",
@@ -808,6 +808,14 @@
     "text": "Disponible"
   },
   {
+    "id": "pluginsStatusAssigned",
+    "text": "Asignado"
+  },
+  {
+    "id": "pluginsStatusCatalog",
+    "text": "Catalogo"
+  },
+  {
     "id": "pluginsStatusEnabled",
     "text": "Activado"
   },
@@ -817,7 +825,19 @@
   },
   {
     "id": "pluginsRemoteAvailableHint",
-    "text": "Disponible en tu catalogo de licencia. Instalala para descargarla a tu carpeta local de plugins."
+    "text": "Disponible para descargar. Instalala para bajarla a tu carpeta local de plugins."
+  },
+  {
+    "id": "pluginsRemotePublicHint",
+    "text": "Este plugin free es publico y se puede instalar sin licencia."
+  },
+  {
+    "id": "pluginsRemoteNeedsLicenseHint",
+    "text": "Este plugin remoto solo se ve en el catalogo. Anade una clave de licencia antes de intentar instalar modulos remotos."
+  },
+  {
+    "id": "pluginsRemoteNeedsAssignmentHint",
+    "text": "Este plugin aun no esta asignado a tu licencia, asi que la API no permitira la descarga."
   },
   {
     "id": "pluginsRemoteInstalledHint",

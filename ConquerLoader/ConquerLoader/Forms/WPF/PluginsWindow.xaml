@@ -178,8 +178,8 @@
                         </Grid.ColumnDefinitions>
                         <StackPanel Grid.Column="0">
                             <TextBlock x:Name="txtPluginsHeading" FontSize="28" FontWeight="SemiBold" Foreground="{StaticResource TextPrimaryBrush}" Text="Plugins" TextWrapping="Wrap" />
-                            <TextBlock x:Name="txtPluginsDescription" Margin="0,8,0,0" FontSize="14" Foreground="{StaticResource TextSecondaryBrush}" Text="Review local plugins, browse remote modules from your license, and decide which ones should be installed." TextWrapping="Wrap" />
-                            <TextBlock x:Name="txtPluginsHint" Margin="0,12,0,0" FontSize="12" Foreground="{StaticResource PrimaryBrush}" Text="Local plugins come from the Plugins folder. Remote plugins only appear when your license exposes them." TextWrapping="Wrap" />
+                            <TextBlock x:Name="txtPluginsDescription" Margin="0,8,0,0" FontSize="14" Foreground="{StaticResource TextSecondaryBrush}" Text="Review local plugins, browse the public free catalog and your assigned premium modules, and decide which ones should be installed." TextWrapping="Wrap" />
+                            <TextBlock x:Name="txtPluginsHint" Margin="0,12,0,0" FontSize="12" Foreground="{StaticResource PrimaryBrush}" Text="Local plugins come from the Plugins folder. Free remote plugins come from the public catalog, and premium remote plugins come from your license assignments." TextWrapping="Wrap" />
                         </StackPanel>
                         <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Top">
                             <Button x:Name="btnRefresh" Width="120" Margin="0,0,12,0" Click="BtnRefresh_Click" Content="Refresh" Style="{StaticResource SecondaryButtonStyle}" />
@@ -267,7 +267,7 @@
                         <TextBlock x:Name="txtEmptyState"
                                    FontSize="15"
                                    Foreground="{StaticResource TextSecondaryBrush}"
-                                   Text="No plugins are available right now. Add local DLLs to the Plugins folder or configure a license to browse remote modules."
+                                   Text="No plugins are available right now. Add local DLLs to the Plugins folder or wait for public free or assigned remote modules to appear."
                                    TextWrapping="Wrap" />
                     </Border>
                 </Grid>

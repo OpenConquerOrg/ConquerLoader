@@ -2,6 +2,7 @@
 using SimpleTCP;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -11,8 +12,31 @@ namespace CLCore
 {
     public static class CLServerConfig
     {
-        public static string APIBaseUri = "https://api.conquerloader.com/api"; // local => "http://localhost:5258/api"
+        public const string DefaultAPIBaseUri = "https://api.conquerloader.com/api";
+        public static string APIBaseUri = ResolveApiBaseUri();
         public static uint ServerPort = 8000;
+
+        public static string NormalizeApiBaseUri(string apiBaseUri)
+        {
+            if (string.IsNullOrWhiteSpace(apiBaseUri))
+            {
+                return DefaultAPIBaseUri;
+            }
+
+            return apiBaseUri.Trim().TrimEnd('/');
+        }
+
+        private static string ResolveApiBaseUri()
+        {
+            try
+            {
+                return NormalizeApiBaseUri(ConfigurationManager.AppSettings["ApiBaseUri"]);
+            }
+            catch
+            {
+                return DefaultAPIBaseUri;
+            }
+        }
     }
     public class ConnectionEvent
     {

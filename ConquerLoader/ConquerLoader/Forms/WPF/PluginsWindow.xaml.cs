@@ -58,7 +58,11 @@ namespace ConquerLoader.Forms.WPF
                     ? T("pluginsTierPremium", "Premium")
                     : T("pluginsTierFree", "Free"),
                 StatusText = !item.IsInstalled
-                    ? T("pluginsStatusAvailable", "Available")
+                    ? item.PluginType == PluginType.FREE
+                        ? T("pluginsStatusAvailable", "Available")
+                        : item.IsAssignedToLicense
+                            ? T("pluginsStatusAssigned", "Assigned")
+                            : T("pluginsStatusCatalog", "Catalog")
                     : item.IsEnabled
                         ? T("pluginsStatusEnabled", "Enabled")
                         : T("pluginsStatusDisabled", "Disabled"),
@@ -69,7 +73,7 @@ namespace ConquerLoader.Forms.WPF
                     : T("btnEnablePlugin", "Enable"),
                 ConfigureButtonText = T("btnConfigurePlugin", "Configure"),
                 RemoveButtonText = T("btnRemovePlugin", "Remove"),
-                InstallVisibility = isRemoteAvailable ? Visibility.Visible : Visibility.Collapsed,
+                InstallVisibility = isRemoteAvailable && item.IsAssignedToLicense ? Visibility.Visible : Visibility.Collapsed,
                 ToggleVisibility = item.IsInstalled ? Visibility.Visible : Visibility.Collapsed,
                 ConfigureVisibility = canConfigure ? Visibility.Visible : Visibility.Collapsed,
                 RemoveVisibility = item.IsInstalled && item.Source == PluginSource.Remote ? Visibility.Visible : Visibility.Collapsed
@@ -80,7 +84,24 @@ namespace ConquerLoader.Forms.WPF
         {
             if (item.Source == PluginSource.Remote && !item.IsInstalled)
             {
-                return T("pluginsRemoteAvailableHint", "Available from your license catalog. Install it to download it into your local plugins folder.");
+                if (item.IsAssignedToLicense)
+                {
+                    return item.PluginType == PluginType.FREE
+                        ? T("pluginsRemoteAvailableHint", "Available in the public catalog. Install it to download it into your local plugins folder.")
+                        : T("pluginsRemoteAvailableHint", "Available from your license catalog. Install it to download it into your local plugins folder.");
+                }
+
+                if (item.PluginType == PluginType.FREE)
+                {
+                    return T("pluginsRemotePublicHint", "This free plugin is public and can be installed without a license.");
+                }
+
+                if (loaderConfig == null || string.IsNullOrWhiteSpace(loaderConfig.LicenseKey))
+                {
+                    return T("pluginsRemoteNeedsLicenseHint", "This remote plugin is only visible in the catalog. Add a license key before you try to install remote modules.");
+                }
+
+                return T("pluginsRemoteNeedsAssignmentHint", "This plugin is not assigned to your license yet, so the API will not allow the download.");
             }
 
             if (item.Source == PluginSource.Remote)
@@ -298,11 +319,11 @@ namespace ConquerLoader.Forms.WPF
             Title = T("pluginsWindowTitle", "Plugins");
             txtWindowTitleBar.Text = T("pluginsWindowTitle", "Plugins");
             txtPluginsHeading.Text = T("pluginsWindowTitle", "Plugins");
-            txtPluginsDescription.Text = T("pluginsWindowDescription", "Review local plugins, browse remote modules from your license, and decide which ones should be installed.");
+            txtPluginsDescription.Text = T("pluginsWindowDescription", "Review local plugins, browse the public free catalog and your assigned premium modules, and decide which ones should be installed.");
             txtPluginsHint.Text = hasLicense
-                ? T("pluginsHintLicensed", "Local plugins come from the Plugins folder. Remote plugins come from your license catalog and are installed on demand.")
-                : T("pluginsHintNoLicense", "Local plugins work without a license. Add a license key if you want to browse and install remote plugins.");
-            txtEmptyState.Text = T("pluginsEmptyState", "No plugins are available right now. Add local DLLs to the Plugins folder or configure a license to browse remote modules.");
+                ? T("pluginsHintLicensed", "Local plugins come from the Plugins folder. Free remote plugins come from the public catalog, and premium remote plugins come from your license assignments.")
+                : T("pluginsHintNoLicense", "Local plugins work without a license. You can still browse and install public free remote plugins, and add a license key later for premium assignments.");
+            txtEmptyState.Text = T("pluginsEmptyState", "No plugins are available right now. Add local DLLs to the Plugins folder or wait for public free or assigned remote modules to appear.");
             btnRefresh.Content = T("btnRefreshPlugins", "Refresh");
             btnClose.Content = T("btnClose", "Close");
         }
