@@ -27,12 +27,11 @@ namespace ConquerLoader
             {
                 UseEncryptedConfig = true;
                 lConfig = Newtonsoft.Json.JsonConvert.DeserializeObject<LoaderConfig>(ConfigFilesEncryption.AESEncription.DecryptString(Constants.LockConfigurationKey, File.ReadAllText(ConfigJsonPath + ".lock")));
-            } else
+            }
+            else if (File.Exists(ConfigJsonPath))
             {
-                if (File.Exists(ConfigJsonPath))
-                {
-                    lConfig = Newtonsoft.Json.JsonConvert.DeserializeObject<LoaderConfig>(File.ReadAllText(ConfigJsonPath));
-                }
+                UseEncryptedConfig = false;
+                lConfig = Newtonsoft.Json.JsonConvert.DeserializeObject<LoaderConfig>(File.ReadAllText(ConfigJsonPath));
             }
             if (lConfig != null)
             {
@@ -70,6 +69,16 @@ namespace ConquerLoader
                         break;
                     }
             }
+        }
+        public static string TranslateText(string key, string fallback = null)
+        {
+            TextTranslation translation = TextTranslations.Where(x => x.Id == key).FirstOrDefault();
+            if (translation != null && !string.IsNullOrWhiteSpace(translation.Text))
+            {
+                return translation.Text;
+            }
+
+            return fallback ?? key;
         }
         public static int DirectXVersion()
         {
@@ -119,7 +128,7 @@ namespace ConquerLoader
             {
                 PluginLoader loader = new PluginLoader();
                 loader.LoadPlugins();
-                LogWritter.Write("Loaded " + PluginLoader.Plugins.Count + " plugins.");
+                LogWritter.Write("Loaded " + PluginLoader.Plugins.Count + " enabled plugins.");
             }
             catch (Exception e)
             {
@@ -130,12 +139,11 @@ namespace ConquerLoader
 
         public static void LoadRemotePlugins()
         {
-            // Remote plugins
             try
             {
                 PluginLoader loader = new PluginLoader();
-                int loaded = loader.LoadPluginsFromAPI(GetLoaderConfig()).Result;
-                Core.LogWritter.Write("Loaded " + loaded + " remote plugins.");
+                int available = loader.LoadPluginsFromAPI(GetLoaderConfig()).Result;
+                Core.LogWritter.Write("Remote plugin catalog reports " + available + " available plugins.");
             }
             catch (Exception ex)
             {
@@ -160,6 +168,41 @@ namespace ConquerLoader
                     }
                 }
             }
+        }
+
+        public static PluginPreLaunchResult RunPreLaunchPlugins(PluginPreLaunchContext context)
+        {
+            if (PluginLoader.Plugins == null || PluginLoader.Plugins.Count == 0)
+            {
+                return PluginPreLaunchResult.Success();
+            }
+
+            foreach (IPlugin plugin in PluginLoader.Plugins)
+            {
+                IPreLaunchPlugin preLaunchPlugin = plugin as IPreLaunchPlugin;
+                if (preLaunchPlugin == null)
+                {
+                    continue;
+                }
+
+                try
+                {
+                    LogWritter.Write("Running pre-launch plugin: " + plugin.Name + ".");
+                    PluginPreLaunchResult result = preLaunchPlugin.BeforeLaunch(context) ?? PluginPreLaunchResult.Success();
+                    if (!result.ContinueLaunch)
+                    {
+                        LogWritter.Write("Pre-launch plugin canceled launch: " + plugin.Name + ". Message: " + (result.Message ?? "No message."));
+                        return result;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    LogWritter.Write("Error on pre-launch plugin " + plugin.Name + ": " + ex);
+                    return PluginPreLaunchResult.Fail("Plugin \"" + plugin.Name + "\" failed before launch: " + ex.Message);
+                }
+            }
+
+            return PluginPreLaunchResult.Success();
         }
 
         public static void SaveLoaderConfig(LoaderConfig LoaderConfig)

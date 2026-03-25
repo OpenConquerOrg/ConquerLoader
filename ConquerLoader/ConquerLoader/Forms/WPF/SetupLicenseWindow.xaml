@@ -1,0 +1,233 @@
+<Window x:Class="ConquerLoader.Forms.WPF.SetupLicenseWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:shell="clr-namespace:System.Windows.Shell;assembly=PresentationFramework"
+        Title="Setup License"
+        Width="820"
+        Height="560"
+        MinWidth="760"
+        MinHeight="520"
+        Background="#09090D"
+        ResizeMode="CanResize"
+        WindowStyle="None"
+        WindowStartupLocation="CenterOwner">
+    <WindowChrome.WindowChrome>
+        <shell:WindowChrome CaptionHeight="0"
+                            CornerRadius="0"
+                            GlassFrameThickness="0"
+                            NonClientFrameEdges="None"
+                            ResizeBorderThickness="6"
+                            UseAeroCaptionButtons="False" />
+    </WindowChrome.WindowChrome>
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/ConquerLoader;component/Forms/WPF/SharedTheme.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        <SolidColorBrush x:Key="PrimaryBrush" Color="#CB4129" />
+        <SolidColorBrush x:Key="SurfaceBrush" Color="#120E13" />
+        <SolidColorBrush x:Key="OutlineBrush" Color="#9EA6B4" />
+        <SolidColorBrush x:Key="TextPrimaryBrush" Color="#F4F7FC" />
+        <SolidColorBrush x:Key="TextSecondaryBrush" Color="#D3D9E3" />
+        <Style x:Key="CardStyle" TargetType="Border">
+            <Setter Property="Background" Value="{StaticResource SurfaceBrush}" />
+            <Setter Property="BorderBrush" Value="#808997" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="CornerRadius" Value="24" />
+            <Setter Property="Padding" Value="24" />
+        </Style>
+        <Style x:Key="PrimaryButtonStyle" TargetType="Button">
+            <Setter Property="Height" Value="44" />
+            <Setter Property="Padding" Value="16,8" />
+            <Setter Property="FontSize" Value="13" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="Background" Value="{StaticResource PrimaryBrush}" />
+            <Setter Property="Foreground" Value="#FFF3EA" />
+            <Setter Property="BorderBrush" Value="#9C7242" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="PrimaryBorder"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="14">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="PrimaryBorder" Property="Background" Value="#D0442B" />
+                                <Setter TargetName="PrimaryBorder" Property="BorderBrush" Value="#E0B36D" />
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="PrimaryBorder" Property="Background" Value="#821914" />
+                                <Setter TargetName="PrimaryBorder" Property="BorderBrush" Value="#F1C78F" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="SecondaryButtonStyle" TargetType="Button">
+            <Setter Property="Height" Value="44" />
+            <Setter Property="Padding" Value="16,8" />
+            <Setter Property="FontSize" Value="13" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="Foreground" Value="{StaticResource TextPrimaryBrush}" />
+            <Setter Property="Background" Value="#231719" />
+            <Setter Property="BorderBrush" Value="{StaticResource OutlineBrush}" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="SecondaryBorder"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="14">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="SecondaryBorder" Property="Background" Value="#2E1E20" />
+                                <Setter TargetName="SecondaryBorder" Property="BorderBrush" Value="#B3834D" />
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="SecondaryBorder" Property="Background" Value="#1A1011" />
+                                <Setter TargetName="SecondaryBorder" Property="BorderBrush" Value="#D1A56B" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="TitleBarButtonStyle" TargetType="Button">
+            <Setter Property="Width" Value="38" />
+            <Setter Property="Height" Value="36" />
+            <Setter Property="Margin" Value="8,0,0,0" />
+            <Setter Property="Padding" Value="0" />
+            <Setter Property="Background" Value="#1D1416" />
+            <Setter Property="Foreground" Value="{StaticResource TextSecondaryBrush}" />
+            <Setter Property="BorderBrush" Value="{StaticResource OutlineBrush}" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="FontFamily" Value="Segoe MDL2 Assets" />
+            <Setter Property="FontSize" Value="12" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="ChromeBorder"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="12">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"
+                                              Margin="0,-1,0,0" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="ChromeBorder" Property="Background" Value="#2C1D1F" />
+                                <Setter TargetName="ChromeBorder" Property="BorderBrush" Value="#C58A49" />
+                                <Setter Property="Foreground" Value="{StaticResource TextPrimaryBrush}" />
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="ChromeBorder" Property="Background" Value="#160E10" />
+                            </Trigger>
+                            <Trigger Property="Tag" Value="Close">
+                                <Setter Property="Foreground" Value="#EFB8AA" />
+                            </Trigger>
+                            <MultiTrigger>
+                                <MultiTrigger.Conditions>
+                                    <Condition Property="Tag" Value="Close" />
+                                    <Condition Property="IsMouseOver" Value="True" />
+                                </MultiTrigger.Conditions>
+                                <Setter TargetName="ChromeBorder" Property="Background" Value="#5D1B1E" />
+                                <Setter TargetName="ChromeBorder" Property="BorderBrush" Value="#F06A58" />
+                                <Setter Property="Foreground" Value="White" />
+                            </MultiTrigger>
+                            <MultiTrigger>
+                                <MultiTrigger.Conditions>
+                                    <Condition Property="Tag" Value="Close" />
+                                    <Condition Property="IsPressed" Value="True" />
+                                </MultiTrigger.Conditions>
+                                <Setter TargetName="ChromeBorder" Property="Background" Value="#421113" />
+                                <Setter TargetName="ChromeBorder" Property="BorderBrush" Value="#F06A58" />
+                            </MultiTrigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter TargetName="ChromeBorder" Property="Opacity" Value="0.45" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        </ResourceDictionary>
+    </Window.Resources>
+    <Border Margin="0" Background="#09080B" BorderBrush="#00FFFFFF" BorderThickness="0" CornerRadius="0">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="56" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Border Grid.Row="0" Background="#170F12" BorderBrush="#6B4C2D" BorderThickness="0,0,0,1" PreviewMouseLeftButtonDown="TitleBar_MouseLeftButtonDown">
+                <Grid Margin="16,8,16,8" PreviewMouseLeftButtonDown="TitleBar_MouseLeftButtonDown">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                        <Image Width="24"
+                               Height="24"
+                               Margin="0,0,10,0"
+                               Source="pack://application:,,,/Resources/ConquerLoaderICON.png"
+                               Stretch="Uniform" />
+                        <TextBlock x:Name="txtWindowTitleBar" VerticalAlignment="Center" FontSize="14" FontWeight="SemiBold" Foreground="{StaticResource TextPrimaryBrush}" Text="Setup License" />
+                    </StackPanel>
+                    <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center" shell:WindowChrome.IsHitTestVisibleInChrome="True">
+                        <Button x:Name="btnMinimizeWindow" Click="BtnMinimizeWindow_Click" Content="_" Style="{StaticResource TitleBarButtonStyle}" />
+                        <Button x:Name="btnMaxRestoreWindow" Click="BtnMaxRestoreWindow_Click" Content="[]" Style="{StaticResource TitleBarButtonStyle}" />
+                        <Button x:Name="btnCloseWindow" Click="BtnCloseWindow_Click" Content="X" Style="{StaticResource TitleBarButtonStyle}" />
+                    </StackPanel>
+                </Grid>
+            </Border>
+            <Grid Grid.Row="1" Margin="24">
+                <Border Style="{StaticResource CardStyle}">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <StackPanel Grid.Row="0">
+                            <TextBlock x:Name="txtLicenseHeading" FontSize="30" FontWeight="SemiBold" Foreground="{StaticResource TextPrimaryBrush}" Text="License setup" TextWrapping="Wrap" />
+                            <TextBlock x:Name="txtLicenseDescription" Margin="0,12,0,0" FontSize="14" Foreground="{StaticResource TextSecondaryBrush}" Text="Paste your license key below to unlock premium plugins and remote modules." TextWrapping="Wrap" />
+                        </StackPanel>
+                        <TextBlock Grid.Row="1" x:Name="txtLicenseKeyLabel" Margin="0,28,0,10" FontSize="12" FontWeight="SemiBold" Foreground="{StaticResource TextSecondaryBrush}" Text="License key" />
+                        <TextBox Grid.Row="2"
+                                 x:Name="tbxLicenseKey"
+                                 MinHeight="160"
+                                 Padding="14"
+                                 AcceptsReturn="True"
+                                 TextWrapping="Wrap"
+                                 VerticalScrollBarVisibility="Auto"
+                                 Foreground="{StaticResource TextPrimaryBrush}"
+                                 Background="#1E1517"
+                                 BorderBrush="{StaticResource OutlineBrush}"
+                                 BorderThickness="1" />
+                        <TextBlock Grid.Row="3" x:Name="txtLicenseExample" Margin="0,12,0,0" FontSize="12" Foreground="{StaticResource TextSecondaryBrush}" Text="Example: 2d32a164-fcd5-796b-b43f-005a78274cad" TextWrapping="Wrap" />
+                        <WrapPanel Grid.Row="4" Margin="0,28,0,0">
+                            <Button x:Name="btnClose" Width="110" Margin="0,0,12,0" Click="BtnClose_Click" Content="Close" Style="{StaticResource SecondaryButtonStyle}" />
+                            <Button x:Name="btnSetup" Width="150" Click="BtnSetup_Click" Content="Save License" Style="{StaticResource PrimaryButtonStyle}" />
+                        </WrapPanel>
+                    </Grid>
+                </Border>
+            </Grid>
+        </Grid>
+    </Border>
+</Window>

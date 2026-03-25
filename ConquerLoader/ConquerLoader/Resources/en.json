@@ -21,7 +21,7 @@
   },
   {
     "id": "btnStart",
-    "text": "START"
+    "text": "ENTER"
   },
   {
     "id": "lblGroupIcon",
@@ -130,5 +130,201 @@
   {
     "id": "lblFPSUnlock",
     "text": "Unlock FPS"
+  },
+  {
+    "id": "commonEnabled",
+    "text": "Enabled"
+  },
+  {
+    "id": "chromeMinimize",
+    "text": "Minimize"
+  },
+  {
+    "id": "chromeMaximize",
+    "text": "Maximize"
+  },
+  {
+    "id": "chromeRestore",
+    "text": "Restore"
+  },
+  {
+    "id": "chromeClose",
+    "text": "Close"
+  },
+  {
+    "id": "mainFpsUnlockHint",
+    "text": "Use this only when your client and server support it."
+  },
+  {
+    "id": "mainOptionsDescription",
+    "text": "Choose the resolution and FPS behavior before launching."
+  },
+  {
+    "id": "settingsColumnServerName",
+    "text": "Server name"
+  },
+  {
+    "id": "settingsColumnServerVersion",
+    "text": "Client version"
+  },
+  {
+    "id": "settingsColumnLoginHost",
+    "text": "Login host"
+  },
+  {
+    "id": "settingsColumnGameHost",
+    "text": "Game host"
+  },
+  {
+    "id": "settingsColumnLoginPort",
+    "text": "Login port"
+  },
+  {
+    "id": "settingsColumnGamePort",
+    "text": "Game port"
+  },
+  {
+    "id": "settingsColumnExecutableName",
+    "text": "Executable"
+  },
+  {
+    "id": "settingsColumnEnableHostName",
+    "text": "Use hostname"
+  },
+  {
+    "id": "settingsColumnUseDirectX9",
+    "text": "DirectX9"
+  },
+  {
+    "id": "settingsColumnHostname",
+    "text": "Hostname"
+  },
+  {
+    "id": "settingsColumnServerNameMemoryAddress",
+    "text": "Server name address"
+  },
+  {
+    "id": "settingsColumnServerIcon",
+    "text": "Server icon"
+  },
+  {
+    "id": "settingsColumnGroup",
+    "text": "Group"
+  },
+  {
+    "id": "settingsLoaderDescriptionLabel",
+    "text": "Description in Loader"
+  },
+  {
+    "id": "pluginsHintLicensed",
+    "text": "Local plugins come from the Plugins folder. Free remote plugins come from the public catalog, and premium remote plugins come from your license assignments."
+  },
+  {
+    "id": "pluginsHintNoLicense",
+    "text": "Local plugins work without a license. You can still browse and install public free remote plugins, and add a license key later for premium assignments."
+  },
+  {
+    "id": "pluginsEmptyState",
+    "text": "No plugins are available right now. Add local DLLs to the Plugins folder or wait for public free or assigned remote modules to appear."
+  },
+  {
+    "id": "pluginsSourceLocal",
+    "text": "Local"
+  },
+  {
+    "id": "pluginsSourceRemote",
+    "text": "Remote"
+  },
+  {
+    "id": "pluginsTierFree",
+    "text": "Free"
+  },
+  {
+    "id": "pluginsTierPremium",
+    "text": "Premium"
+  },
+  {
+    "id": "pluginsStatusAvailable",
+    "text": "Available"
+  },
+  {
+    "id": "pluginsStatusAssigned",
+    "text": "Assigned"
+  },
+  {
+    "id": "pluginsStatusCatalog",
+    "text": "Catalog"
+  },
+  {
+    "id": "pluginsStatusEnabled",
+    "text": "Enabled"
+  },
+  {
+    "id": "pluginsStatusDisabled",
+    "text": "Disabled"
+  },
+  {
+    "id": "pluginsRemoteAvailableHint",
+    "text": "Available for download. Install it to download it into your local plugins folder."
+  },
+  {
+    "id": "pluginsRemotePublicHint",
+    "text": "This free plugin is public and can be installed without a license."
+  },
+  {
+    "id": "pluginsRemoteNeedsLicenseHint",
+    "text": "This remote plugin is only visible in the catalog. Add a license key before you try to install remote modules."
+  },
+  {
+    "id": "pluginsRemoteNeedsAssignmentHint",
+    "text": "This plugin is not assigned to your license yet, so the API will not allow the download."
+  },
+  {
+    "id": "pluginsRemoteInstalledHint",
+    "text": "This plugin was installed from the remote catalog. Restart the loader after install, remove, or enable changes."
+  },
+  {
+    "id": "pluginsLocalHint",
+    "text": "This plugin comes from the local Plugins folder."
+  },
+  {
+    "id": "btnInstallPlugin",
+    "text": "Install"
+  },
+  {
+    "id": "btnEnablePlugin",
+    "text": "Enable"
+  },
+  {
+    "id": "btnDisablePlugin",
+    "text": "Disable"
+  },
+  {
+    "id": "btnRemovePlugin",
+    "text": "Remove"
+  },
+  {
+    "id": "btnRefreshPlugins",
+    "text": "Refresh"
+  },
+  {
+    "id": "pluginsInstallSuccess",
+    "text": "Plugin installed. Restart the loader to activate it."
+  },
+  {
+    "id": "pluginsStateSaved",
+    "text": "Plugin state saved. Restart the loader to apply the change."
+  },
+  {
+    "id": "pluginsRemoveConfirm",
+    "text": "Remove plugin \"{0}\" from the local installation?"
+  },
+  {
+    "id": "pluginsRemoveSuccess",
+    "text": "Plugin removed. Restart the loader if it was active in the current session."
+  },
+  {
+    "id": "pluginsActionError",
+    "text": "The plugin action failed: {0}"
   }
 ]

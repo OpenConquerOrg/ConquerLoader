@@ -1,20 +1,22 @@
-﻿using ConquerLoader.Forms;
 using System;
-using System.Windows.Forms;
+using System.Windows;
+using ConquerLoader.Forms.WPF;
 
 namespace ConquerLoader
 {
     static class Program
     {
         /// <summary>
-        /// Punto de entrada principal para la aplicación.
+        /// Punto de entrada principal para la aplicacion.
         /// </summary>
         [STAThread]
         static void Main()
         {
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Main());
+            System.Windows.Forms.Application.EnableVisualStyles();
+            System.Windows.Forms.Application.SetCompatibleTextRenderingDefault(false);
+            Application app = new Application();
+            app.ShutdownMode = ShutdownMode.OnMainWindowClose;
+            app.Run(new MainLite());
         }
     }
 }

@@ -65,7 +65,6 @@ namespace ConquerLoader.Forms
             }
             Constants.MainWorker = worker;
             Core.LoadAvailablePlugins();
-            Core.LoadRemotePlugins(); // Experimental
             Core.InitPlugins();
             DX9Allowed = Core.DirectXVersion() >= 9;
         }
@@ -400,7 +399,7 @@ namespace ConquerLoader.Forms
             string WorkingDir = Path.GetDirectoryName(PathToConquerExe);
             bool NoUseDX8_DX9 = true;
             bool UseDecryptedServerDat = true;
-            bool AlreadyUsingLoader = Process.GetProcessesByName(Process.GetCurrentProcess().ProcessName).Length >= 1;
+            bool AlreadyUsingLoader = Process.GetProcessesByName(Process.GetCurrentProcess().ProcessName).Length > 1;
             if (AlreadyUsingLoader)
             {
                 Core.LogWritter.Write("Detected already using ConquerLoader.");
@@ -475,6 +474,33 @@ namespace ConquerLoader.Forms
                     bool createdFlashFix = SafeIO.TryWriteAllBytes(Path.Combine(WorkingDir, "COFlashFixer.dll"), Properties.Resources.COFlashFixer_DLL); // Fix for flash
                     Core.LogWritter.Write($"Generating COFlashFixer.dll... [{(createdFlashFix ? "Created" : "Failed")}]");
                     RebuildServerDat();
+                }
+                PluginPreLaunchContext preLaunchContext = new PluginPreLaunchContext()
+                {
+                    LoaderConfig = LoaderConfig,
+                    Server = SelectedServer,
+                    ExecutablePath = PathToConquerExe,
+                    WorkingDirectory = WorkingDir,
+                    StartupPath = Application.StartupPath,
+                    UseDecryptedServerDat = UseDecryptedServerDat,
+                    UseDirectX9Environment = string.Equals(PathToConquerExe, CheckPathEnvDX9, StringComparison.OrdinalIgnoreCase),
+                    ReportProgress = progressValue =>
+                    {
+                        if (worker == null)
+                        {
+                            return;
+                        }
+
+                        int safeValue = Math.Max(1, Math.Min(8, progressValue));
+                        worker.ReportProgress(safeValue);
+                    },
+                    Log = message => Core.LogWritter.Write("[Plugin] " + message)
+                };
+                PluginPreLaunchResult preLaunchResult = Core.RunPreLaunchPlugins(preLaunchContext);
+                if (!preLaunchResult.ContinueLaunch)
+                {
+                    MetroFramework.MetroMessageBox.Show(this, preLaunchResult.Message ?? $"[{SelectedServer.ServerName}] Launch canceled by plugin.", this.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
                 }
                 Process conquerProc = Process.Start(new ProcessStartInfo() { FileName = PathToConquerExe, WorkingDirectory = WorkingDir, Arguments = "blacknull" });
                 if (conquerProc != null)

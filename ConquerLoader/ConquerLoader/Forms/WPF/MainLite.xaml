@@ -1,0 +1,982 @@
+<Window x:Class="ConquerLoader.Forms.WPF.MainLite"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        xmlns:shell="clr-namespace:System.Windows.Shell;assembly=PresentationFramework"
+        Title="ConquerLoader"
+        Width="1280"
+        Height="800"
+        MinWidth="1280"
+        MinHeight="800"
+        Background="#07090E"
+        ResizeMode="CanResize"
+        WindowStyle="None"
+        WindowStartupLocation="CenterScreen">
+    <WindowChrome.WindowChrome>
+        <shell:WindowChrome CaptionHeight="0"
+                            CornerRadius="0"
+                            GlassFrameThickness="0"
+                            NonClientFrameEdges="None"
+                            ResizeBorderThickness="6"
+                            UseAeroCaptionButtons="False" />
+    </WindowChrome.WindowChrome>
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/ConquerLoader;component/Forms/WPF/SharedTheme.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <SolidColorBrush x:Key="PrimaryBrush" Color="#CB4129" />
+            <SolidColorBrush x:Key="PrimaryDarkBrush" Color="#941C17" />
+            <SolidColorBrush x:Key="PrimarySoftBrush" Color="#341319" />
+            <SolidColorBrush x:Key="SurfaceBrush" Color="#120E13" />
+            <SolidColorBrush x:Key="SurfaceAltBrush" Color="#171319" />
+            <SolidColorBrush x:Key="OutlineBrush" Color="#9EA6B4" />
+            <SolidColorBrush x:Key="TextPrimaryBrush" Color="#F4F7FC" />
+            <SolidColorBrush x:Key="TextSecondaryBrush" Color="#D3D9E3" />
+            <SolidColorBrush x:Key="GoldBrush" Color="#E7EBF3" />
+
+            <Style x:Key="CardBorderStyle" TargetType="Border">
+                <Setter Property="Padding" Value="28" />
+                <Setter Property="CornerRadius" Value="28" />
+                <Setter Property="Background" Value="{StaticResource SurfaceBrush}" />
+                <Setter Property="BorderBrush" Value="#808997" />
+                <Setter Property="BorderThickness" Value="1" />
+                <Setter Property="Effect">
+                    <Setter.Value>
+                        <DropShadowEffect BlurRadius="24"
+                                      Direction="270"
+                                      Opacity="0.36"
+                                      ShadowDepth="12"
+                                      Color="#040203" />
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+            <Style x:Key="ScenePanelStyle" TargetType="Border" BasedOn="{StaticResource CardBorderStyle}">
+                <Setter Property="Padding" Value="24" />
+                <Setter Property="CornerRadius" Value="26" />
+                <Setter Property="Background" Value="#58100E14" />
+                <Setter Property="BorderBrush" Value="#B4BCC8" />
+                <Setter Property="BorderThickness" Value="1.4" />
+            </Style>
+
+            <Style x:Key="SectionTitleStyle" TargetType="TextBlock">
+                <Setter Property="FontSize" Value="24" />
+                <Setter Property="FontWeight" Value="SemiBold" />
+                <Setter Property="Foreground" Value="{StaticResource TextPrimaryBrush}" />
+            </Style>
+
+            <Style x:Key="BodyStyle" TargetType="TextBlock">
+                <Setter Property="FontSize" Value="14" />
+                <Setter Property="Foreground" Value="{StaticResource TextSecondaryBrush}" />
+                <Setter Property="TextWrapping" Value="Wrap" />
+            </Style>
+
+            <Style x:Key="FieldLabelStyle" TargetType="TextBlock">
+                <Setter Property="Margin" Value="0,0,0,8" />
+                <Setter Property="FontSize" Value="12" />
+                <Setter Property="FontWeight" Value="SemiBold" />
+                <Setter Property="Foreground" Value="{StaticResource TextSecondaryBrush}" />
+            </Style>
+
+            <Style x:Key="ServerListStyle" TargetType="ListBox">
+                <Setter Property="Background" Value="#24171B" />
+                <Setter Property="BorderBrush" Value="#AAB2C0" />
+                <Setter Property="BorderThickness" Value="1" />
+                <Setter Property="Padding" Value="10" />
+                <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled" />
+                <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto" />
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="ListBox">
+                            <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="22">
+                                <ScrollViewer Padding="{TemplateBinding Padding}"
+                                          Focusable="False">
+                                    <ItemsPresenter />
+                                </ScrollViewer>
+                            </Border>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+            <Style x:Key="ServerListItemStyle" TargetType="ListBoxItem">
+                <Setter Property="Margin" Value="0,0,0,10" />
+                <Setter Property="Padding" Value="0" />
+                <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="ListBoxItem">
+                            <Border x:Name="ItemBorder"
+                                Background="#1A1012"
+                                BorderBrush="#7F8792"
+                                BorderThickness="1"
+                                CornerRadius="16">
+                                <Grid Margin="16,14">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock VerticalAlignment="Center"
+                                           FontSize="16"
+                                           FontWeight="SemiBold"
+                                           Foreground="{StaticResource TextPrimaryBrush}"
+                                           Text="{TemplateBinding Content}" />
+                                    <Border Grid.Column="1"
+                                        Padding="10,4"
+                                        Background="#6A1C17"
+                                        BorderBrush="#D8AE77"
+                                        BorderThickness="1"
+                                        CornerRadius="12">
+                                        <TextBlock FontFamily="Segoe MDL2 Assets"
+                                               FontSize="11"
+                                               Foreground="White"
+                                               Text="&#xE72A;" />
+                                    </Border>
+                                </Grid>
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter TargetName="ItemBorder" Property="Background" Value="#231417" />
+                                    <Setter TargetName="ItemBorder" Property="BorderBrush" Value="#D6B686" />
+                                </Trigger>
+                                <Trigger Property="IsSelected" Value="True">
+                                    <Setter TargetName="ItemBorder" Property="Background" Value="#401614" />
+                                    <Setter TargetName="ItemBorder" Property="BorderBrush" Value="#E6C28B" />
+                                </Trigger>
+                                <Trigger Property="IsEnabled" Value="False">
+                                    <Setter TargetName="ItemBorder" Property="Opacity" Value="0.45" />
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+            <Style x:Key="PrimaryButtonStyle" TargetType="Button">
+                <Setter Property="Height" Value="52" />
+                <Setter Property="Padding" Value="20,10" />
+                <Setter Property="FontSize" Value="15" />
+                <Setter Property="FontWeight" Value="SemiBold" />
+                <Setter Property="Background" Value="{StaticResource PrimaryBrush}" />
+                <Setter Property="Foreground" Value="#FFF3EA" />
+                <Setter Property="BorderThickness" Value="0" />
+                <Setter Property="Cursor" Value="Hand" />
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="Button">
+                            <Border x:Name="PrimaryBorder"
+                                BorderBrush="#D7A96A"
+                                BorderThickness="1"
+                                CornerRadius="16">
+                                <Border.Background>
+                                    <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                        <GradientStop Color="#D0442B" Offset="0" />
+                                        <GradientStop Color="#821914" Offset="1" />
+                                    </LinearGradientBrush>
+                                </Border.Background>
+                                <Border Margin="1"
+                                    CornerRadius="15"
+                                    BorderBrush="#2AFFE3B8"
+                                    BorderThickness="1"
+                                    Opacity="0.3">
+                                    <ContentPresenter HorizontalAlignment="Center"
+                                                  VerticalAlignment="Center" />
+                                </Border>
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter TargetName="PrimaryBorder" Property="Background" Value="{StaticResource PrimaryDarkBrush}" />
+                                    <Setter TargetName="PrimaryBorder" Property="BorderBrush" Value="#F1C78F" />
+                                </Trigger>
+                                <Trigger Property="IsPressed" Value="True">
+                                    <Setter TargetName="PrimaryBorder" Property="Background" Value="#73110F" />
+                                    <Setter TargetName="PrimaryBorder" Property="BorderBrush" Value="#F1C78F" />
+                                </Trigger>
+                                <Trigger Property="IsKeyboardFocused" Value="True">
+                                    <Setter TargetName="PrimaryBorder" Property="BorderBrush" Value="#F8D9A9" />
+                                </Trigger>
+                                <Trigger Property="IsEnabled" Value="False">
+                                    <Setter TargetName="PrimaryBorder" Property="Opacity" Value="0.45" />
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+            <Style x:Key="LaunchButtonStyle" TargetType="Button" BasedOn="{StaticResource PrimaryButtonStyle}">
+                <Setter Property="Height" Value="74" />
+                <Setter Property="FontSize" Value="21" />
+                <Setter Property="FontWeight" Value="SemiBold" />
+                <Setter Property="Padding" Value="28,12" />
+                <Setter Property="Foreground" Value="#FFF8F1" />
+            </Style>
+
+            <Style x:Key="SecondaryButtonStyle" TargetType="Button">
+                <Setter Property="Height" Value="46" />
+                <Setter Property="Padding" Value="18,10" />
+                <Setter Property="FontSize" Value="14" />
+                <Setter Property="FontWeight" Value="SemiBold" />
+                <Setter Property="Background" Value="#231719" />
+                <Setter Property="Foreground" Value="{StaticResource TextPrimaryBrush}" />
+                <Setter Property="BorderBrush" Value="{StaticResource OutlineBrush}" />
+                <Setter Property="BorderThickness" Value="1" />
+                <Setter Property="Cursor" Value="Hand" />
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="Button">
+                            <Border x:Name="SecondaryBorder"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="16">
+                                <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center" />
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter TargetName="SecondaryBorder" Property="Background" Value="#2E1E20" />
+                                    <Setter TargetName="SecondaryBorder" Property="BorderBrush" Value="#B3834D" />
+                                </Trigger>
+                                <Trigger Property="IsPressed" Value="True">
+                                    <Setter TargetName="SecondaryBorder" Property="Background" Value="#1A1011" />
+                                    <Setter TargetName="SecondaryBorder" Property="BorderBrush" Value="#D1A56B" />
+                                </Trigger>
+                                <Trigger Property="IsKeyboardFocused" Value="True">
+                                    <Setter TargetName="SecondaryBorder" Property="BorderBrush" Value="#D1A56B" />
+                                </Trigger>
+                                <Trigger Property="IsEnabled" Value="False">
+                                    <Setter TargetName="SecondaryBorder" Property="Opacity" Value="0.45" />
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+            <Style x:Key="ComboToggleButtonStyle" TargetType="ToggleButton">
+                <Setter Property="Focusable" Value="False" />
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="ToggleButton">
+                            <Border Background="Transparent">
+                                <Path Width="10"
+                                  Height="6"
+                                  Margin="0,0,16,0"
+                                  HorizontalAlignment="Right"
+                                  VerticalAlignment="Center"
+                                  Fill="{StaticResource TextSecondaryBrush}"
+                                  Data="M 0 0 L 10 0 L 5 6 Z" />
+                            </Border>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+            <Style x:Key="InputComboBoxStyle" TargetType="ComboBox">
+                <Setter Property="Height" Value="48" />
+                <Setter Property="Padding" Value="14,6" />
+                <Setter Property="FontSize" Value="14" />
+                <Setter Property="Background" Value="{StaticResource SurfaceAltBrush}" />
+                <Setter Property="Foreground" Value="{StaticResource TextPrimaryBrush}" />
+                <Setter Property="BorderBrush" Value="{StaticResource OutlineBrush}" />
+                <Setter Property="BorderThickness" Value="1" />
+                <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled" />
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="ComboBox">
+                            <Grid>
+                                <Border x:Name="ComboBorder"
+                                    Background="{TemplateBinding Background}"
+                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                    BorderThickness="{TemplateBinding BorderThickness}"
+                                    CornerRadius="16">
+                                    <Grid>
+                                        <ToggleButton ClickMode="Press"
+                                                  Focusable="False"
+                                                  IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
+                                                  Style="{StaticResource ComboToggleButtonStyle}" />
+                                        <ContentPresenter Margin="14,0,42,0"
+                                                      VerticalAlignment="Center"
+                                                      HorizontalAlignment="Left"
+                                                      Content="{TemplateBinding SelectionBoxItem}"
+                                                      ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
+                                                      ContentStringFormat="{TemplateBinding SelectionBoxItemStringFormat}" />
+                                    </Grid>
+                                </Border>
+                                <Popup x:Name="PART_Popup"
+                                   AllowsTransparency="True"
+                                   IsOpen="{TemplateBinding IsDropDownOpen}"
+                                   Placement="Bottom"
+                                   PopupAnimation="Fade"
+                                   StaysOpen="False">
+                                    <Border MinWidth="{Binding ActualWidth, RelativeSource={RelativeSource TemplatedParent}}"
+                                        Margin="0,8,0,0"
+                                        Background="#1A1011"
+                                        BorderBrush="{StaticResource OutlineBrush}"
+                                        BorderThickness="1"
+                                        CornerRadius="16">
+                                        <ScrollViewer Margin="4"
+                                                  SnapsToDevicePixels="True">
+                                            <StackPanel IsItemsHost="True"
+                                                    KeyboardNavigation.DirectionalNavigation="Contained" />
+                                        </ScrollViewer>
+                                    </Border>
+                                </Popup>
+                            </Grid>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter TargetName="ComboBorder" Property="BorderBrush" Value="#B3834D" />
+                                    <Setter TargetName="ComboBorder" Property="Background" Value="#241816" />
+                                </Trigger>
+                                <Trigger Property="IsKeyboardFocusWithin" Value="True">
+                                    <Setter TargetName="ComboBorder" Property="BorderBrush" Value="#D1A56B" />
+                                </Trigger>
+                                <Trigger Property="IsDropDownOpen" Value="True">
+                                    <Setter TargetName="ComboBorder" Property="BorderBrush" Value="#D1A56B" />
+                                    <Setter TargetName="ComboBorder" Property="Background" Value="#241816" />
+                                </Trigger>
+                                <Trigger Property="HasItems" Value="False">
+                                    <Setter TargetName="ComboBorder" Property="Opacity" Value="0.7" />
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+            <Style TargetType="ComboBoxItem">
+                <Setter Property="Foreground" Value="{StaticResource TextPrimaryBrush}" />
+                <Setter Property="Background" Value="Transparent" />
+                <Setter Property="Padding" Value="12,10" />
+                <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="ComboBoxItem">
+                            <Border x:Name="ItemBorder"
+                                Margin="2"
+                                Padding="{TemplateBinding Padding}"
+                                Background="{TemplateBinding Background}"
+                                CornerRadius="10">
+                                <ContentPresenter />
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsHighlighted" Value="True">
+                                    <Setter TargetName="ItemBorder" Property="Background" Value="#3A231F" />
+                                </Trigger>
+                                <Trigger Property="IsSelected" Value="True">
+                                    <Setter TargetName="ItemBorder" Property="Background" Value="#8F301F" />
+                                    <Setter Property="Foreground" Value="White" />
+                                </Trigger>
+                                <MultiTrigger>
+                                    <MultiTrigger.Conditions>
+                                        <Condition Property="IsSelected" Value="True" />
+                                        <Condition Property="IsHighlighted" Value="True" />
+                                    </MultiTrigger.Conditions>
+                                    <Setter TargetName="ItemBorder" Property="Background" Value="#B5462C" />
+                                </MultiTrigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+            <Style x:Key="ProgressStyle" TargetType="ProgressBar">
+                <Setter Property="Height" Value="16" />
+                <Setter Property="Foreground" Value="{StaticResource GoldBrush}" />
+                <Setter Property="Background" Value="#2B1B1D" />
+                <Setter Property="BorderThickness" Value="0" />
+            </Style>
+
+            <Style x:Key="TitleBarButtonStyle" TargetType="Button">
+                <Setter Property="Width" Value="38" />
+                <Setter Property="Height" Value="36" />
+                <Setter Property="Margin" Value="8,0,0,0" />
+                <Setter Property="Padding" Value="0" />
+                <Setter Property="Background" Value="#1D1416" />
+                <Setter Property="Foreground" Value="{StaticResource TextSecondaryBrush}" />
+                <Setter Property="BorderBrush" Value="{StaticResource OutlineBrush}" />
+                <Setter Property="BorderThickness" Value="1" />
+                <Setter Property="FontFamily" Value="Segoe MDL2 Assets" />
+                <Setter Property="FontSize" Value="12" />
+                <Setter Property="Cursor" Value="Hand" />
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="Button">
+                            <Border x:Name="ChromeBorder"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="12">
+                                <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"
+                                              Margin="0,-1,0,0" />
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter TargetName="ChromeBorder" Property="Background" Value="#2C1D1F" />
+                                    <Setter TargetName="ChromeBorder" Property="BorderBrush" Value="#C58A49" />
+                                    <Setter Property="Foreground" Value="{StaticResource TextPrimaryBrush}" />
+                                </Trigger>
+                                <Trigger Property="IsPressed" Value="True">
+                                    <Setter TargetName="ChromeBorder" Property="Background" Value="#160E10" />
+                                </Trigger>
+                                <Trigger Property="Tag" Value="Close">
+                                    <Setter Property="Foreground" Value="#EFB8AA" />
+                                </Trigger>
+                                <MultiTrigger>
+                                    <MultiTrigger.Conditions>
+                                        <Condition Property="Tag" Value="Close" />
+                                        <Condition Property="IsMouseOver" Value="True" />
+                                    </MultiTrigger.Conditions>
+                                    <Setter TargetName="ChromeBorder" Property="Background" Value="#5D1B1E" />
+                                    <Setter TargetName="ChromeBorder" Property="BorderBrush" Value="#F06A58" />
+                                    <Setter Property="Foreground" Value="White" />
+                                </MultiTrigger>
+                                <MultiTrigger>
+                                    <MultiTrigger.Conditions>
+                                        <Condition Property="Tag" Value="Close" />
+                                        <Condition Property="IsPressed" Value="True" />
+                                    </MultiTrigger.Conditions>
+                                    <Setter TargetName="ChromeBorder" Property="Background" Value="#421113" />
+                                    <Setter TargetName="ChromeBorder" Property="BorderBrush" Value="#F06A58" />
+                                </MultiTrigger>
+                                <Trigger Property="IsEnabled" Value="False">
+                                    <Setter TargetName="ChromeBorder" Property="Opacity" Value="0.45" />
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+        </ResourceDictionary>
+    </Window.Resources>
+
+    <Border Margin="0"
+            Background="#020203"
+            BorderBrush="#00FFFFFF"
+            BorderThickness="0"
+            CornerRadius="0">
+        <Grid ClipToBounds="True">
+            <Image Source="/ConquerLoader;component/Resources/CL_BG.png"
+                   Stretch="UniformToFill"
+                   Opacity="1"
+                   IsHitTestVisible="False" />
+            <Rectangle IsHitTestVisible="False"
+                       Fill="#04000000" />
+            <Rectangle IsHitTestVisible="False">
+                <Rectangle.Fill>
+                    <LinearGradientBrush StartPoint="0.5,0" EndPoint="0.5,1">
+                        <GradientStop Color="#00000000" Offset="0" />
+                        <GradientStop Color="#04020406" Offset="0.18" />
+                        <GradientStop Color="#1805070C" Offset="0.72" />
+                        <GradientStop Color="#3A030508" Offset="1" />
+                    </LinearGradientBrush>
+                </Rectangle.Fill>
+            </Rectangle>
+            <Rectangle VerticalAlignment="Top"
+                       Height="160"
+                       IsHitTestVisible="False">
+                <Rectangle.Fill>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                        <GradientStop Color="#14FFF7F3" Offset="0" />
+                        <GradientStop Color="#00FFFFFF" Offset="1" />
+                    </LinearGradientBrush>
+                </Rectangle.Fill>
+            </Rectangle>
+            <Ellipse Width="500"
+                     Height="150"
+                     Margin="0,0,0,76"
+                     HorizontalAlignment="Center"
+                     VerticalAlignment="Bottom"
+                     Fill="#26FF6A47"
+                     IsHitTestVisible="False">
+                <Ellipse.Effect>
+                    <BlurEffect Radius="60" />
+                </Ellipse.Effect>
+            </Ellipse>
+
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="56" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+
+                <Border Grid.Row="0"
+                        Background="#3010151A"
+                        BorderBrush="#339EA6B4"
+                        BorderThickness="0,0,0,1"
+                        PreviewMouseLeftButtonDown="TitleBar_MouseLeftButtonDown">
+                    <Grid Margin="16,8,16,8"
+                          PreviewMouseLeftButtonDown="TitleBar_MouseLeftButtonDown">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+
+                        <StackPanel Orientation="Horizontal"
+                                    VerticalAlignment="Center"
+                                    PreviewMouseLeftButtonDown="TitleBar_MouseLeftButtonDown">
+                            <Border Width="32"
+                                    Height="32"
+                                    CornerRadius="15"
+                                    Background="#261014"
+                                    BorderBrush="#8893A3"
+                                    BorderThickness="1">
+                                <Image Width="24"
+                                       Height="24"
+                                       HorizontalAlignment="Center"
+                                       VerticalAlignment="Center"
+                                       Source="/ConquerLoader;component/Resources/ConquerLoaderICON.png"
+                                       Stretch="Uniform" />
+                            </Border>
+                            <TextBlock x:Name="txtTopBarTitle"
+                                       Margin="12,0,0,0"
+                                       VerticalAlignment="Center"
+                                       FontSize="14"
+                                       FontWeight="SemiBold"
+                                       Foreground="{StaticResource TextPrimaryBrush}"
+                                       Text="ConquerLoader" />
+                        </StackPanel>
+
+                        <StackPanel Grid.Column="1"
+                                    Orientation="Horizontal"
+                                    VerticalAlignment="Center"
+                                    shell:WindowChrome.IsHitTestVisibleInChrome="True">
+                            <Button x:Name="btnMinimizeWindow"
+                                    Click="BtnMinimizeWindow_Click"
+                                    Content="&#xE921;"
+                                    Style="{StaticResource TitleBarButtonStyle}" />
+                            <Button x:Name="btnMaxRestoreWindow"
+                                    Click="BtnMaxRestoreWindow_Click"
+                                    Content="&#xE922;"
+                                    Style="{StaticResource TitleBarButtonStyle}" />
+                            <Button x:Name="btnCloseWindow"
+                                    Click="BtnCloseWindow_Click"
+                                    Content="&#xE8BB;"
+                                    Tag="Close"
+                                    Style="{StaticResource TitleBarButtonStyle}" />
+                        </StackPanel>
+                    </Grid>
+                </Border>
+
+                <ScrollViewer Grid.Row="1"
+                              Margin="0,0,8,8"
+                              Padding="0"
+                              VerticalScrollBarVisibility="Auto"
+                              HorizontalScrollBarVisibility="Disabled"
+                              PanningMode="VerticalOnly">
+                    <Grid Margin="42,0,42,24"
+                          MinHeight="620">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="18" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+
+                        <StackPanel Grid.Row="0"
+                            HorizontalAlignment="Center">
+                            <Image Width="184"
+                           Height="184"
+                           Margin="0,0,0,0"
+                           HorizontalAlignment="Center"
+                           Source="/ConquerLoader;component/Resources/ConquerLoaderICON.png"
+                           Stretch="Uniform">
+                                <Image.Effect>
+                                    <DropShadowEffect BlurRadius="42"
+                                              Direction="270"
+                                              Opacity="0.5"
+                                              ShadowDepth="16"
+                                              Color="#2D0E09" />
+                                </Image.Effect>
+                            </Image>
+                        </StackPanel>
+
+                        <Grid Grid.Row="2"
+                      MinHeight="458">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="308" />
+                                <ColumnDefinition Width="34" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="34" />
+                                <ColumnDefinition Width="336" />
+                            </Grid.ColumnDefinitions>
+
+                            <Border Grid.Column="0"
+                            VerticalAlignment="Top"
+                            Style="{StaticResource ScenePanelStyle}"
+                            Background="#4A0F131A"
+                            BorderBrush="#D0D6E0"
+                            Padding="22,20,22,20" Margin="0,-183,0,0">
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="18" />
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="18" />
+                                        <RowDefinition Height="*" />
+                                        <RowDefinition Height="22" />
+                                        <RowDefinition Height="Auto" />
+                                    </Grid.RowDefinitions>
+
+                                    <StackPanel>
+                                        <TextBlock FontFamily="Palatino Linotype"
+                                           x:Name="txtServerSelectionTitle"
+                                           Style="{StaticResource SectionTitleStyle}"
+                                           Text="Server Selection" />
+                                        <TextBlock x:Name="txtHelper"
+                                           Margin="0,8,0,0"
+                                           Style="{StaticResource BodyStyle}"
+                                           Text="Pick the server you want to launch. Your last realm stays selected for the next session." />
+                                    </StackPanel>
+
+                                    <StackPanel Grid.Row="2">
+                                        <TextBlock x:Name="txtAvailableServers"
+                                           Text="Available servers"
+                                           Style="{StaticResource FieldLabelStyle}" />
+                                        <ListBox x:Name="lstServers"
+                                         Height="210"
+                                         ItemContainerStyle="{StaticResource ServerListItemStyle}"
+                                         Style="{StaticResource ServerListStyle}"
+                                          SelectionChanged="CbxServers_SelectedIndexChanged" />
+                                    </StackPanel>
+
+                                    <Border Grid.Row="4"
+                                    Padding="18"
+                                    Background="#311216"
+                                    BorderBrush="#A8B0BC"
+                                    BorderThickness="1"
+                                    CornerRadius="22"
+                                    VerticalAlignment="Top">
+                                        <StackPanel>
+                                            <TextBlock x:Name="txtLauncherNoteTitle"
+                                               FontSize="12"
+                                               FontWeight="SemiBold"
+                                               Foreground="{StaticResource GoldBrush}"
+                                               Text="Launcher note" />
+                                            <TextBlock x:Name="txtLaunchTip"
+                                               Margin="0,10,0,0"
+                                               Style="{StaticResource BodyStyle}"
+                                               Text="Choose a server first so the launch status and resolution stay in sync." />
+                                        </StackPanel>
+                                    </Border>
+
+                                    <UniformGrid Grid.Row="6"
+                                         Columns="2">
+                                        <Button x:Name="btnSettings"
+                                        Margin="0,0,12,0"
+                                        Click="BtnSettings_Click"
+                                        Content="Settings"
+                                        Style="{StaticResource SecondaryButtonStyle}" />
+                                        <Button x:Name="lblAbout"
+                                        Margin="12,0,0,0"
+                                        Click="LblAbout_Click"
+                                        Content="About"
+                                        Style="{StaticResource SecondaryButtonStyle}" />
+                                    </UniformGrid>
+                                </Grid>
+                            </Border>
+
+                            <Grid Grid.Column="2"
+                          Margin="0,-18,0,0"
+                          VerticalAlignment="Top" Height="502">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
+
+                                <StackPanel Grid.Row="0"
+                                    Width="448"
+                                    HorizontalAlignment="Center">
+                                    <Border Padding="20,20"
+                            Background="#55111318"
+                                    BorderBrush="#D7DDE6"
+                                    BorderThickness="1.2"
+                                    CornerRadius="28">
+                                        <StackPanel>
+                                            <TextBlock x:Name="txtEnterLabel"
+                                               HorizontalAlignment="Center"
+                                               FontSize="12"
+                                               FontWeight="SemiBold"
+                                               Foreground="{StaticResource GoldBrush}"
+                                               Text="ENTER THE REALM" />
+                                            <TextBlock x:Name="txtSelectedServer"
+                                               Margin="0,12,0,0"
+                                               HorizontalAlignment="Center"
+                                               FontFamily="Palatino Linotype"
+                                               FontSize="23"
+                                               FontWeight="Bold"
+                                               Foreground="{StaticResource TextPrimaryBrush}"
+                                               Text="No server selected"
+                                               TextAlignment="Center"
+                                               TextWrapping="Wrap" />
+                                            <TextBlock x:Name="txtHeaderDescription"
+                                               Margin="0,10,0,0"
+                                               HorizontalAlignment="Center"
+                                               MaxWidth="430"
+                                               FontSize="12"
+                                               Foreground="#DCE3EC"
+                                               Text="Choose your realm, set the launch options, and enter from a single launcher screen."
+                                               TextAlignment="Center"
+                                               TextWrapping="Wrap" />
+                                            <Border x:Name="serverStatusBadge"
+                                            Width="126"
+                                            Height="40"
+                                            Margin="0,14,0,0"
+                                            HorizontalAlignment="Center"
+                                            Background="#6B4C2D"
+                                            CornerRadius="20">
+                                                <TextBlock x:Name="serverStatus"
+                                                   HorizontalAlignment="Center"
+                                                   VerticalAlignment="Center"
+                                                   FontWeight="Bold"
+                                                   Foreground="White"
+                                                   Text="-" />
+                                            </Border>
+                                            <TextBlock x:Name="txtServerStatusHint"
+                                               Margin="0,12,0,0"
+                                               HorizontalAlignment="Center"
+                                               MaxWidth="430"
+                                               Style="{StaticResource BodyStyle}"
+                                               Text="The selected server will be checked before launch."
+                                               TextAlignment="Center" />
+                                        </StackPanel>
+                                    </Border>
+                                </StackPanel>
+
+                                <StackPanel Grid.Row="1"
+                                    Width="392"
+                                    Margin="0,8,0,0"
+                                    HorizontalAlignment="Center">
+                                    <Button x:Name="btnStart"
+                                    Width="392"
+                                    Margin="0,0,0,10"
+                                    Click="BtnStart_Click"
+                                    Content="ENTER"
+                                    Style="{StaticResource LaunchButtonStyle}" />
+                                    <Border Width="392"
+                                    Padding="20,16"
+                                    Background="#4C111319"
+                                    BorderBrush="#D0D6E0"
+                                    BorderThickness="1"
+                                    CornerRadius="24">
+                                        <StackPanel>
+                                            <ProgressBar x:Name="pBar"
+                                                 Height="16"
+                                                 Minimum="0"
+                                                 Maximum="100"
+                                                 VerticalAlignment="Center"
+                                                 Style="{StaticResource ProgressStyle}" />
+                                            <TextBlock x:Name="txtProgressValue"
+                                               Margin="0,12,0,0"
+                                               HorizontalAlignment="Center"
+                                               FontSize="14"
+                                               FontWeight="SemiBold"
+                                               Foreground="{StaticResource TextSecondaryBrush}"
+                                               Text="0%" />
+                                        </StackPanel>
+                                    </Border>
+                                </StackPanel>
+                            </Grid>
+
+                            <Border Grid.Column="4"
+                            Margin="0,-183,0,0"
+                            VerticalAlignment="Top"
+                            Style="{StaticResource ScenePanelStyle}"
+                            Background="#48111617"
+                            BorderBrush="#D0D6E0"
+                            Padding="24,20,24,20">
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="18" />
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="18" />
+                                        <RowDefinition Height="Auto" />
+                                    </Grid.RowDefinitions>
+
+                                    <StackPanel>
+                                        <TextBlock FontFamily="Palatino Linotype"
+                                           x:Name="txtOptionsTitle"
+                                           Style="{StaticResource SectionTitleStyle}"
+                                           Text="Options" />
+                                        <TextBlock x:Name="txtActionsDescription"
+                                           Margin="0,8,0,0"
+                                           Style="{StaticResource BodyStyle}"
+                                           Text="Choose the resolution and FPS behavior before launching." />
+                                    </StackPanel>
+
+                                    <Border Grid.Row="2"
+                                    Padding="18"
+                                    Background="#3A1218"
+                                    BorderBrush="#98A2B0"
+                                    BorderThickness="1"
+                                    CornerRadius="22">
+                                        <StackPanel>
+                                            <TextBlock x:Name="txtResolutionLabel"
+                                               Text="Resolution"
+                                               Style="{StaticResource FieldLabelStyle}" />
+                                            <ComboBox x:Name="cbxResolutions"
+                                              Margin="0,8,0,0"
+                                              Style="{StaticResource InputComboBoxStyle}"
+                                              SelectionChanged="CbxResolutions_SelectedIndexChanged">
+                                                <sys:String>800x600</sys:String>
+                                                <sys:String>1024x768</sys:String>
+                                            </ComboBox>
+                                        </StackPanel>
+                                    </Border>
+
+                                    <Border Grid.Row="4"
+                                    Padding="18"
+                                    Background="#2A1418"
+                                    BorderBrush="#A0A9B6"
+                                    BorderThickness="1"
+                                    CornerRadius="22">
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*" />
+                                                <ColumnDefinition Width="18" />
+                                                <ColumnDefinition Width="Auto" />
+                                            </Grid.ColumnDefinitions>
+
+                                            <StackPanel Grid.Column="0">
+                                                <TextBlock x:Name="lblFPSUnlock"
+                                                   FontSize="15"
+                                                   FontWeight="SemiBold"
+                                                   Foreground="{StaticResource TextPrimaryBrush}" />
+                                                <TextBlock x:Name="txtFpsUnlockHint"
+                                                   Margin="0,6,0,0"
+                                                   Style="{StaticResource BodyStyle}"
+                                                   Text="Use this only when your client and server support it." />
+                                            </StackPanel>
+
+                                            <CheckBox x:Name="tglFPSUnlock"
+                                              Grid.Column="2"
+                                              VerticalAlignment="Center"
+                                              Foreground="{StaticResource TextPrimaryBrush}"
+                                              Content="Enabled"
+                                              Checked="TglFPSUnlock_CheckedChanged"
+                                              Unchecked="TglFPSUnlock_CheckedChanged" />
+                                        </Grid>
+                                    </Border>
+
+                                </Grid>
+                            </Border>
+                        </Grid>
+                    </Grid>
+                </ScrollViewer>
+
+                <Grid x:Name="firstRunOverlay"
+              Grid.RowSpan="2"
+              Background="#CC040203"
+              Visibility="Collapsed">
+                    <Grid Margin="24">
+                        <Border MaxWidth="760"
+                        Padding="34"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Background="#161014"
+                        BorderBrush="#6B4C2D"
+                        BorderThickness="1"
+                        CornerRadius="30">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="20" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="24" />
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
+
+                                <StackPanel>
+                                    <Border Width="156"
+                                    Height="34"
+                                    Padding="12,6"
+                                    HorizontalAlignment="Left"
+                                    Background="{StaticResource PrimarySoftBrush}"
+                                    CornerRadius="17">
+                                        <TextBlock x:Name="txtFirstRunBadge"
+                                           HorizontalAlignment="Center"
+                                           VerticalAlignment="Center"
+                                           FontSize="12"
+                                           FontWeight="SemiBold"
+                                           Foreground="{StaticResource PrimaryBrush}"
+                                           Text="First-time setup" />
+                                    </Border>
+
+                                    <TextBlock x:Name="txtFirstRunTitle"
+                                       Margin="0,18,0,0"
+                                       FontSize="34"
+                                       FontWeight="SemiBold"
+                                       Foreground="{StaticResource TextPrimaryBrush}"
+                                       Text="Let's create your first server"
+                                       TextWrapping="Wrap" />
+
+                                    <TextBlock x:Name="txtFirstRunDescription"
+                                       Margin="0,14,0,0"
+                                       FontSize="15"
+                                       Foreground="{StaticResource TextSecondaryBrush}"
+                                       Text="ConquerLoader needs at least one server before it can launch the game. The guided wizard will walk you through the setup step by step."
+                                       TextWrapping="Wrap" />
+                                </StackPanel>
+
+                                <Border Grid.Row="2"
+                                Padding="20"
+                                Background="#211517"
+                                BorderBrush="#6B4C2D"
+                                BorderThickness="1"
+                                CornerRadius="22">
+                                    <StackPanel>
+                                        <TextBlock x:Name="txtFirstRunStep1"
+                                           FontSize="14"
+                                           Foreground="{StaticResource TextPrimaryBrush}"
+                                           Text="1. Choose a name for the server so you can recognize it later."
+                                           TextWrapping="Wrap" />
+                                        <TextBlock x:Name="txtFirstRunStep2"
+                                           Margin="0,10,0,0"
+                                           FontSize="14"
+                                           Foreground="{StaticResource TextPrimaryBrush}"
+                                           Text="2. Enter the server IP, client version, and executable in the wizard."
+                                           TextWrapping="Wrap" />
+                                        <TextBlock x:Name="txtFirstRunStep3"
+                                           Margin="0,10,0,0"
+                                           FontSize="14"
+                                           Foreground="{StaticResource TextPrimaryBrush}"
+                                           Text="3. Save the server and come back here to launch the game."
+                                           TextWrapping="Wrap" />
+                                    </StackPanel>
+                                </Border>
+
+                                <WrapPanel Grid.Row="4"
+                                   HorizontalAlignment="Left">
+                                    <Button x:Name="btnStartFirstRun"
+                                    Width="220"
+                                    Margin="0,0,12,12"
+                                    Click="BtnStartFirstRun_Click"
+                                    Content="Create My First Server"
+                                    Style="{StaticResource PrimaryButtonStyle}" />
+                                    <Button x:Name="btnOpenSettingsFromOverlay"
+                                    Width="170"
+                                    Margin="0,0,12,12"
+                                    Click="BtnSettings_Click"
+                                    Content="Open Settings"
+                                    Style="{StaticResource SecondaryButtonStyle}" />
+                                    <Button x:Name="btnAboutFromOverlay"
+                                    Width="110"
+                                    Margin="0,0,0,12"
+                                    Click="LblAbout_Click"
+                                    Content="About"
+                                    Style="{StaticResource SecondaryButtonStyle}" />
+                                </WrapPanel>
+                            </Grid>
+                        </Border>
+                    </Grid>
+                </Grid>
+            </Grid>
+        </Grid>
+    </Border>
+</Window>
