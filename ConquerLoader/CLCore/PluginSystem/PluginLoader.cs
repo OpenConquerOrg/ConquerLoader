@@ -58,7 +58,7 @@ namespace CLCore
             List<PluginCatalogItem> remoteCatalog = LoadRemoteCatalog(loaderConfig);
             foreach (PluginCatalogItem remoteItem in remoteCatalog)
             {
-                bool alreadyInstalled = catalog.Any(item =>
+                PluginCatalogItem existingItem = catalog.FirstOrDefault(item =>
                     item.IsInstalled &&
                     item.Source == PluginSource.Remote &&
                     (
@@ -67,9 +67,16 @@ namespace CLCore
                         string.Equals(item.Name, remoteItem.Name, StringComparison.OrdinalIgnoreCase)
                     ));
 
-                if (!alreadyInstalled)
+                if (existingItem == null)
                 {
                     catalog.Add(remoteItem);
+                }
+                else
+                {
+                    // Actualizar campos del servidor para reflejar el estado real (premium/free)
+                    existingItem.PluginType = remoteItem.PluginType;
+                    existingItem.IsAssignedToLicense = remoteItem.IsAssignedToLicense;
+                    existingItem.Explanation = remoteItem.Explanation;
                 }
             }
 
