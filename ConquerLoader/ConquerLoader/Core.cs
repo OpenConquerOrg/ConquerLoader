@@ -27,12 +27,11 @@ namespace ConquerLoader
             {
                 UseEncryptedConfig = true;
                 lConfig = Newtonsoft.Json.JsonConvert.DeserializeObject<LoaderConfig>(ConfigFilesEncryption.AESEncription.DecryptString(Constants.LockConfigurationKey, File.ReadAllText(ConfigJsonPath + ".lock")));
-            } else
+            }
+            else if (File.Exists(ConfigJsonPath))
             {
-                if (File.Exists(ConfigJsonPath))
-                {
-                    lConfig = Newtonsoft.Json.JsonConvert.DeserializeObject<LoaderConfig>(File.ReadAllText(ConfigJsonPath));
-                }
+                UseEncryptedConfig = false;
+                lConfig = Newtonsoft.Json.JsonConvert.DeserializeObject<LoaderConfig>(File.ReadAllText(ConfigJsonPath));
             }
             if (lConfig != null)
             {

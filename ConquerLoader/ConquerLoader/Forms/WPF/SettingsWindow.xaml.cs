@@ -435,6 +435,7 @@ namespace ConquerLoader.Forms.WPF
             SetupLicenseWindow setupLic = new SetupLicenseWindow();
             setupLic.Owner = this;
             setupLic.ShowDialog();
+            CurrentLoaderConfig = Core.GetLoaderConfig();
         }
 
         private string T(string key, string fallback)

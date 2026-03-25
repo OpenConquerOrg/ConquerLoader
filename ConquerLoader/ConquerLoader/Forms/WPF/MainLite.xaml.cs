@@ -765,8 +765,7 @@ namespace ConquerLoader.Forms.WPF
             SettingsWindow s = new SettingsWindow();
             s.Owner = this;
             s.ShowDialog();
-            LoaderConfig = s.CurrentLoaderConfig;
-            if (LoaderConfig == null) LoaderConfig = Core.GetLoaderConfig();
+            LoaderConfig = Core.GetLoaderConfig();
             if (LoaderConfig != null) LoadConfigInForm();
         }
 
