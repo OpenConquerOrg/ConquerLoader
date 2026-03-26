@@ -73,6 +73,7 @@
     <Compile Include="Models\ServerDatGroup.cs" />
     <Compile Include="PluginSystem\IPreLaunchPlugin.cs" />
     <Compile Include="PluginSystem\IPlugin.cs" />
+    <Compile Include="PluginSystem\IResolutionProvider.cs" />
     <Compile Include="PluginSystem\Parameter.cs" />
     <Compile Include="PluginSystem\PluginCatalogItem.cs" />
     <Compile Include="PluginSystem\PluginPreLaunchContext.cs" />

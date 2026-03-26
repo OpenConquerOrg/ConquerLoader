@@ -82,6 +82,7 @@ namespace ConquerLoader.Forms.WPF
 
             Core.LoadAvailablePlugins();
             Core.InitPlugins();
+            LoadCustomResolutionsFromPlugins();
             DX9Allowed = Core.DirectXVersion() >= 9;
             UpdateChromeButtons();
         }
@@ -427,25 +428,59 @@ namespace ConquerLoader.Forms.WPF
                         string setupIniPath = Path.Combine(Directory.GetCurrentDirectory(), "ini", "GameSetup.ini");
                         IniManager parser = new IniManager(setupIniPath, "ScreenMode");
 
+                        // Check if a custom resolution from plugins is selected
+                        string selectedRes = cbxResolutions.SelectedItem?.ToString();
+                        bool isCustomPluginResolution = false;
+                        int customWidth = 0;
+                        int customHeight = 0;
+
+                        if (!string.IsNullOrEmpty(selectedRes) && 
+                            selectedRes != "800x600" && 
+                            selectedRes != "1024x768" && 
+                            selectedRes != "1920x1080")
+                        {
+                            // Try to get resolution from plugins
+                            string[] parts = selectedRes.Split('x');
+                            if (parts.Length == 2 && 
+                                int.TryParse(parts[0], out customWidth) && 
+                                int.TryParse(parts[1], out customHeight))
+                            {
+                                isCustomPluginResolution = true;
+                            }
+                        }
+
                         parser.Write("ScreenMode", "FullScrType", LoaderConfig.FullScreen ? "0" : "1");
                         Core.LogWritter.Write("[+] Changing FullScrType to " + (LoaderConfig.FullScreen ? "0" : "1"));
-                        parser.Write("ScreenMode", "ScrWidth", LoaderConfig.FHDResolution ? "1920" : LoaderConfig.HighResolution ? "1024" : "800");
-                        parser.Write("ScreenMode", "ScrHeight", LoaderConfig.FHDResolution ? "1080" : LoaderConfig.HighResolution ? "768" : "600");
 
-                        bool isCustomResolution = LoaderConfig.FHDResolution && SelectedServer.ServerVersion >= 5600;
-                        if (LoaderConfig.HighResolution || LoaderConfig.FHDResolution)
+                        if (isCustomPluginResolution && customWidth > 0 && customHeight > 0)
                         {
-                            parser.Write("ScreenMode", "ScreenModeRecord", LoaderConfig.FullScreen ? "3" : isCustomResolution ? "4" : "2");
-                            Core.LogWritter.Write("[+] Changing ScreenModeRecord to " + (LoaderConfig.FullScreen ? "3" : isCustomResolution ? "4" : "2"));
+                            parser.Write("ScreenMode", "ScrWidth", customWidth.ToString());
+                            parser.Write("ScreenMode", "ScrHeight", customHeight.ToString());
+                            parser.Write("ScreenMode", "ScreenModeRecord", "4");
+                            Core.LogWritter.Write("[+] Changing ScreenModeRecord to 4 (Custom from plugin)");
+                            Core.LogWritter.Write($"[+] Changing ScrWidth to {customWidth}");
+                            Core.LogWritter.Write($"[+] Changing ScrHeight to {customHeight}");
                         }
                         else
                         {
-                            parser.Write("ScreenMode", "ScreenModeRecord", LoaderConfig.FullScreen ? "1" : "0");
-                            Core.LogWritter.Write("[+] Changing ScreenModeRecord to " + (LoaderConfig.FullScreen ? "1" : "0"));
-                        }
+                            parser.Write("ScreenMode", "ScrWidth", LoaderConfig.FHDResolution ? "1920" : LoaderConfig.HighResolution ? "1024" : "800");
+                            parser.Write("ScreenMode", "ScrHeight", LoaderConfig.FHDResolution ? "1080" : LoaderConfig.HighResolution ? "768" : "600");
 
-                        Core.LogWritter.Write("[+] Changing ScrWidth to " + (LoaderConfig.FHDResolution ? "1920" : LoaderConfig.HighResolution ? "1024" : "800"));
-                        Core.LogWritter.Write("[+] Changing ScrHeight to " + (LoaderConfig.FHDResolution ? "1080" : LoaderConfig.HighResolution ? "768" : "600"));
+                            bool isCustomResolution = LoaderConfig.FHDResolution && SelectedServer.ServerVersion >= 5600;
+                            if (LoaderConfig.HighResolution || LoaderConfig.FHDResolution)
+                            {
+                                parser.Write("ScreenMode", "ScreenModeRecord", LoaderConfig.FullScreen ? "3" : isCustomResolution ? "4" : "2");
+                                Core.LogWritter.Write("[+] Changing ScreenModeRecord to " + (LoaderConfig.FullScreen ? "3" : isCustomResolution ? "4" : "2"));
+                            }
+                            else
+                            {
+                                parser.Write("ScreenMode", "ScreenModeRecord", LoaderConfig.FullScreen ? "1" : "0");
+                                Core.LogWritter.Write("[+] Changing ScreenModeRecord to " + (LoaderConfig.FullScreen ? "1" : "0"));
+                            }
+
+                            Core.LogWritter.Write("[+] Changing ScrWidth to " + (LoaderConfig.FHDResolution ? "1920" : LoaderConfig.HighResolution ? "1024" : "800"));
+                            Core.LogWritter.Write("[+] Changing ScrHeight to " + (LoaderConfig.FHDResolution ? "1080" : LoaderConfig.HighResolution ? "768" : "600"));
+                        }
                     }
 
                     worker.RunWorkerAsync();
@@ -827,8 +862,34 @@ namespace ConquerLoader.Forms.WPF
                     LoaderConfig.HighResolution = selectedRes == "1024x768";
                     LoaderConfig.FHDResolution = selectedRes == "1920x1080";
                 }
+
+                // Notify plugins about custom resolution selection
+                NotifyResolutionProviders(selectedRes);
+
                 Core.SaveLoaderConfig(LoaderConfig);
                 txtLaunchTip.Text = TF("mainResolutionSelected", "Selected resolution: {0}. Review fullscreen and FPS options before launching.", selectedRes);
+            }
+        }
+
+        private void NotifyResolutionProviders(string selectedRes)
+        {
+            try
+            {
+                foreach (IPlugin plugin in PluginLoader.Plugins)
+                {
+                    IResolutionProvider resolutionProvider = plugin as IResolutionProvider;
+                    if (resolutionProvider == null) continue;
+
+                    List<string> customResolutions = resolutionProvider.GetCustomResolutions();
+                    if (customResolutions != null && customResolutions.Contains(selectedRes))
+                    {
+                        resolutionProvider.OnResolutionSelected(selectedRes);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Core.LogWritter.Write($"[ResolutionProvider] Error notifying resolution selection: {ex.Message}");
             }
         }
 
@@ -864,6 +925,34 @@ namespace ConquerLoader.Forms.WPF
             }
         }
 
+        private void LoadCustomResolutionsFromPlugins()
+        {
+            try
+            {
+                foreach (IPlugin plugin in PluginLoader.Plugins)
+                {
+                    IResolutionProvider resolutionProvider = plugin as IResolutionProvider;
+                    if (resolutionProvider == null) continue;
+
+                    List<string> customResolutions = resolutionProvider.GetCustomResolutions();
+                    if (customResolutions == null || customResolutions.Count == 0) continue;
+
+                    foreach (string resolution in customResolutions)
+                    {
+                        if (!cbxResolutions.Items.Contains(resolution))
+                        {
+                            cbxResolutions.Items.Add(resolution);
+                            Core.LogWritter.Write($"[ResolutionProvider] Added resolution {resolution} from plugin {plugin.Name}");
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Core.LogWritter.Write($"[ResolutionProvider] Error loading custom resolutions: {ex.Message}");
+            }
+        }
+
         private void UpdateResolutionOptionsForServer(ServerConfiguration server)
         {
             if (server == null) return;
@@ -882,6 +971,47 @@ namespace ConquerLoader.Forms.WPF
                     cbxResolutions.SelectedItem = "1024x768";
                 }
                 cbxResolutions.Items.Remove("1920x1080");
+            }
+
+            // Check custom resolutions from plugins for compatibility
+            try
+            {
+                foreach (IPlugin plugin in PluginLoader.Plugins)
+                {
+                    IResolutionProvider resolutionProvider = plugin as IResolutionProvider;
+                    if (resolutionProvider == null) continue;
+
+                    List<string> customResolutions = resolutionProvider.GetCustomResolutions();
+                    if (customResolutions == null) continue;
+
+                    foreach (string resolution in customResolutions)
+                    {
+                        // Custom resolutions typically require version >= 5600
+                        if (server.ServerVersion < 5600)
+                        {
+                            if (cbxResolutions.Items.Contains(resolution))
+                            {
+                                if (Equals(cbxResolutions.SelectedItem, resolution))
+                                {
+                                    cbxResolutions.SelectedItem = "1024x768";
+                                }
+                                cbxResolutions.Items.Remove(resolution);
+                                Core.LogWritter.Write($"[ResolutionProvider] Removed {resolution} - requires client >= 5600");
+                            }
+                        }
+                        else
+                        {
+                            if (!cbxResolutions.Items.Contains(resolution))
+                            {
+                                cbxResolutions.Items.Add(resolution);
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Core.LogWritter.Write($"[ResolutionProvider] Error updating resolution options: {ex.Message}");
             }
         }
 
