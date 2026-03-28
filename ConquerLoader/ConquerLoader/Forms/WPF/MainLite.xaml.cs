@@ -70,6 +70,7 @@ namespace ConquerLoader.Forms.WPF
             {
                 Constants.CloseOnFinish = LoaderConfig.CloseOnFinish;
                 CustomDLLs = LoaderConfig.UseCustomDLLs;
+                Constants.LicenseKey = LoaderConfig.LicenseKey;
                 SetResolutionSelectionFromConfig();
             }
 

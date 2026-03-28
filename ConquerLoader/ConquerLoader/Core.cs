@@ -153,6 +153,11 @@ namespace ConquerLoader
 
         public static void InitPlugins()
         {
+            LoaderConfig currentConfig = GetLoaderConfig();
+            if (currentConfig != null && !string.IsNullOrWhiteSpace(currentConfig.LicenseKey))
+            {
+                Constants.LicenseKey = currentConfig.LicenseKey;
+            }
 
             foreach (IPlugin plugin in PluginLoader.Plugins)
             {

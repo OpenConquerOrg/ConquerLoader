@@ -50,6 +50,7 @@ namespace ConquerLoader.Forms
             if (LoaderConfig != null) {
                 Constants.CloseOnFinish = LoaderConfig.CloseOnFinish;
                 CustomDLLs = LoaderConfig.UseCustomDLLs;
+                Constants.LicenseKey = LoaderConfig.LicenseKey;
                 if (LoaderConfig.HighResolution)
                 {
                     cbxResolutions.Text = "1024x768";
